@@ -1,7 +1,0 @@
-NODE_ENV=production
-PORT=5010
-MONGODB_URI=mongodb+srv://lathanhsi100804:thanhsi1008@movie-booking.xovn2xs.mongodb.net/?retryWrites=true&w=majority&appName=movie-booking
-JWT_SECRET=movie_booking_secret_key_2024
-JWT_EXPIRE=30d
-CLIENT_URL=https://movie-booking-client.vercel.app
-API_URL=https://movie-booking-api-pink.vercel.app
