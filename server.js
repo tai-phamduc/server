@@ -99,7 +99,6 @@ app.get('/api-test', (req, res) => {
 //   customSiteTitle: 'Movie Booking API Documentation',
 // }));
 
-// Serve Swagger spec as JSON
 // app.get('/api-docs.json', (req, res) => {
 //   res.setHeader('Content-Type', 'application/json');
 //   res.send(swaggerSpec);
