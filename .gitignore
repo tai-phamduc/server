@@ -1,0 +1,39 @@
+# dependencies
+/node_modules
+/client/node_modules
+/server/node_modules
+
+# production
+/client/dist
+/client/build
+
+# misc
+.DS_Store
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.production
+/server/.env
+/server/.env.production
+/client/.env
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.idea
+.vscode
+
+# Vercel
+.vercel
+
+# Temporary files
+/server/scripts/seedData.js
+/server/scripts/addBookingsToAdmin.js
+/server/scripts/addSampleBooking.js
+/server/scripts/seedBookingData.js
+/seedData.js
+/add-bookings.js

@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "server",
   "version": "1.0.0",
   "description": "Backend for movie booking website",
@@ -50,5 +51,30 @@
     "node-mocks-http": "^1.16.2",
     "nodemon": "^3.1.10",
     "supertest": "^7.1.0"
+=======
+  "name": "movie-booking-app",
+  "version": "1.0.0",
+  "description": "Movie booking website similar to Aovis",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "server": "nodemon server/server.js",
+    "client": "cd client && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "install-all": "npm install && cd client && npm install && cd ../server && npm install"
+  },
+  "keywords": [
+    "react",
+    "node",
+    "express",
+    "movie",
+    "booking"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.0",
+    "nodemon": "^3.0.1"
+>>>>>>> a37b440255ca73be39e0501fe244befc4bccd560
   }
 }
