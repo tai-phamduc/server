@@ -208,7 +208,7 @@ app.use(errorHandler);
 //   app.listen(PORT, () => {
 //     console.log(`Server running on port ${PORT}`);
 //   });
-}
+// }
 
 // Export for Vercel
 export default app
