@@ -1,168 +1,107 @@
-<<<<<<< HEAD
 # Movie Booking API
 
-API backend cho ứng dụng đặt vé xem phim, được triển khai trên Vercel.
-
-## Cấu trúc dự án
-
-```
-server/
-  ├── api/                  # Thư mục chứa API serverless cho Vercel
-  │   ├── index.js          # Entry point cho API
-  │   └── .env              # Biến môi trường cho API
-  ├── controllers/          # Xử lý logic nghiệp vụ
-  ├── middleware/           # Middleware
-  ├── models/               # Định nghĩa schema MongoDB
-  ├── routes/               # Định nghĩa routes
-  ├── utils/                # Tiện ích
-  ├── .env                  # Biến môi trường cho development
-  ├── package.json          # Dependencies
-  └── vercel.json           # Cấu hình Vercel
-```
-
-## Triển khai lên Vercel
-
-1. Đăng nhập vào Vercel CLI:
-```bash
-vercel login
-```
-
-2. Triển khai:
-```bash
-vercel
-```
-
-3. Triển khai phiên bản production:
-```bash
-vercel --prod
-```
-
-## Biến môi trường
-
-Đảm bảo các biến môi trường sau được cấu hình trên Vercel:
-
-- `MONGODB_URI`: URI kết nối MongoDB Atlas
-- `JWT_SECRET`: Secret key cho JWT
-- `JWT_EXPIRE`: Thời gian hết hạn của JWT (ví dụ: 30d)
-- `NODE_ENV`: "production"
-
-## API Endpoints
-
-### Authentication
-- `POST /api/users/register`: Đăng ký người dùng mới
-- `POST /api/users/login`: Đăng nhập
-- `GET /api/users/profile`: Lấy thông tin người dùng hiện tại
-
-### Movies
-- `GET /api/movies`: Lấy danh sách phim
-- `GET /api/movies/:id`: Lấy thông tin chi tiết phim
-- `GET /api/movies/status/now-playing`: Lấy danh sách phim đang chiếu
-
-### Showtimes
-- `GET /api/showtimes/movie/:movieId`: Lấy danh sách suất chiếu của phim
-- `GET /api/showtimes/:showtimeId/seats`: Lấy danh sách ghế của suất chiếu
-
-### Bookings
-- `GET /api/bookings`: Lấy danh sách đặt vé của người dùng
-- `POST /api/bookings`: Tạo đặt vé mới
-- `PUT /api/bookings/:id/cancel`: Hủy đặt vé
-
-### Events
-- `GET /api/events`: Lấy danh sách sự kiện
-- `GET /api/events/:id`: Lấy thông tin chi tiết sự kiện
-
-### News
-- `GET /api/news`: Lấy danh sách tin tức
-- `GET /api/news/:id`: Lấy thông tin chi tiết tin tức
-
-## Phát triển local
-
-1. Cài đặt dependencies:
-```bash
-npm install
-```
-
-2. Chạy server trong chế độ development:
-```bash
-npm run dev
-```
-
-Server sẽ chạy tại http://localhost:5010
-=======
-# Movie Booking Website
-
-A full-stack movie booking website similar to Aovis, built with React, Node.js, and Express.
-
-## Features
-
-- Movie listings with details
-- Movie filtering by category and status
-- Movie trailers
-- Event listings
-- News/blog section
-- User authentication
-- Ticket booking system
+Backend API for the Movie Booking Website, built with Node.js, Express, and MongoDB. This API provides endpoints for managing movies, events, news, users, bookings, and more.
 
 ## Tech Stack
 
-### Frontend
-- React (Vite)
-- React Router for navigation
-- Axios for API requests
-- React Icons for icons
-- Tailwind CSS for styling
-- Swiper for carousels/sliders
-- React Query for data fetching
-
-### Backend
 - Node.js
 - Express.js for the server
 - MongoDB with Mongoose for database
 - JWT for authentication
 - Bcrypt for password hashing
 - Multer for file uploads
+- Swagger for API documentation
 
 ## Project Structure
 
 ```
-group-project-react/
-├── client/                 # Frontend React application
-│   ├── public/             # Static files
-│   │   ├── images/         # Image assets
-│   │   ├── index.html      # HTML template
-│   │   └── favicon.ico     # Favicon
-│   ├── src/                # React source code
-│   │   ├── components/     # Reusable components
-│   │   ├── pages/          # Page components
-│   │   ├── layouts/        # Layout components
-│   │   ├── assets/         # Assets (CSS, images)
-│   │   ├── services/       # API services
-│   │   ├── context/        # React context
-│   │   ├── hooks/          # Custom hooks
-│   │   ├── utils/          # Utility functions
-│   │   ├── App.js          # Main App component
-│   │   ├── index.js        # Entry point
-│   │   └── routes.js       # Route definitions
-│   ├── package.json        # Frontend dependencies
-│   └── vite.config.js      # Vite configuration
-├── server/                 # Backend Node.js/Express application
-│   ├── config/             # Configuration files
-│   ├── controllers/        # Route controllers
-│   ├── models/             # Database models
-│   ├── routes/             # API routes
-│   ├── middleware/         # Custom middleware
-│   ├── utils/              # Utility functions
-│   ├── server.js           # Express server
-│   └── package.json        # Backend dependencies
-├── .gitignore              # Git ignore file
-├── package.json            # Root package.json for scripts
-└── README.md               # Project documentation
+server/
+├── config/             # Configuration files
+├── controllers/        # Route controllers
+├── models/             # Database models
+├── routes/             # API routes
+├── middleware/         # Custom middleware
+│   └── validation/     # Request validation
+├── utils/              # Utility functions
+├── docs/               # API documentation
+├── tests/              # Test files
+│   ├── integration/    # Integration tests
+│   └── unit/           # Unit tests
+├── logs/               # Log files
+├── public/             # Static files
+├── server.js           # Express server
+├── package.json        # Dependencies
+└── README.md           # Documentation
 ```
+
+## API Endpoints
+
+### Authentication
+- `POST /api/users/register` - Register a new user
+- `POST /api/users/login` - Login user
+- `GET /api/users/profile` - Get user profile
+- `PUT /api/users/profile` - Update user profile
+- `POST /api/users/forgot-password` - Request password reset
+- `POST /api/users/reset-password` - Reset password
+
+### Movies
+- `GET /api/movies` - Get all movies
+- `GET /api/movies/:id` - Get movie by ID
+- `GET /api/movies/status/:status` - Get movies by status (Now Playing, Coming Soon, Featured)
+- `GET /api/movies/genre/:genre` - Get movies by genre
+- `POST /api/movies` - Create a new movie (Admin)
+- `PUT /api/movies/:id` - Update a movie (Admin)
+- `DELETE /api/movies/:id` - Delete a movie (Admin)
+
+### Events
+- `GET /api/events` - Get all events
+- `GET /api/events/:id` - Get event by ID
+- `GET /api/events/featured` - Get featured events
+- `GET /api/events/upcoming` - Get upcoming events
+- `POST /api/events` - Create a new event (Admin)
+- `PUT /api/events/:id` - Update an event (Admin)
+- `DELETE /api/events/:id` - Delete an event (Admin)
+
+### News
+- `GET /api/news` - Get all news articles
+- `GET /api/news/:id` - Get news article by ID
+- `GET /api/news/category/:category` - Get news articles by category
+- `POST /api/news` - Create a news article (Admin)
+- `PUT /api/news/:id` - Update a news article (Admin)
+- `DELETE /api/news/:id` - Delete a news article (Admin)
+
+### Bookings
+- `GET /api/bookings` - Get user bookings
+- `POST /api/bookings` - Create a new booking
+- `GET /api/bookings/:id` - Get booking by ID
+- `PUT /api/bookings/:id/cancel` - Cancel booking
+- `GET /api/booking-history` - Get booking history
+
+### Showtimes
+- `GET /api/showtimes` - Get all showtimes
+- `GET /api/showtimes/movie/:movieId` - Get showtimes for a movie
+- `GET /api/showtimes/:id/seats` - Get available seats for a showtime
+- `POST /api/showtimes` - Create a new showtime (Admin)
+- `PUT /api/showtimes/:id` - Update a showtime (Admin)
+- `DELETE /api/showtimes/:id` - Delete a showtime (Admin)
+
+### Theaters
+- `GET /api/theaters` - Get all theaters
+- `GET /api/theaters/:id` - Get theater by ID
+- `POST /api/theaters` - Create a new theater (Admin)
+- `PUT /api/theaters/:id` - Update a theater (Admin)
+- `DELETE /api/theaters/:id` - Delete a theater (Admin)
+
+### Additional Endpoints
+- `GET /api/genres` - Get all genres
+- `GET /api/tags` - Get all tags
+- `GET /api/faqs` - Get all FAQs
+- `GET /api/settings` - Get application settings
+- `GET /api/search` - Global search across collections
 
 ## Getting Started
 
 ### Prerequisites
-
 - Node.js (v14 or higher)
 - npm or yarn
 - MongoDB
@@ -170,50 +109,103 @@ group-project-react/
 ### Installation
 
 1. Clone the repository
-   ```
-   git clone <repository-url>
-   cd group-project-react
+   ```bash
+   git clone https://github.com/tai-phamduc/server.git
+   cd server
    ```
 
 2. Install dependencies
+   ```bash
+   npm install
    ```
-   npm run install-all
-   ```
-   This will install dependencies for the root project, client, and server.
 
 3. Set up environment variables
-   - Create a `.env` file in the server directory based on `.env.example`
+   - Create a `.env` file with the following variables:
+     ```
+     NODE_ENV=development
+     PORT=5010
+     MONGODB_URI=mongodb+srv://lathanhsi100804:thanhsi1008@movie-booking.xovn2xs.mongodb.net/movie-booking?retryWrites=true&w=majority&appName=movie-booking
+     JWT_SECRET=movie_booking_secret_key_2024
+     JWT_EXPIRE=30d
+     ```
 
 4. Start the development server
-   ```
+   ```bash
    npm run dev
    ```
-   This will start both the frontend and backend servers concurrently.
+   The server will run at http://localhost:5010
 
-## API Endpoints
+## Deployment
 
-### Movies
-- `GET /api/movies` - Get all movies
-- `GET /api/movies/:id` - Get movie by ID
-- `GET /api/movies/status/:status` - Get movies by status (Now Playing, Coming Soon, Featured)
-- `GET /api/movies/genre/:genre` - Get movies by genre
+The API is deployed on Vercel at https://movie-ticket-booking-api.vercel.app
 
-### Events
-- `GET /api/events` - Get all events
-- `GET /api/events/:id` - Get event by ID
-- `GET /api/events/featured/list` - Get featured events
+### Deployment Steps
 
-### News
-- `GET /api/news` - Get all news articles
-- `GET /api/news/:id` - Get news article by ID
-- `GET /api/news/category/:category` - Get news articles by category
+1. Set up Vercel CLI:
+   ```bash
+   npm install -g vercel
+   vercel login
+   ```
 
-### Users
-- `POST /api/users/register` - Register a new user
-- `POST /api/users/login` - Login user
+2. Deploy to Vercel:
+   ```bash
+   vercel
+   vercel --prod
+   ```
+
+3. Configure environment variables in Vercel dashboard.
+
+## Testing
+
+To run tests:
+```bash
+npm test
+```
+
+To run specific test suites:
+```bash
+npm run test:unit
+npm run test:integration
+```
+
+## Database
+
+The application uses MongoDB Atlas as the database. The database contains the following collections:
+- users
+- movies
+- events
+- news
+- theaters
+- showtimes
+- bookings
+- genres
+- tags
+- reviews
+- comments
+- faqs
+- settings
+
+## Authentication
+
+The API uses JWT (JSON Web Tokens) for authentication. To access protected endpoints, include the JWT token in the Authorization header:
+
+```
+Authorization: Bearer <token>
+```
+
+## Error Handling
+
+The API returns standard HTTP status codes:
+- 200: Success
+- 201: Created
+- 400: Bad Request
+- 401: Unauthorized
+- 403: Forbidden
+- 404: Not Found
+- 500: Server Error
+
+Error responses include a message field with details about the error.
 
 ## License
 
 This project is licensed under the MIT License.
-# College-ReactJS-Project
->>>>>>> a37b440255ca73be39e0501fe244befc4bccd560
