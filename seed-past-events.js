@@ -3,7 +3,7 @@ const colors = require('colors');
 const Event = require('./models/Event');
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/movie-booking')
+mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://lathanhsi100804:thanhsi1008@movie-booking.xovn2xs.mongodb.net/movie-booking?retryWrites=true&w=majority&appName=movie-booking')
   .then(() => console.log('MongoDB Connected'.green.bold))
   .catch(err => {
     console.error(`Error: ${err.message}`.red.bold);
@@ -17,7 +17,7 @@ const createPastEvents = async () => {
 
     // Get current date
     const currentDate = new Date();
-    
+
     // Create past events (events that occurred before today)
     const pastEvents = [
       {

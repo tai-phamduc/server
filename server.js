@@ -23,6 +23,11 @@ const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 // Load environment variables
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
+// Set environment variables for development
+if (process.env.NODE_ENV !== 'production') {
+  process.env.USE_SAMPLE_DATA = 'true';
+}
+
 // Connect to MongoDB
 const connectDB = require('./config/db');
 connectDB();
@@ -45,7 +50,7 @@ reminderService.start();
 
 // CORS configuration
 const corsOptions = {
-  origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3001', 'http://127.0.0.1:3001', 'https://movie-booking-client.vercel.app', 'https://movie-booking-api-pink.vercel.app', 'https://movie-ticket-booking-api.vercel.app/'],
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3001', 'http://127.0.0.1:3001', 'https://movie-booking-client.vercel.app', 'https://movie-booking-api-pink.vercel.app', 'https://movie-ticket-booking-api.vercel.app'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -202,13 +207,24 @@ app.use(errorHandler);
 // Set port and start server
 const PORT = process.env.PORT || 5005; // Changed to 5005
 
-// Only start the server if not running on Vercel
-// if (process.env.NODE_ENV !== 'production') {
-
-// }
-
-app.listen(PORT, () => {
+// Start server with improved error handling
+const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+}).on('error', (error) => {
+  if (error.code === 'EADDRINUSE') {
+    console.error(`Port ${PORT} is already in use. Trying port ${PORT + 1}...`);
+    setTimeout(() => {
+      app.listen(PORT + 1, () => {
+        console.log(`Server running on port ${PORT + 1}`);
+      }).on('error', (err) => {
+        console.error(`Failed to start server: ${err.message}`);
+        process.exit(1);
+      });
+    }, 1000);
+  } else {
+    console.error(`Failed to start server: ${error.message}`);
+    process.exit(1);
+  }
 });
 
 // Export for Vercel

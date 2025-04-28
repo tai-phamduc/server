@@ -149,12 +149,10 @@ const getMovies = async (req, res) => {
     }
 
     // Execute query with pagination
-    // const movies = await Movie.find(filter)
-    //   .sort(sort)
-    //   .skip(skip)
-    //   .limit(pageSize);
-
-    const movies = await Movie.find({});
+    const movies = await Movie.find(filter)
+      .sort(sort)
+      .skip(skip)
+      .limit(pageSize);
 
     // Get total count for pagination
     const totalMovies = await Movie.countDocuments(filter);
