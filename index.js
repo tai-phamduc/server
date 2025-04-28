@@ -92,7 +92,7 @@ app.use('/api/blog-categories', require('./routes/blogCategoryRoutes'));
 app.use('/api/tags', require('./routes/tagRoutes'));
 app.use('/api/pages', require('./routes/pageRoutes'));
 app.use('/api/settings', require('./routes/settingRoutes'));
-// app.use('/api/booking-history', require('./routes/bookingHistoryRoutes'));
+app.use('/api/booking-history', require('./routes/bookingHistoryRoutes'));
 
 // Basic route for testing API with caching
 app.get('/api', (req, res) => {
