@@ -33,7 +33,7 @@ async function connectToDatabase() {
   }
 
   try {
-    const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://lathanhsi100804:thanhsi1008@movie-booking.xovn2xs.mongodb.net/?retryWrites=true&w=majority&appName=movie-booking';
+    const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://lathanhsi100804:thanhsi1008@movie-booking.xovn2xs.mongodb.net/movie-booking?retryWrites=true&w=majority&appName=movie-booking';
 
     const client = await mongoose.connect(MONGODB_URI, {
       useNewUrlParser: true,
