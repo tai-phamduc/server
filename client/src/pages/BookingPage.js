@@ -41,18 +41,22 @@ const BookingPage = () => {
   const dates = generateDates();
 
   const theaters = [
-    { id: 1, name: 'Cinema City', location: 'Downtown', distance: '1.2 miles' },
-    { id: 2, name: 'Starlight Cinema', location: 'Westside Mall', distance: '2.5 miles' },
-    { id: 3, name: 'Royal Theater', location: 'Eastside', distance: '3.8 miles' },
+    { id: 1, name: 'Cinema City', location: '123 Main Street, New York, NY', distance: '1.2 miles' },
+    { id: 2, name: 'Starlight Multiplex', location: '456 Broadway Avenue, Los Angeles, CA', distance: '2.5 miles' },
   ];
 
   const showtimes = [
-    { id: 1, time: '10:00 AM', format: '2D', price: 10.99 },
-    { id: 2, time: '12:30 PM', format: '3D', price: 13.99 },
-    { id: 3, time: '3:00 PM', format: '2D', price: 10.99 },
-    { id: 4, time: '5:30 PM', format: 'IMAX', price: 15.99 },
-    { id: 5, time: '8:00 PM', format: '2D', price: 12.99 },
-    { id: 6, time: '10:30 PM', format: '3D', price: 13.99 },
+    { id: 1, time: '10:00 AM', format: '2D', price: 12.99, hall: 'Hall 1' },
+    { id: 2, time: '1:00 PM', format: '2D', price: 12.99, hall: 'Hall 2' },
+    { id: 3, time: '4:00 PM', format: '4DX', price: 17.99, hall: '4DX' },
+    { id: 4, time: '7:00 PM', format: '3D', price: 14.99, hall: 'Hall 3' },
+    { id: 5, time: '10:00 PM', format: '4DX', price: 19.99, hall: '4DX' },
+    { id: 6, time: '1:00 PM', format: 'VIP', price: 22.99, hall: 'VIP' },
+    { id: 7, time: '4:00 PM', format: 'VIP', price: 22.99, hall: 'VIP' },
+    { id: 8, time: '7:00 PM', format: 'VIP', price: 24.99, hall: 'VIP' },
+    { id: 9, time: '10:00 AM', format: 'IMAX', price: 19.99, hall: 'IMAX' },
+    { id: 10, time: '1:00 PM', format: 'IMAX', price: 19.99, hall: 'IMAX' },
+    { id: 11, time: '10:00 PM', format: 'IMAX', price: 21.99, hall: 'IMAX' },
   ];
 
   // Generate a more realistic seat map with different seat types and sections
@@ -405,7 +409,10 @@ const BookingPage = () => {
                       >
                         <div className="flex flex-col items-center">
                           <span className="font-semibold mb-1">{showtime.time}</span>
-                          <span className="text-sm text-gray-400 mb-1">{showtime.format}</span>
+                          <div className="flex items-center gap-1 mb-1">
+                            <span className="text-xs px-1.5 py-0.5 bg-gray-700 rounded">{showtime.format}</span>
+                            <span className="text-xs px-1.5 py-0.5 bg-gray-700 rounded">{showtime.hall}</span>
+                          </div>
                           <span className="text-sm">${showtime.price}</span>
                         </div>
                       </button>

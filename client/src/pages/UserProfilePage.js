@@ -15,20 +15,33 @@ const UserProfilePage = () => {
     const fetchUserData = async () => {
       try {
         setLoading(true);
-        
+
         // Get current user
         const currentUser = authService.getCurrentUser();
-        if (!currentUser) {
+
+        // In development mode, allow access without login for testing
+        if (!currentUser && process.env.NODE_ENV !== 'development') {
           setError('You must be logged in to view this page');
           setLoading(false);
           return;
         }
-        
-        setUser(currentUser);
-        
+
+        // Use mock user data in development mode if not logged in
+        if (!currentUser && process.env.NODE_ENV === 'development') {
+          setUser({
+            _id: 'dev-user-id',
+            name: 'Development User',
+            email: 'dev@example.com',
+            role: 'User',
+            profilePicture: null
+          });
+        } else {
+          setUser(currentUser);
+        }
+
         // In a real implementation, these would be API calls
         // For now, we'll use mock data
-        
+
         // Mock bookings
         setBookings([
           {
@@ -48,7 +61,7 @@ const UserProfilePage = () => {
             createdAt: '2023-11-18T10:15:00Z'
           }
         ]);
-        
+
         // Mock reviews
         setReviews([
           {
@@ -68,7 +81,7 @@ const UserProfilePage = () => {
             createdAt: '2023-11-22T16:20:00Z'
           }
         ]);
-        
+
         setLoading(false);
       } catch (err) {
         console.error('Error fetching user data:', err);
@@ -76,7 +89,7 @@ const UserProfilePage = () => {
         setLoading(false);
       }
     };
-    
+
     fetchUserData();
   }, []);
 
@@ -88,32 +101,42 @@ const UserProfilePage = () => {
     );
   }
 
-  if (error) {
+  if (error && process.env.NODE_ENV !== 'development') {
     return (
       <div className="bg-dark min-h-screen py-12">
         <div className="container">
           <div className="bg-red-900 text-white p-6 rounded-lg">
             <h2 className="text-xl font-bold mb-2">Error</h2>
             <p>{error}</p>
-            <Link to="/login" className="mt-4 inline-block bg-primary text-white px-4 py-2 rounded">
-              Go to Login
-            </Link>
+            <div className="flex space-x-4 mt-4">
+              <Link to="/login" className="inline-block bg-primary text-white px-4 py-2 rounded">
+                Go to Login
+              </Link>
+              <Link to="/" className="inline-block bg-gray-700 text-white px-4 py-2 rounded">
+                Back to Home
+              </Link>
+            </div>
           </div>
         </div>
       </div>
     );
   }
 
-  if (!user) {
+  if (!user && process.env.NODE_ENV !== 'development') {
     return (
       <div className="bg-dark min-h-screen py-12">
         <div className="container">
           <div className="bg-secondary text-white p-6 rounded-lg">
             <h2 className="text-xl font-bold mb-2">Not Logged In</h2>
             <p>You must be logged in to view your profile.</p>
-            <Link to="/login" className="mt-4 inline-block bg-primary text-white px-4 py-2 rounded">
-              Go to Login
-            </Link>
+            <div className="flex space-x-4 mt-4">
+              <Link to="/login" className="inline-block bg-primary text-white px-4 py-2 rounded">
+                Go to Login
+              </Link>
+              <Link to="/" className="inline-block bg-gray-700 text-white px-4 py-2 rounded">
+                Back to Home
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -124,7 +147,7 @@ const UserProfilePage = () => {
     <div className="bg-dark min-h-screen py-12">
       <div className="container">
         <h1 className="text-3xl font-bold mb-8">My Profile</h1>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - User Info */}
           <div className="lg:col-span-1">
@@ -144,13 +167,13 @@ const UserProfilePage = () => {
                 <h2 className="text-xl font-bold">{user.name}</h2>
                 <p className="text-gray-400">{user.role}</p>
               </div>
-              
+
               <div className="space-y-4">
                 <div className="flex items-center">
                   <FaEnvelope className="text-gray-400 mr-3" />
                   <span>{user.email}</span>
                 </div>
-                
+
                 <div className="pt-4 border-t border-gray-700">
                   <Link to="/account/edit" className="flex items-center text-primary hover:underline">
                     <FaEdit className="mr-2" />
@@ -159,7 +182,7 @@ const UserProfilePage = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="bg-secondary rounded-lg p-6">
               <h3 className="text-xl font-bold mb-4">Quick Links</h3>
               <div className="space-y-3">
@@ -182,13 +205,13 @@ const UserProfilePage = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Right Column - Activity and AI Insights */}
           <div className="lg:col-span-2">
             {/* Recent Activity */}
             <div className="bg-secondary rounded-lg p-6 mb-8">
               <h3 className="text-xl font-bold mb-6">Recent Activity</h3>
-              
+
               {/* Recent Bookings */}
               <div className="mb-6">
                 <h4 className="text-lg font-semibold mb-4">Recent Bookings</h4>
@@ -228,14 +251,14 @@ const UserProfilePage = () => {
                 ) : (
                   <p className="text-gray-400">No recent bookings</p>
                 )}
-                
+
                 <div className="mt-4">
                   <Link to="/my-bookings" className="text-primary hover:underline">
                     View all bookings
                   </Link>
                 </div>
               </div>
-              
+
               {/* Recent Reviews */}
               <div>
                 <h4 className="text-lg font-semibold mb-4">Recent Reviews</h4>
@@ -284,7 +307,7 @@ const UserProfilePage = () => {
                 ) : (
                   <p className="text-gray-400">No recent reviews</p>
                 )}
-                
+
                 <div className="mt-4">
                   <Link to="/my-reviews" className="text-primary hover:underline">
                     View all reviews
@@ -292,7 +315,7 @@ const UserProfilePage = () => {
                 </div>
               </div>
             </div>
-            
+
             {/* AI Insights */}
             <UserInsights userId={user.id} />
           </div>

@@ -2,11 +2,11 @@ import axios from 'axios';
 
 // Create an axios instance
 const api = axios.create({
-  baseURL: 'http://localhost:5010/api',
+  baseURL: process.env.REACT_APP_API_URL || 'https://movie-booking-api.vercel.app/api',
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 10000, // 10 seconds timeout
+  timeout: 15000, // 15 seconds timeout for Vercel serverless functions
 });
 
 // Add a request interceptor to include the auth token in requests
@@ -51,9 +51,14 @@ api.interceptors.response.use(
         localStorage.removeItem('token');
         localStorage.removeItem('user');
 
-        // Redirect to login page if not already there
-        if (window.location.pathname !== '/login') {
-          window.location.href = '/login?session=expired';
+        // In development mode, don't redirect to login page for easier testing
+        if (process.env.NODE_ENV !== 'development') {
+          // Redirect to login page if not already there
+          if (window.location.pathname !== '/login') {
+            window.location.href = '/login?session=expired';
+          }
+        } else {
+          console.log('Development mode: Not redirecting to login page on 401 error');
         }
         break;
 
@@ -380,65 +385,6 @@ export const bookingService = {
       return response.data;
     } catch (error) {
       console.error(`Error fetching showtimes for movie ${movieId}:`, error);
-
-      // For development, return mock data
-      if (process.env.NODE_ENV === 'development') {
-        // Generate some mock showtimes
-        const now = new Date();
-        const tomorrow = new Date(now);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        const dayAfterTomorrow = new Date(now);
-        dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2);
-
-        return [
-          {
-            _id: '60d0fe4f5311236168a109e1',
-            movie: movieId,
-            startTime: tomorrow.toISOString(),
-            displayTime: '7:00 PM',
-            hall: 'Hall 1',
-            price: 12.99,
-            seatsAvailable: 120,
-            totalSeats: 150,
-            bookedSeats: ['A1', 'A2', 'B5', 'C10'],
-            theater: {
-              _id: '60d0fe4f5311236168a109ce',
-              name: 'Cinema City'
-            }
-          },
-          {
-            _id: '60d0fe4f5311236168a109e2',
-            movie: movieId,
-            startTime: tomorrow.toISOString(),
-            displayTime: '9:30 PM',
-            hall: 'Hall 2',
-            price: 14.99,
-            seatsAvailable: 100,
-            totalSeats: 120,
-            bookedSeats: ['D3', 'D4', 'E7', 'F12'],
-            theater: {
-              _id: '60d0fe4f5311236168a109ce',
-              name: 'Cinema City'
-            }
-          },
-          {
-            _id: '60d0fe4f5311236168a109e3',
-            movie: movieId,
-            startTime: dayAfterTomorrow.toISOString(),
-            displayTime: '6:15 PM',
-            hall: 'IMAX',
-            price: 17.99,
-            seatsAvailable: 180,
-            totalSeats: 200,
-            bookedSeats: ['G3', 'G4', 'H9', 'H10'],
-            theater: {
-              _id: '60d0fe4f5311236168a109d6',
-              name: 'Royal Theater'
-            }
-          }
-        ];
-      }
-
       // Return empty array if API fails
       return [];
     }
@@ -451,33 +397,6 @@ export const bookingService = {
       return response.data;
     } catch (error) {
       console.error(`Error fetching seats for showtime ${showtimeId}:`, error);
-
-      // For development, return mock data
-      if (process.env.NODE_ENV === 'development') {
-        // Generate a mock seat map
-        const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-        const seatMap = [];
-
-        // Some random booked seats
-        const bookedSeats = ['A1', 'A2', 'B5', 'C10', 'D3', 'D4', 'E7', 'F12', 'G3', 'G4', 'H9', 'H10'];
-
-        // Generate seats for each row
-        rows.forEach(row => {
-          for (let i = 1; i <= 10; i++) {
-            const seatId = `${row}${i}`;
-            seatMap.push({
-              id: seatId,
-              row,
-              number: i,
-              status: bookedSeats.includes(seatId) ? 'booked' : 'available',
-              type: 'standard'
-            });
-          }
-        });
-
-        return seatMap;
-      }
-
       // Return empty array if API fails
       return [];
     }
@@ -501,8 +420,59 @@ export const bookingService = {
       return response.data;
     } catch (error) {
       console.error('Error fetching user bookings:', error);
+
       // Return empty array if API fails
       return [];
+    }
+  },
+
+  // Get user booking history
+  getUserBookingHistory: async () => {
+    try {
+      const response = await api.get('/booking-history');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching user booking history:', error);
+      return [];
+    }
+  },
+
+  // Get detailed booking history
+  getDetailedBookingHistory: async () => {
+    try {
+      const response = await api.get('/booking-history/detailed');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching detailed booking history:', error);
+      return [];
+    }
+  },
+
+  // Get booking history statistics
+  getBookingHistoryStats: async () => {
+    try {
+      const response = await api.get('/booking-history/stats');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching booking history stats:', error);
+      return {
+        totalBookings: 0,
+        totalSpent: 0,
+        favoriteGenres: [],
+        favoriteTheaters: [],
+        mostWatchedMovies: []
+      };
+    }
+  },
+
+  // Save booking to history
+  saveBookingToHistory: async (bookingId) => {
+    try {
+      const response = await api.post('/booking-history', { bookingId });
+      return response.data;
+    } catch (error) {
+      console.error('Error saving booking to history:', error);
+      throw error;
     }
   },
 

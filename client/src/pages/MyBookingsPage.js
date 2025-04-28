@@ -19,6 +19,7 @@ const MyBookingsPage = () => {
   const currentUser = authService.getCurrentUser();
 
   useEffect(() => {
+    // Always require login
     if (!currentUser) {
       navigate('/login');
       return;
@@ -28,97 +29,7 @@ const MyBookingsPage = () => {
       try {
         setLoading(true);
         const data = await bookingService.getUserBookings();
-
-        // If API returns empty array, use mock data for development
-        if (data.length === 0 && process.env.NODE_ENV === 'development') {
-          // Generate mock data
-          const now = new Date();
-          const yesterday = new Date(now);
-          yesterday.setDate(now.getDate() - 1);
-
-          const tomorrow = new Date(now);
-          tomorrow.setDate(now.getDate() + 1);
-
-          const nextWeek = new Date(now);
-          nextWeek.setDate(now.getDate() + 7);
-
-          const mockBookings = [
-            {
-              _id: '1',
-              movieTitle: 'Inception',
-              moviePoster: 'https://via.placeholder.com/300x450/1A202C/FFFFFF?text=Inception',
-              showtimeDate: tomorrow.toISOString(),
-              showtimeDisplay: '7:30 PM',
-              theaterName: 'Cinema City',
-              hall: 'Hall 1',
-              seats: ['A1', 'A2'],
-              totalPrice: 25.98,
-              bookingStatus: 'confirmed',
-              bookingDate: now.toISOString()
-            },
-            {
-              _id: '2',
-              movieTitle: 'The Dark Knight',
-              moviePoster: 'https://via.placeholder.com/300x450/1A202C/FFFFFF?text=Dark+Knight',
-              showtimeDate: nextWeek.toISOString(),
-              showtimeDisplay: '8:00 PM',
-              theaterName: 'Royal Theater',
-              hall: 'IMAX',
-              seats: ['C4', 'C5', 'C6'],
-              totalPrice: 45.99,
-              bookingStatus: 'confirmed',
-              bookingDate: now.toISOString()
-            },
-            {
-              _id: '3',
-              movieTitle: 'Interstellar',
-              moviePoster: 'https://via.placeholder.com/300x450/1A202C/FFFFFF?text=Interstellar',
-              showtimeDate: yesterday.toISOString(),
-              showtimeDisplay: '6:15 PM',
-              theaterName: 'Starlight Cinema',
-              hall: 'Hall 3',
-              seats: ['F7', 'F8'],
-              totalPrice: 22.50,
-              bookingStatus: 'completed',
-              bookingDate: new Date(now.setDate(now.getDate() - 3)).toISOString()
-            },
-            {
-              _id: '4',
-              movieTitle: 'The Matrix',
-              moviePoster: 'https://via.placeholder.com/300x450/1A202C/FFFFFF?text=Matrix',
-              showtimeDate: new Date(now.setDate(now.getDate() - 5)).toISOString(),
-              showtimeDisplay: '9:00 PM',
-              theaterName: 'Cinema City',
-              hall: '4DX',
-              seats: ['D10', 'D11'],
-              totalPrice: 32.99,
-              bookingStatus: 'cancelled',
-              cancellationDate: new Date(now.setDate(now.getDate() - 4)).toISOString(),
-              refundStatus: 'completed',
-              refundAmount: 29.69,
-              refundPercentage: 90,
-              bookingDate: new Date(now.setDate(now.getDate() - 7)).toISOString()
-            },
-            {
-              _id: '5',
-              movieTitle: 'Dune',
-              moviePoster: 'https://via.placeholder.com/300x450/1A202C/FFFFFF?text=Dune',
-              showtimeDate: new Date(now.setDate(now.getDate() + 10)).toISOString(),
-              showtimeDisplay: '5:45 PM',
-              theaterName: 'Royal Theater',
-              hall: 'Dolby Atmos',
-              seats: ['H3', 'H4', 'H5', 'H6'],
-              totalPrice: 52.00,
-              bookingStatus: 'confirmed',
-              bookingDate: now.toISOString()
-            }
-          ];
-
-          setBookings(mockBookings);
-        } else {
-          setBookings(data);
-        }
-
+        setBookings(data);
         setLoading(false);
       } catch (err) {
         console.error('Error fetching bookings:', err);
@@ -361,35 +272,35 @@ const MyBookingsPage = () => {
                     <div className="space-y-2 mb-4">
                       <div className="flex items-center text-sm text-gray-400">
                         <FaCalendarAlt className="mr-2" />
-                        <span>{formatDate(booking.showtimeDate)}</span>
+                        <span>{booking.showtimeDate ? formatDate(booking.showtimeDate) : 'Date not available'}</span>
                       </div>
                       <div className="flex items-center text-sm text-gray-400">
                         <FaClock className="mr-2" />
-                        <span>{booking.showtimeDisplay || formatTime(booking.showtimeDate)}</span>
+                        <span>{booking.showtimeDisplay || (booking.showtimeDate ? formatTime(booking.showtimeDate) : 'Time not available')}</span>
                       </div>
                       <div className="flex items-center text-sm text-gray-400">
                         <FaMapMarkerAlt className="mr-2" />
-                        <span>{booking.theaterName}, {booking.hall}</span>
+                        <span>{booking.theaterName || 'Theater not available'}{booking.hall ? `, ${booking.hall}` : ''}</span>
                       </div>
                       <div className="flex items-center text-sm text-gray-400">
                         <FaCouch className="mr-2" />
-                        <span>Seats: {booking.seats.join(', ')}</span>
+                        <span>Seats: {booking.seats && booking.seats.length > 0 ? booking.seats.join(', ') : 'Not available'}</span>
                       </div>
                     </div>
 
                     <div className="flex justify-between items-center">
                       <div>
-                        <span className="font-semibold">${booking.totalPrice?.toFixed(2) || '0.00'}</span>
+                        <span className="font-semibold">${booking.totalPrice ? booking.totalPrice.toFixed(2) : '0.00'}</span>
 
                         {/* Show refund info for cancelled bookings */}
-                        {booking.bookingStatus === 'cancelled' && booking.refundAmount > 0 && (
+                        {booking.bookingStatus === 'cancelled' && booking.refundAmount && booking.refundAmount > 0 && (
                           <div className="text-sm text-green-400">
                             Refund: ${booking.refundAmount.toFixed(2)}
                             <span className="text-gray-400 ml-1">
                               ({booking.refundStatus === 'completed' ? 'Processed' :
                                 booking.refundStatus === 'pending' ? 'Pending' :
                                 booking.refundStatus === 'failed' ? 'Failed' :
-                                booking.refundStatus})
+                                booking.refundStatus || 'Unknown'})
                             </span>
                           </div>
                         )}
