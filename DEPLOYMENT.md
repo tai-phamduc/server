@@ -153,13 +153,13 @@ vercel --prod
 
 1. Tạo file `.env` trong thư mục client:
 ```
-REACT_APP_API_URL=https://your-api-url.vercel.app/api
+REACT_APP_API_URL=https://movie-booking-api-pink.vercel.app/api
 ```
 
 2. Cập nhật file `api.js` trong thư mục client:
 ```javascript
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'https://your-api-url.vercel.app/api',
+  baseURL: process.env.REACT_APP_API_URL || 'https://movie-booking-api-pink.vercel.app/api',
   headers: {
     'Content-Type': 'application/json',
   },
