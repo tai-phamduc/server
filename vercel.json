@@ -1,9 +1,13 @@
 {
   "version": 2,
   "builds": [
-    { "src": "index.js", "use": "@vercel/node" }
+    { "src": "server.js", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "/index.js" }
-  ]
+    { "src": "/(.*)", "dest": "/server.js" }
+  ],
+  "env": {
+    "MONGODB_URI": "mongodb+srv://lathanhsi100804:thanhsi1008@movie-booking.xovn2xs.mongodb.net/movie-booking?retryWrites=true&w=majority&appName=movie-booking",
+    "NODE_ENV": "production"
+  }
 }
