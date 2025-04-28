@@ -203,11 +203,13 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 5005; // Changed to 5005
 
 // Only start the server if not running on Vercel
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-}
+// if (process.env.NODE_ENV !== 'production') {
+
+// }
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
 // Export for Vercel
 module.exports = app;
