@@ -481,6 +481,19 @@
             "description": "Get theaters by city"
           },
           "response": []
+        },
+        {
+          "name": "Get Theaters by Movie and Date",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/theaters/movie/{{movieId}}/date/2024-04-30",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "theaters", "movie", "{{movieId}}", "date", "2024-04-30"]
+            },
+            "description": "Get theaters showing a specific movie on a specific date"
+          },
+          "response": []
         }
       ],
       "description": "Endpoints for theater operations"
@@ -524,6 +537,32 @@
               "path": ["api", "showtimes", "{{showtimeId}}", "seats"]
             },
             "description": "Get available seats for a showtime"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Showtimes by Movie and Date",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes/movie/{{movieId}}/date/2024-04-30",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes", "movie", "{{movieId}}", "date", "2024-04-30"]
+            },
+            "description": "Get showtimes for a movie on a specific date, grouped by theater"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Showtimes by Movie, Theater, and Date",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes/movie/{{movieId}}/theater/{{theaterId}}/date/2024-04-30",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes", "movie", "{{movieId}}", "theater", "{{theaterId}}", "date", "2024-04-30"]
+            },
+            "description": "Get showtimes for a movie at a specific theater on a specific date"
           },
           "response": []
         }

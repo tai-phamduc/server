@@ -81,10 +81,30 @@ A typical testing workflow might look like:
 1. Check API health using the "API Health Check" request
 2. Register a new user or login with existing credentials
 3. Browse movies, events, or news
-4. Create a booking for a movie
-5. Process payment for the booking
-6. View and manage bookings
-7. Test search functionality
+4. Select a movie and date to find available theaters
+5. Select a theater to find available showtimes
+6. Create a booking for a movie
+7. Process payment for the booking
+8. View and manage bookings
+9. Test search functionality
+
+## New Booking Flow API Endpoints
+
+The collection includes new endpoints for the updated ticket booking flow:
+
+### Theater Endpoints:
+- **Get Theaters by Movie and Date**: `GET /api/theaters/movie/:movieId/date/:date`
+  - Returns theaters showing a specific movie on a specific date
+  - Example: `GET /api/theaters/movie/680f66dbefdceecc9e34aab9/date/2024-04-30`
+
+### Showtime Endpoints:
+- **Get Showtimes by Movie and Date**: `GET /api/showtimes/movie/:movieId/date/:date`
+  - Returns showtimes for a movie on a specific date, grouped by theater
+  - Example: `GET /api/showtimes/movie/680f66dbefdceecc9e34aab9/date/2024-04-30`
+
+- **Get Showtimes by Movie, Theater, and Date**: `GET /api/showtimes/movie/:movieId/theater/:theaterId/date/:date`
+  - Returns showtimes for a movie at a specific theater on a specific date
+  - Example: `GET /api/showtimes/movie/680f66dbefdceecc9e34aab9/theater/680fa672205b620d90c2f65e/date/2024-04-30`
 
 ## Troubleshooting
 
