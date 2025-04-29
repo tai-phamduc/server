@@ -29,6 +29,7 @@ server/
 │   └── unit/           # Unit tests
 ├── logs/               # Log files
 ├── public/             # Static files
+├── postman/            # Postman collection for API testing
 ├── server.js           # Express server
 ├── package.json        # Dependencies
 └── README.md           # Documentation
@@ -91,6 +92,17 @@ server/
 - `POST /api/theaters` - Create a new theater (Admin)
 - `PUT /api/theaters/:id` - Update a theater (Admin)
 - `DELETE /api/theaters/:id` - Delete a theater (Admin)
+
+### Payments
+- `GET /api/payments` - Get user payments
+- `GET /api/payments/:id` - Get payment by ID
+- `POST /api/payments/stripe/create-payment-intent` - Create Stripe payment intent
+- `POST /api/payments/stripe/confirm` - Confirm Stripe payment
+- `POST /api/payments/paypal/create-order` - Create PayPal order
+- `POST /api/payments/paypal/capture-order` - Capture PayPal order
+- `POST /api/payments/:id/refund` - Refund payment (Admin)
+- `GET /api/payments/admin` - Get all payments (Admin)
+- `GET /api/payments/stats` - Get payment statistics (Admin)
 
 ### Additional Endpoints
 - `GET /api/genres` - Get all genres
@@ -168,6 +180,48 @@ npm run test:unit
 npm run test:integration
 ```
 
+## Postman Collection
+
+The repository includes a Postman collection for testing the API endpoints. The collection is located in the `postman` folder.
+
+### Using the Postman Collection
+
+1. Import the collection file (`postman/Movie_Ticket_Booking_API.postman_collection.json`) into Postman:
+   - Open Postman
+   - Click on "Import" button
+   - Select the collection file
+
+2. Import the environment file (`postman/Movie_Ticket_Booking_API.postman_environment.json`) into Postman:
+   - Click on "Import" button again
+   - Select the environment file
+
+3. Select the "Movie Ticket Booking API Environment" from the environment dropdown in the top right corner of Postman
+
+### Authentication in Postman
+
+To use endpoints that require authentication:
+
+1. First, use the "Login User" request in the "Users" folder with valid credentials
+2. The response will contain a token
+3. Copy this token and set it as the value for the `userToken` environment variable
+
+For admin endpoints:
+
+1. Login with an admin account
+2. Copy the token and set it as the value for the `adminToken` environment variable
+
+### Testing Workflow
+
+A typical testing workflow might look like:
+
+1. Check API health using the "API Health Check" request
+2. Register a new user or login with existing credentials
+3. Browse movies, events, or news
+4. Create a booking for a movie
+5. Process payment for the booking
+6. View and manage bookings
+7. Test search functionality
+
 ## Database
 
 The application uses MongoDB Atlas as the database. The database contains the following collections:
@@ -184,6 +238,7 @@ The application uses MongoDB Atlas as the database. The database contains the fo
 - comments
 - faqs
 - settings
+- payments
 
 ## Authentication
 
