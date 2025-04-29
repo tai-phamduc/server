@@ -9,6 +9,7 @@ const {
   getTheatersByCity,
   addHall,
   updateHall,
+  getTheatersByMovieAndDate,
 } = require('../controllers/theaterController');
 const { protect, admin } = require('../middleware/authMiddleware');
 
@@ -21,6 +22,9 @@ router.route('/:id')
 
 router.route('/city/:city')
   .get(getTheatersByCity);
+
+router.route('/movie/:movieId/date/:date')
+  .get(getTheatersByMovieAndDate);
 
 // Admin routes
 router.route('/')

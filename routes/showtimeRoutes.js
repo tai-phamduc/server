@@ -7,6 +7,8 @@ const {
   updateShowtime,
   deleteShowtime,
   getAvailableSeats,
+  getShowtimesByMovieTheaterDate,
+  getShowtimesByMovieDate,
 } = require('../controllers/showtimeController');
 const { protect, admin } = require('../middleware/authMiddleware');
 
@@ -19,6 +21,12 @@ router.route('/:id')
 
 router.route('/:id/seats')
   .get(getAvailableSeats);
+
+router.route('/movie/:movieId/theater/:theaterId/date/:date')
+  .get(getShowtimesByMovieTheaterDate);
+
+router.route('/movie/:movieId/date/:date')
+  .get(getShowtimesByMovieDate);
 
 // Admin routes
 router.route('/')
