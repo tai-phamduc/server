@@ -122,6 +122,9 @@ app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/upload', require('./routes/uploadRoutes'));
 app.use('/api/theaters', require('./routes/theaterRoutes'));
 app.use('/api/showtimes', require('./routes/showtimeRoutes'));
+// New routes using updated models
+app.use('/api/cinemas', require('./routes/cinemaRoutes'));
+app.use('/api/screenings', require('./routes/screeningRoutes'));
 app.use('/api/bookings', require('./routes/bookingRoutes'));
 app.use('/api/reviews', require('./routes/reviewRoutes'));
 app.use('/api/payments', require('./routes/paymentRoutes'));
