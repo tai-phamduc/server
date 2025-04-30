@@ -111,9 +111,9 @@ const UserSchema = new mongoose.Schema(
           message: 'You can only have up to 10 favorite genres',
         },
       },
-      favoriteTheaters: [{
+      favoriteCinemas: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Theater',
+        ref: 'Cinema',
       }],
       notificationEnabled: {
         type: Boolean,
@@ -220,6 +220,14 @@ const UserSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Booking',
     }],
+    orderHistory: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Order',
+    }],
+    recommendations: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Recommendation',
+    }],
     reviewCount: {
       type: Number,
       default: 0,
@@ -272,7 +280,15 @@ UserSchema.virtual('fullAddress').get(function() {
 UserSchema.virtual('bookings', {
   ref: 'Booking',
   localField: '_id',
-  foreignField: 'user',
+  foreignField: 'user_id',
+  justOne: false,
+});
+
+// Create virtual for orders
+UserSchema.virtual('orders', {
+  ref: 'Order',
+  localField: '_id',
+  foreignField: 'user_id',
   justOne: false,
 });
 
@@ -297,6 +313,22 @@ UserSchema.virtual('news', {
   ref: 'News',
   localField: '_id',
   foreignField: 'author',
+  justOne: false,
+});
+
+// Create virtual for activities
+UserSchema.virtual('activities', {
+  ref: 'UserActivity',
+  localField: '_id',
+  foreignField: 'user_id',
+  justOne: false,
+});
+
+// Create virtual for recommendations
+UserSchema.virtual('userRecommendations', {
+  ref: 'Recommendation',
+  localField: '_id',
+  foreignField: 'user_id',
   justOne: false,
 });
 

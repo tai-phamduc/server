@@ -1,47 +1,62 @@
 const mongoose = require('mongoose');
 
+// Schema for booked seats
+const BookedSeatSchema = new mongoose.Schema({
+  seat_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
+  row: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  column: {
+    type: Number,
+    required: true,
+  },
+  type: {
+    type: String,
+    enum: ['standard', 'premium', 'vip', 'couple', 'accessible'],
+    default: 'standard',
+  },
+  price: {
+    type: Number,
+    required: true,
+    min: [0, 'Price cannot be negative'],
+  },
+}, { _id: false });
+
 const BookingSchema = new mongoose.Schema(
   {
-    user: {
+    user_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: [true, 'User is required'],
       index: true,
     },
-    movie: {
+    movie_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Movie',
       required: [true, 'Movie is required'],
       index: true,
     },
-    movieTitle: {
-      type: String,
-      trim: true,
-    },
-    moviePoster: {
-      type: String,
-    },
-    showtime: {
+    screening_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Showtime',
-      required: [true, 'Showtime is required'],
+      ref: 'Screening',
+      required: [true, 'Screening is required'],
       index: true,
     },
-    showtimeDate: {
-      type: Date,
-    },
-    showtimeDisplay: {
-      type: String,
-      trim: true,
-    },
-    theater: {
+    cinema_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Theater',
-      required: [true, 'Theater is required'],
+      ref: 'Cinema',
+      required: [true, 'Cinema is required'],
+      index: true,
     },
-    theaterName: {
-      type: String,
-      trim: true,
+    room_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Room',
+      required: [true, 'Room is required'],
     },
     hall: {
       type: String,
