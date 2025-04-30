@@ -1,66 +1,289 @@
 const mongoose = require('mongoose');
 
-// Schema for booked seats
+// Schema for booked seats - optimized for better querying and validation
 const BookedSeatSchema = new mongoose.Schema({
-  seat_id: {
+  seat: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
+    index: true
   },
   row: {
     type: String,
     required: true,
     trim: true,
+    uppercase: true, // Standardize row letters to uppercase
   },
   column: {
     type: Number,
     required: true,
+    min: [1, 'Column number must be positive']
+  },
+  seatNumber: {
+    type: String,
+    required: true,
+    trim: true,
   },
   type: {
     type: String,
-    enum: ['standard', 'premium', 'vip', 'couple', 'accessible'],
+    enum: {
+      values: ['standard', 'premium', 'vip', 'couple', 'accessible'],
+      message: '{VALUE} is not a valid seat type'
+    },
     default: 'standard',
+    index: true
   },
   price: {
     type: Number,
     required: true,
     min: [0, 'Price cannot be negative'],
   },
-}, { _id: false });
+  isAccessible: {
+    type: Boolean,
+    default: false
+  },
+  location: {
+    type: String,
+    enum: ['front', 'middle', 'back', 'left', 'right', 'center'],
+    default: 'middle'
+  }
+}, { _id: true }); // Changed to true to allow direct referencing
+
+// Schema for concession items - optimized for better tracking and customization
+const ConcessionItemSchema = new mongoose.Schema({
+  product: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Product',
+    required: true,
+    index: true
+  },
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  quantity: {
+    type: Number,
+    required: true,
+    min: [1, 'Quantity must be at least 1'],
+    max: [20, 'Maximum quantity per item is 20']
+  },
+  unitPrice: {
+    type: Number,
+    required: true,
+    min: [0, 'Price cannot be negative'],
+  },
+  subtotal: {
+    type: Number,
+    required: true,
+    min: [0, 'Subtotal cannot be negative'],
+  },
+  discount: {
+    type: Number,
+    default: 0,
+    min: [0, 'Discount cannot be negative']
+  },
+  notes: {
+    type: String,
+    trim: true,
+    maxlength: [200, 'Notes cannot be more than 200 characters']
+  },
+  options: [{
+    name: {
+      type: String,
+      trim: true
+    },
+    value: {
+      type: String,
+      trim: true
+    },
+    priceAdjustment: {
+      type: Number,
+      default: 0
+    }
+  }],
+  category: {
+    type: String,
+    trim: true,
+    enum: ['food', 'beverage', 'combo', 'merchandise', 'other'],
+    default: 'food'
+  },
+  isCombo: {
+    type: Boolean,
+    default: false
+  }
+}, { _id: true }); // Changed to true to allow direct referencing
+
+// Schema for refund details - optimized for better tracking and reporting
+const RefundDetailsSchema = new mongoose.Schema({
+  amount: {
+    type: Number,
+    required: true,
+    min: [0, 'Refund amount cannot be negative'],
+  },
+  percentage: {
+    type: Number,
+    required: true,
+    min: [0, 'Refund percentage cannot be negative'],
+    max: [100, 'Refund percentage cannot exceed 100'],
+  },
+  reason: {
+    type: String,
+    required: true,
+    trim: true,
+    enum: {
+      values: [
+        'customer_request',
+        'screening_cancelled',
+        'technical_issues',
+        'double_booking',
+        'schedule_change',
+        'service_issue',
+        'payment_error',
+        'medical_emergency',
+        'weather_conditions',
+        'other'
+      ],
+      message: '{VALUE} is not a valid refund reason',
+    },
+    index: true
+  },
+  reasonDetails: {
+    type: String,
+    trim: true,
+    maxlength: [500, 'Reason details cannot be more than 500 characters']
+  },
+  requestDate: {
+    type: Date,
+    default: Date.now,
+    index: true
+  },
+  processedDate: {
+    type: Date,
+  },
+  processedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    index: true
+  },
+  status: {
+    type: String,
+    enum: {
+      values: ['pending', 'approved', 'rejected', 'completed', 'failed', 'cancelled'],
+      message: '{VALUE} is not a valid refund status',
+    },
+    default: 'pending',
+    index: true
+  },
+  transactionId: {
+    type: String,
+    trim: true,
+    index: true
+  },
+  paymentMethod: {
+    type: String,
+    enum: {
+      values: ['original_payment', 'credit', 'bank_transfer', 'store_credit', 'gift_card', 'other'],
+      message: '{VALUE} is not a valid refund payment method',
+    },
+    default: 'original_payment',
+  },
+  notes: {
+    type: String,
+    trim: true,
+    maxlength: [500, 'Notes cannot be more than 500 characters']
+  },
+  refundedItems: {
+    tickets: {
+      count: {
+        type: Number,
+        default: 0,
+        min: [0, 'Ticket count cannot be negative']
+      },
+      amount: {
+        type: Number,
+        default: 0,
+        min: [0, 'Ticket amount cannot be negative']
+      }
+    },
+    concessions: {
+      count: {
+        type: Number,
+        default: 0,
+        min: [0, 'Concession count cannot be negative']
+      },
+      amount: {
+        type: Number,
+        default: 0,
+        min: [0, 'Concession amount cannot be negative']
+      }
+    },
+    fees: {
+      amount: {
+        type: Number,
+        default: 0,
+        min: [0, 'Fee amount cannot be negative']
+      }
+    }
+  },
+  isPartial: {
+    type: Boolean,
+    default: false
+  },
+  customerNotified: {
+    type: Boolean,
+    default: false
+  },
+  customerNotifiedAt: {
+    type: Date
+  }
+}, { _id: true, timestamps: true });
 
 const BookingSchema = new mongoose.Schema(
   {
-    user_id: {
+    // User and session information - optimized field names for consistency
+    user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: [true, 'User is required'],
       index: true,
     },
-    movie_id: {
+    movie: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Movie',
       required: [true, 'Movie is required'],
       index: true,
     },
-    screening_id: {
+    screening: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Screening',
       required: [true, 'Screening is required'],
       index: true,
     },
-    cinema_id: {
+    cinema: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Cinema',
       required: [true, 'Cinema is required'],
       index: true,
     },
-    room_id: {
+    room: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Room',
       required: [true, 'Room is required'],
+      index: true,
     },
     hall: {
       type: String,
       required: [true, 'Hall is required'],
+      trim: true,
+    },
+    screeningDate: {
+      type: Date,
+      required: [true, 'Screening date is required'],
+      index: true,
+    },
+    screeningTime: {
+      type: String,
+      required: [true, 'Screening time is required'],
       trim: true,
     },
     seats: {
@@ -73,6 +296,7 @@ const BookingSchema = new mongoose.Schema(
         message: 'Please select between 1 and 10 seats',
       },
     },
+    bookedSeats: [BookedSeatSchema],
     seatsDisplay: {
       type: String,
       trim: true,
@@ -120,6 +344,40 @@ const BookingSchema = new mongoose.Schema(
           default: 0,
         },
       },
+      couple: {
+        count: {
+          type: Number,
+          default: 0,
+        },
+        price: {
+          type: Number,
+          default: 0,
+        },
+        total: {
+          type: Number,
+          default: 0,
+        },
+      },
+      accessible: {
+        count: {
+          type: Number,
+          default: 0,
+        },
+        price: {
+          type: Number,
+          default: 0,
+        },
+        total: {
+          type: Number,
+          default: 0,
+        },
+      },
+    },
+    concessionItems: [ConcessionItemSchema],
+    concessionTotal: {
+      type: Number,
+      default: 0,
+      min: [0, 'Concession total cannot be negative'],
     },
     totalPrice: {
       type: Number,
@@ -133,7 +391,7 @@ const BookingSchema = new mongoose.Schema(
     paymentMethod: {
       type: String,
       enum: {
-        values: ['credit_card', 'paypal', 'cash', 'stripe', 'apple_pay', 'google_pay'],
+        values: ['credit_card', 'paypal', 'cash', 'stripe', 'apple_pay', 'google_pay', 'venmo'],
         message: '{VALUE} is not a valid payment method',
       },
       required: [true, 'Payment method is required'],
@@ -141,7 +399,7 @@ const BookingSchema = new mongoose.Schema(
     paymentStatus: {
       type: String,
       enum: {
-        values: ['pending', 'completed', 'failed', 'refunded', 'partially_refunded'],
+        values: ['pending', 'processing', 'completed', 'failed', 'refunded', 'partially_refunded'],
         message: '{VALUE} is not a valid payment status',
       },
       default: 'pending',
@@ -154,10 +412,28 @@ const BookingSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    paymentDetails: {
+      cardType: {
+        type: String,
+        trim: true,
+      },
+      lastFourDigits: {
+        type: String,
+        trim: true,
+      },
+      expiryDate: {
+        type: String,
+        trim: true,
+      },
+      billingAddress: {
+        type: String,
+        trim: true,
+      },
+    },
     bookingStatus: {
       type: String,
       enum: {
-        values: ['pending', 'confirmed', 'cancelled', 'completed', 'expired'],
+        values: ['pending', 'confirmed', 'cancelled', 'completed', 'expired', 'refunded'],
         message: '{VALUE} is not a valid booking status',
       },
       default: 'pending',
@@ -166,28 +442,29 @@ const BookingSchema = new mongoose.Schema(
     cancellationDate: {
       type: Date,
     },
-    refundAmount: {
-      type: Number,
-      default: 0,
-      min: [0, 'Refund amount cannot be negative'],
-    },
-    refundPercentage: {
-      type: Number,
-      default: 0,
-      min: [0, 'Refund percentage cannot be negative'],
-      max: [100, 'Refund percentage cannot exceed 100'],
-    },
-    refundStatus: {
-      type: String,
-      enum: {
-        values: ['not_applicable', 'pending', 'completed', 'failed', 'manual_required'],
-        message: '{VALUE} is not a valid refund status',
-      },
-      default: 'not_applicable',
-    },
-    refundTransactionId: {
+    cancellationReason: {
       type: String,
       trim: true,
+    },
+    refunds: [RefundDetailsSchema],
+    refundEligibility: {
+      isEligible: {
+        type: Boolean,
+        default: true,
+      },
+      eligibleUntil: {
+        type: Date,
+      },
+      maxRefundPercentage: {
+        type: Number,
+        default: 100,
+        min: [0, 'Max refund percentage cannot be negative'],
+        max: [100, 'Max refund percentage cannot exceed 100'],
+      },
+      reason: {
+        type: String,
+        trim: true,
+      },
     },
     bookingNumber: {
       type: String,
@@ -219,6 +496,10 @@ const BookingSchema = new mongoose.Schema(
       min: [0, 'Discount cannot be negative'],
     },
     discountFormatted: {
+      type: String,
+      trim: true,
+    },
+    discountCode: {
       type: String,
       trim: true,
     },
@@ -288,31 +569,25 @@ const BookingSchema = new mongoose.Schema(
     reminderSentAt: {
       type: Date,
     },
-    cancellationDate: {
-      type: Date,
-    },
-    refundAmount: {
+    version: {
       type: Number,
-      default: 0,
-      min: [0, 'Refund amount cannot be negative'],
+      default: 1,
     },
-    refundPercentage: {
-      type: Number,
-      default: 0,
-      min: [0, 'Refund percentage cannot be negative'],
-      max: [100, 'Refund percentage cannot exceed 100'],
-    },
-    refundStatus: {
-      type: String,
-      enum: {
-        values: ['not_applicable', 'pending', 'completed', 'failed', 'manual_required'],
-        message: '{VALUE} is not a valid refund status',
-      },
-      default: 'not_applicable',
-    },
-    refundTransactionId: {
+    ipAddress: {
       type: String,
       trim: true,
+    },
+    userAgent: {
+      type: String,
+      trim: true,
+    },
+    bookingSource: {
+      type: String,
+      enum: {
+        values: ['web', 'mobile_app', 'kiosk', 'box_office', 'third_party'],
+        message: '{VALUE} is not a valid booking source',
+      },
+      default: 'web',
     },
   },
   {
@@ -322,12 +597,13 @@ const BookingSchema = new mongoose.Schema(
   }
 );
 
-// Create virtual for payment
+// Create virtual for payment with options
 BookingSchema.virtual('payment', {
   ref: 'Payment',
   localField: '_id',
   foreignField: 'booking',
   justOne: true,
+  options: { sort: { createdAt: -1 } }
 });
 
 // Create virtual for net amount
@@ -340,11 +616,45 @@ BookingSchema.virtual('seatCount').get(function() {
   return this.seats.length;
 });
 
-// Create indexes for faster queries
+// Create virtual for refund status
+BookingSchema.virtual('refundStatus').get(function() {
+  if (!this.refunds || this.refunds.length === 0) {
+    return 'none';
+  }
+
+  const latestRefund = this.refunds.sort((a, b) =>
+    b.requestDate.getTime() - a.requestDate.getTime()
+  )[0];
+
+  return latestRefund.status;
+});
+
+// Create virtual for total refunded amount
+BookingSchema.virtual('totalRefundedAmount').get(function() {
+  if (!this.refunds || this.refunds.length === 0) {
+    return 0;
+  }
+
+  return this.refunds
+    .filter(refund => refund.status === 'completed')
+    .reduce((total, refund) => total + refund.amount, 0);
+});
+
+// Create virtual for remaining balance
+BookingSchema.virtual('remainingBalance').get(function() {
+  const refundedAmount = this.totalRefundedAmount || 0;
+  return Math.max(0, this.totalPrice - refundedAmount);
+});
+
+// Create indexes for faster queries - optimized for common access patterns
 BookingSchema.index({ user: 1, createdAt: -1 });
-BookingSchema.index({ movie: 1, showtime: 1 });
+BookingSchema.index({ movie: 1, screening: 1 });
 BookingSchema.index({ bookingDate: -1 });
 BookingSchema.index({ bookingStatus: 1, paymentStatus: 1 });
+BookingSchema.index({ bookingNumber: 1 }, { unique: true });
+BookingSchema.index({ 'refunds.status': 1, bookingStatus: 1 });
+BookingSchema.index({ screeningDate: 1, cinema: 1 });
+BookingSchema.index({ isCheckedIn: 1, screeningDate: 1 });
 
 // Generate a unique booking number and format display fields before saving
 BookingSchema.pre('save', async function (next) {
@@ -472,76 +782,243 @@ BookingSchema.post('save', async function() {
   }
 });
 
-// Static method to find bookings by user
-BookingSchema.statics.findByUser = function(userId) {
-  return this.find({ user: userId })
+// Static method to find bookings by user with pagination
+BookingSchema.statics.findByUser = function(userId, page = 1, limit = 10, status = null) {
+  const skip = (page - 1) * limit;
+  const query = { user: userId };
+
+  // Add status filter if provided
+  if (status) {
+    query.bookingStatus = status;
+  }
+
+  return this.find(query)
     .sort({ createdAt: -1 })
-    .populate('movie', 'title poster')
-    .populate('showtime')
-    .populate('theater', 'name location');
+    .skip(skip)
+    .limit(limit)
+    .populate('movie', 'title poster slug')
+    .populate('screening', 'date startTime endTime')
+    .populate('cinema', 'name location')
+    .select('-notes -ipAddress -userAgent'); // Exclude unnecessary fields
 };
 
-// Static method to find bookings by movie
-BookingSchema.statics.findByMovie = function(movieId) {
-  return this.find({ movie: movieId })
-    .sort({ createdAt: -1 });
+// Static method to find bookings by movie with pagination
+BookingSchema.statics.findByMovie = function(movieId, page = 1, limit = 20) {
+  const skip = (page - 1) * limit;
+  return this.find({
+    movie: movieId,
+    bookingStatus: { $in: ['confirmed', 'completed'] } // Only include valid bookings
+  })
+    .sort({ screeningDate: 1, createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .select('bookingNumber screeningDate screeningTime seats totalPrice bookingStatus');
 };
 
-// Static method to find bookings by status
-BookingSchema.statics.findByStatus = function(status) {
+// Static method to find bookings by status with pagination
+BookingSchema.statics.findByStatus = function(status, page = 1, limit = 20) {
+  const skip = (page - 1) * limit;
   return this.find({ bookingStatus: status })
-    .sort({ createdAt: -1 });
-};
-
-// Static method to find bookings by payment status
-BookingSchema.statics.findByPaymentStatus = function(status) {
-  return this.find({ paymentStatus: status })
-    .sort({ createdAt: -1 });
-};
-
-// Static method to find recent bookings
-BookingSchema.statics.findRecent = function(limit = 10) {
-  return this.find()
     .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .populate('user', 'name email')
+    .populate('movie', 'title poster')
+    .populate('cinema', 'name');
+};
+
+// Static method to find bookings by payment status with pagination
+BookingSchema.statics.findByPaymentStatus = function(status, page = 1, limit = 20) {
+  const skip = (page - 1) * limit;
+  return this.find({ paymentStatus: status })
+    .sort({ createdAt: -1 })
+    .skip(skip)
     .limit(limit)
     .populate('user', 'name email')
     .populate('movie', 'title')
-    .populate('showtime')
-    .populate('theater', 'name');
+    .select('bookingNumber totalPrice paymentMethod bookingDate');
 };
 
-// Method to cancel booking
-BookingSchema.methods.cancelBooking = async function(reason, refundAmount, refundPercentage) {
+// Static method to find recent bookings with better population
+BookingSchema.statics.findRecent = function(limit = 10) {
+  return this.find({
+    bookingStatus: { $in: ['confirmed', 'completed'] }
+  })
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .populate('user', 'name email profilePicture')
+    .populate('movie', 'title poster slug')
+    .populate('cinema', 'name location')
+    .select('bookingNumber screeningDate screeningTime seats totalPrice bookingStatus');
+};
+
+// Static method to find bookings by date range
+BookingSchema.statics.findByDateRange = function(startDate, endDate, page = 1, limit = 50) {
+  const skip = (page - 1) * limit;
+  return this.find({
+    bookingDate: { $gte: startDate, $lte: endDate }
+  })
+    .sort({ bookingDate: -1 })
+    .skip(skip)
+    .limit(limit);
+};
+
+// Static method to find bookings by cinema
+BookingSchema.statics.findByCinema = function(cinemaId, page = 1, limit = 20) {
+  const skip = (page - 1) * limit;
+  return this.find({ cinema: cinemaId })
+    .sort({ screeningDate: 1, screeningTime: 1 })
+    .skip(skip)
+    .limit(limit)
+    .populate('movie', 'title poster')
+    .populate('user', 'name');
+};
+
+// Static method to find bookings with refunds
+BookingSchema.statics.findWithRefunds = function(status = null, page = 1, limit = 20) {
+  const skip = (page - 1) * limit;
+  const query = { 'refunds.0': { $exists: true } };
+
+  if (status) {
+    query['refunds.status'] = status;
+  }
+
+  return this.find(query)
+    .sort({ 'refunds.requestDate': -1 })
+    .skip(skip)
+    .limit(limit)
+    .populate('user', 'name email')
+    .populate('movie', 'title');
+};
+
+// Method to cancel booking - optimized with better refund handling
+BookingSchema.methods.cancelBooking = async function(reason, refundAmount, refundPercentage, processedBy = null) {
+  // Update booking status
   this.bookingStatus = 'cancelled';
   this.cancellationDate = new Date();
   this.notes = reason || this.notes;
 
+  // Create a refund record if amount is specified
   if (refundAmount > 0) {
-    this.refundAmount = refundAmount;
-    this.refundPercentage = refundPercentage;
-    this.refundStatus = 'pending';
-
-    if (this.paymentStatus === 'completed') {
-      this.paymentStatus = 'refunded';
+    // Validate refund amount doesn't exceed total price
+    if (refundAmount > this.totalPrice) {
+      throw new Error('Refund amount cannot exceed total booking price');
     }
+
+    // Create new refund record
+    const refund = {
+      amount: refundAmount,
+      percentage: refundPercentage || Math.round((refundAmount / this.totalPrice) * 100),
+      reason: 'customer_request',
+      reasonDetails: reason,
+      requestDate: new Date(),
+      status: 'pending'
+    };
+
+    // Add processor information if available
+    if (processedBy) {
+      refund.processedBy = processedBy;
+      refund.processedDate = new Date();
+      refund.status = 'approved';
+    }
+
+    // Add refund to the refunds array
+    if (!this.refunds) this.refunds = [];
+    this.refunds.push(refund);
+
+    // Update payment status if payment was completed
+    if (this.paymentStatus === 'completed') {
+      this.paymentStatus = 'refund_pending';
+    }
+  }
+
+  // Release the seats back to inventory
+  // This would typically involve updating the Screening model
+  // We'll implement this in a post-save hook or separate method
+
+  return this.save();
+};
+
+// Method to process refund
+BookingSchema.methods.processRefund = async function(refundId, status, processedBy, transactionId = null) {
+  // Find the refund by ID
+  if (!this.refunds || this.refunds.length === 0) {
+    throw new Error('No refunds found for this booking');
+  }
+
+  const refundIndex = this.refunds.findIndex(r => r._id.toString() === refundId);
+
+  if (refundIndex === -1) {
+    throw new Error('Refund not found');
+  }
+
+  // Update the refund
+  this.refunds[refundIndex].status = status;
+  this.refunds[refundIndex].processedBy = processedBy;
+  this.refunds[refundIndex].processedDate = new Date();
+
+  if (transactionId) {
+    this.refunds[refundIndex].transactionId = transactionId;
+  }
+
+  // Update payment status based on refund status
+  if (status === 'completed') {
+    this.paymentStatus = 'refunded';
+  } else if (status === 'rejected') {
+    this.paymentStatus = 'completed';
   }
 
   return this.save();
 };
 
 // Method to complete booking (check-in)
-BookingSchema.methods.checkIn = async function() {
+BookingSchema.methods.checkIn = async function(checkedInBy = null) {
+  if (this.isCheckedIn) {
+    throw new Error('Booking already checked in');
+  }
+
+  // Validate that the screening hasn't passed
+  const now = new Date();
+  if (this.screeningDate < now) {
+    // Allow check-in up to 30 minutes after screening start
+    const screeningTime = new Date(this.screeningDate);
+    const thirtyMinutesAfterStart = new Date(screeningTime.getTime() + 30 * 60000);
+
+    if (now > thirtyMinutesAfterStart) {
+      throw new Error('Cannot check in after screening has ended');
+    }
+  }
+
   this.isCheckedIn = true;
-  this.checkedInAt = Date.now();
+  this.checkedInAt = now;
   this.bookingStatus = 'completed';
+
+  if (checkedInBy) {
+    this.checkedInBy = checkedInBy;
+  }
+
   return this.save();
 };
 
 // Method to generate QR code
 BookingSchema.methods.generateQRCode = async function() {
-  // This would typically use a QR code generation library
-  // For now, we'll just set a placeholder
-  this.qrCode = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${this.bookingNumber}`;
+  // Create a data string with booking details for the QR code
+  const qrData = JSON.stringify({
+    id: this._id.toString(),
+    number: this.bookingNumber,
+    seats: this.seats,
+    movie: this.movieTitle,
+    date: this.screeningDate,
+    cinema: this.cinemaName,
+    hall: this.hall
+  });
+
+  // Generate QR code URL (in a real implementation, you might use a QR code library)
+  this.qrCode = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrData)}`;
+
+  // Generate barcode URL as well
+  this.barcodeUrl = `https://barcodeapi.org/api/128/${this.bookingNumber}`;
+
   return this.save();
 };
 
