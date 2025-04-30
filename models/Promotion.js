@@ -1,4 +1,115 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
+
+// Schema for promotion usage
+const PromotionUsageSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  usedAt: {
+    type: Date,
+    default: Date.now,
+  },
+  booking: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Booking',
+  },
+  order: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Order',
+  },
+  amountSaved: {
+    type: Number,
+    min: [0, 'Amount saved cannot be negative'],
+    default: 0,
+  },
+  originalAmount: {
+    type: Number,
+    min: [0, 'Original amount cannot be negative'],
+    default: 0,
+  },
+  finalAmount: {
+    type: Number,
+    min: [0, 'Final amount cannot be negative'],
+    default: 0,
+  },
+  ip: {
+    type: String,
+    trim: true,
+  },
+  userAgent: {
+    type: String,
+    trim: true,
+  },
+}, { _id: true, timestamps: true });
+
+// Schema for promotion restrictions
+const PromotionRestrictionSchema = new mongoose.Schema({
+  type: {
+    type: String,
+    enum: {
+      values: ['movie', 'cinema', 'screening', 'product', 'user', 'time', 'day', 'date', 'minimum_purchase', 'maximum_discount', 'payment_method'],
+      message: '{VALUE} is not a valid restriction type',
+    },
+    required: true,
+  },
+  movies: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Movie',
+  }],
+  cinemas: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Cinema',
+  }],
+  screenings: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Screening',
+  }],
+  products: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Product',
+  }],
+  userTypes: {
+    type: [String],
+    default: [],
+  },
+  timeStart: {
+    type: String,
+    trim: true,
+  },
+  timeEnd: {
+    type: String,
+    trim: true,
+  },
+  days: {
+    type: [String],
+    default: [],
+  },
+  dateStart: {
+    type: Date,
+  },
+  dateEnd: {
+    type: Date,
+  },
+  minimumPurchase: {
+    type: Number,
+    min: [0, 'Minimum purchase cannot be negative'],
+  },
+  maximumDiscount: {
+    type: Number,
+    min: [0, 'Maximum discount cannot be negative'],
+  },
+  paymentMethods: {
+    type: [String],
+    default: [],
+  },
+  description: {
+    type: String,
+    trim: true,
+  },
+}, { _id: false });
 
 const PromotionSchema = new mongoose.Schema(
   {
@@ -22,10 +133,15 @@ const PromotionSchema = new mongoose.Schema(
       trim: true,
       maxlength: [500, 'Description cannot be more than 500 characters'],
     },
+    shortDescription: {
+      type: String,
+      trim: true,
+      maxlength: [100, 'Short description cannot be more than 100 characters'],
+    },
     type: {
       type: String,
       enum: {
-        values: ['percentage', 'fixed_amount', 'free_ticket', 'buy_one_get_one'],
+        values: ['percentage', 'fixed_amount', 'free_ticket', 'buy_one_get_one', 'free_item', 'free_shipping', 'bundle'],
         message: '{VALUE} is not a valid promotion type',
       },
       required: [true, 'Promotion type is required'],
@@ -79,29 +195,39 @@ const PromotionSchema = new mongoose.Schema(
       min: [0, 'User limit cannot be negative'],
       default: 1,
     },
+    usageHistory: [PromotionUsageSchema],
+    restrictions: [PromotionRestrictionSchema],
     applicableMovies: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Movie',
     }],
-    applicableTheaters: [{
+    applicableCinemas: [{
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Theater',
+      ref: 'Cinema',
     }],
-    applicableShowtimes: [{
+    applicableScreenings: [{
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Showtime',
+      ref: 'Screening',
+    }],
+    applicableProducts: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Product',
     }],
     excludedMovies: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Movie',
     }],
-    excludedTheaters: [{
+    excludedCinemas: [{
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Theater',
+      ref: 'Cinema',
     }],
-    excludedShowtimes: [{
+    excludedScreenings: [{
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Showtime',
+      ref: 'Screening',
+    }],
+    excludedProducts: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Product',
     }],
     applicableDays: {
       type: [String],
@@ -111,13 +237,88 @@ const PromotionSchema = new mongoose.Schema(
       },
       default: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
     },
+    applicableTo: {
+      type: String,
+      enum: {
+        values: ['all', 'tickets', 'concessions', 'merchandise', 'specific_items'],
+        default: 'all',
+      },
+    },
     image: {
+      type: String,
+      default: '',
+    },
+    bannerImage: {
       type: String,
       default: '',
     },
     termsAndConditions: {
       type: String,
       trim: true,
+    },
+    isPublic: {
+      type: Boolean,
+      default: true,
+    },
+    isFirstTimeOnly: {
+      type: Boolean,
+      default: false,
+    },
+    isReferralCode: {
+      type: Boolean,
+      default: false,
+    },
+    referredBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    isExclusive: {
+      type: Boolean,
+      default: false,
+    },
+    exclusiveUserGroups: {
+      type: [String],
+      default: [],
+    },
+    exclusiveUsers: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    }],
+    isCombinableWithOtherPromotions: {
+      type: Boolean,
+      default: false,
+    },
+    priority: {
+      type: Number,
+      default: 0,
+    },
+    campaign: {
+      type: String,
+      trim: true,
+    },
+    source: {
+      type: String,
+      trim: true,
+    },
+    trackingCode: {
+      type: String,
+      trim: true,
+    },
+    totalSaved: {
+      type: Number,
+      default: 0,
+      min: [0, 'Total saved cannot be negative'],
+    },
+    redemptionRate: {
+      type: Number,
+      default: 0,
+      min: [0, 'Redemption rate cannot be negative'],
+      max: [100, 'Redemption rate cannot exceed 100'],
+    },
+    averageSavings: {
+      type: Number,
+      default: 0,
+      min: [0, 'Average savings cannot be negative'],
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
@@ -126,6 +327,17 @@ const PromotionSchema = new mongoose.Schema(
     updatedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
+    },
+    aiGenerated: {
+      type: Boolean,
+      default: false,
+    },
+    aiModel: {
+      type: String,
+      trim: true,
+    },
+    aiParameters: {
+      type: Object,
     },
   },
   {
@@ -152,7 +364,7 @@ PromotionSchema.virtual('formattedValue').get(function() {
 // Create virtual for status
 PromotionSchema.virtual('status').get(function() {
   const now = new Date();
-  
+
   if (!this.isActive) {
     return 'inactive';
   } else if (now < this.startDate) {
@@ -182,7 +394,7 @@ PromotionSchema.virtual('usagePercentage').get(function() {
 PromotionSchema.virtual('daysRemaining').get(function() {
   const now = new Date();
   if (now > this.endDate) return 0;
-  
+
   const diffTime = this.endDate.getTime() - now.getTime();
   return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 });
@@ -199,13 +411,13 @@ PromotionSchema.pre('save', function(next) {
     if (this.isModified('code')) {
       this.code = this.code.toUpperCase();
     }
-    
+
     // Validate dates
     const now = new Date();
     if (this.endDate <= this.startDate) {
       return next(new Error('End date must be after start date'));
     }
-    
+
     next();
   } catch (error) {
     next(error);
@@ -215,7 +427,7 @@ PromotionSchema.pre('save', function(next) {
 // Static method to find active promotions
 PromotionSchema.statics.findActive = function() {
   const now = new Date();
-  
+
   return this.find({
     isActive: true,
     startDate: { $lte: now },
@@ -236,7 +448,7 @@ PromotionSchema.statics.findByCode = function(code) {
 PromotionSchema.statics.findApplicable = function(movieId, theaterId, showtimeId, amount) {
   const now = new Date();
   const dayOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][now.getDay()];
-  
+
   return this.find({
     isActive: true,
     startDate: { $lte: now },
@@ -248,7 +460,7 @@ PromotionSchema.statics.findApplicable = function(movieId, theaterId, showtimeId
       { usageCount: { $lt: '$usageLimit' } },
       {
         $and: [
-          { 
+          {
             $or: [
               { applicableMovies: { $size: 0 } },
               { applicableMovies: movieId }
@@ -279,63 +491,63 @@ PromotionSchema.statics.findApplicable = function(movieId, theaterId, showtimeId
 PromotionSchema.methods.isApplicable = function(movieId, theaterId, showtimeId, amount, userId) {
   const now = new Date();
   const dayOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][now.getDay()];
-  
+
   // Check if promotion is active
   if (!this.isActive) return false;
-  
+
   // Check dates
   if (now < this.startDate || now > this.endDate) return false;
-  
+
   // Check usage limit
   if (this.usageLimit && this.usageCount >= this.usageLimit) return false;
-  
+
   // Check minimum purchase
   if (amount < this.minPurchase) return false;
-  
+
   // Check applicable days
   if (!this.applicableDays.includes(dayOfWeek)) return false;
-  
+
   // Check applicable movies
   if (this.applicableMovies.length > 0 && !this.applicableMovies.includes(movieId)) return false;
-  
+
   // Check applicable theaters
   if (this.applicableTheaters.length > 0 && !this.applicableTheaters.includes(theaterId)) return false;
-  
+
   // Check applicable showtimes
   if (this.applicableShowtimes.length > 0 && !this.applicableShowtimes.includes(showtimeId)) return false;
-  
+
   // Check excluded movies
   if (this.excludedMovies.includes(movieId)) return false;
-  
+
   // Check excluded theaters
   if (this.excludedTheaters.includes(theaterId)) return false;
-  
+
   // Check excluded showtimes
   if (this.excludedShowtimes.includes(showtimeId)) return false;
-  
+
   return true;
 };
 
 // Method to calculate discount amount
 PromotionSchema.methods.calculateDiscount = function(amount) {
   let discount = 0;
-  
+
   if (this.type === 'percentage') {
     discount = (amount * this.value) / 100;
-    
+
     // Apply maximum discount if set
     if (this.maxDiscount && discount > this.maxDiscount) {
       discount = this.maxDiscount;
     }
   } else if (this.type === 'fixed_amount') {
     discount = this.value;
-    
+
     // Discount cannot be more than the amount
     if (discount > amount) {
       discount = amount;
     }
   }
-  
+
   return discount;
 };
 
@@ -343,10 +555,10 @@ PromotionSchema.methods.calculateDiscount = function(amount) {
 PromotionSchema.methods.apply = async function(userId) {
   // Increment usage count
   this.usageCount += 1;
-  
+
   // Add user to usage history (if tracking per-user usage)
   // This would require adding a usageHistory array to the schema
-  
+
   return this.save();
 };
 

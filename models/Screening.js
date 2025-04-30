@@ -15,9 +15,14 @@ const ScreeningSeatSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  seatNumber: {
+    type: String,
+    required: true,
+    trim: true,
+  },
   status: {
     type: String,
-    enum: ['available', 'booked', 'reserved', 'unavailable'],
+    enum: ['available', 'booked', 'reserved', 'unavailable', 'maintenance'],
     default: 'available',
   },
   price: {
@@ -39,6 +44,19 @@ const ScreeningSeatSchema = new mongoose.Schema({
     enum: ['standard', 'premium', 'vip', 'couple', 'accessible'],
     default: 'standard',
   },
+  reservedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    default: null
+  },
+  reservedAt: {
+    type: Date,
+    default: null
+  },
+  lockVersion: {
+    type: Number,
+    default: 0
+  }
 }, { _id: true });
 
 const ScreeningSchema = new mongoose.Schema(
@@ -92,7 +110,7 @@ const ScreeningSchema = new mongoose.Schema(
     format: {
       type: String,
       enum: {
-        values: ['2D', '3D', 'IMAX', 'IMAX 3D', '4DX', 'Dolby Atmos', 'VIP'],
+        values: ['2D', '3D', 'IMAX', 'IMAX 3D', '4DX', 'Dolby Atmos', 'VIP', 'ScreenX', 'RPX'],
         message: '{VALUE} is not a valid format',
       },
       default: '2D',
@@ -111,6 +129,33 @@ const ScreeningSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'Price is required'],
       min: [0, 'Price cannot be negative'],
+    },
+    pricingTiers: {
+      standard: {
+        type: Number,
+        required: true,
+        min: [0, 'Standard price cannot be negative']
+      },
+      premium: {
+        type: Number,
+        default: 0,
+        min: [0, 'Premium price cannot be negative']
+      },
+      vip: {
+        type: Number,
+        default: 0,
+        min: [0, 'VIP price cannot be negative']
+      },
+      couple: {
+        type: Number,
+        default: 0,
+        min: [0, 'Couple price cannot be negative']
+      },
+      accessible: {
+        type: Number,
+        default: 0,
+        min: [0, 'Accessible price cannot be negative']
+      }
     },
     seats: [ScreeningSeatSchema],
     totalSeats: {
@@ -131,7 +176,7 @@ const ScreeningSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: {
-        values: ['scheduled', 'cancelled', 'sold_out', 'almost_full', 'open'],
+        values: ['scheduled', 'cancelled', 'sold_out', 'almost_full', 'open', 'in_progress', 'completed'],
         message: '{VALUE} is not a valid status',
       },
       default: 'scheduled',
@@ -149,6 +194,40 @@ const ScreeningSchema = new mongoose.Schema(
       type: Number,
       default: 1,
     },
+    specialEvent: {
+      type: Boolean,
+      default: false
+    },
+    specialEventDetails: {
+      type: String,
+      trim: true
+    },
+    promotionalDiscount: {
+      isActive: {
+        type: Boolean,
+        default: false
+      },
+      discountPercentage: {
+        type: Number,
+        min: [0, 'Discount percentage cannot be negative'],
+        max: [100, 'Discount percentage cannot exceed 100'],
+        default: 0
+      },
+      discountCode: {
+        type: String,
+        trim: true
+      }
+    },
+    concurrentBookingLimit: {
+      type: Number,
+      default: 10,
+      min: [1, 'Concurrent booking limit must be at least 1']
+    },
+    currentConcurrentBookings: {
+      type: Number,
+      default: 0,
+      min: [0, 'Current concurrent bookings cannot be negative']
+    }
   },
   {
     timestamps: true,
@@ -290,10 +369,10 @@ ScreeningSchema.statics.findByCinema = function(cinemaId, options = {}) {
 ScreeningSchema.statics.findByMovieAndDate = function(movieId, date) {
   const startOfDay = new Date(date);
   startOfDay.setHours(0, 0, 0, 0);
-  
+
   const endOfDay = new Date(date);
   endOfDay.setHours(23, 59, 59, 999);
-  
+
   return this.find({
     movie_id: movieId,
     date: { $gte: startOfDay, $lte: endOfDay },
@@ -308,10 +387,10 @@ ScreeningSchema.statics.findByMovieAndDate = function(movieId, date) {
 ScreeningSchema.statics.findByMovieCinemaDate = function(movieId, cinemaId, date) {
   const startOfDay = new Date(date);
   startOfDay.setHours(0, 0, 0, 0);
-  
+
   const endOfDay = new Date(date);
   endOfDay.setHours(23, 59, 59, 999);
-  
+
   return this.find({
     movie_id: movieId,
     cinema_id: cinemaId,
@@ -337,9 +416,9 @@ ScreeningSchema.statics.findAvailableSeats = function(screeningId) {
 ScreeningSchema.methods.reserveSeats = async function(seatIds, expirationMinutes = 15) {
   const expirationTime = new Date();
   expirationTime.setMinutes(expirationTime.getMinutes() + expirationMinutes);
-  
+
   let reservedCount = 0;
-  
+
   // Update seat status to reserved
   this.seats.forEach(seat => {
     if (seatIds.includes(seat._id.toString()) && seat.status === 'available') {
@@ -348,30 +427,30 @@ ScreeningSchema.methods.reserveSeats = async function(seatIds, expirationMinutes
       reservedCount++;
     }
   });
-  
+
   // Update available seats count
   this.seatsAvailable -= reservedCount;
-  
+
   // Update status if needed
   if (this.seatsAvailable === 0) {
     this.status = 'sold_out';
   } else if (this.seatsAvailable <= this.totalSeats * 0.1) { // Less than 10% seats available
     this.status = 'almost_full';
   }
-  
+
   // Increment version
   this.version += 1;
-  
+
   return this.save();
 };
 
 // Method to book seats
 ScreeningSchema.methods.bookSeats = async function(seatIds, bookingId) {
   let bookedCount = 0;
-  
+
   // Update seat status to booked
   this.seats.forEach(seat => {
-    if (seatIds.includes(seat._id.toString()) && 
+    if (seatIds.includes(seat._id.toString()) &&
         (seat.status === 'available' || seat.status === 'reserved')) {
       seat.status = 'booked';
       seat.booking_id = bookingId;
@@ -379,27 +458,27 @@ ScreeningSchema.methods.bookSeats = async function(seatIds, bookingId) {
       bookedCount++;
     }
   });
-  
+
   // Update available seats count if seats were available (not reserved)
   this.seatsAvailable -= bookedCount;
-  
+
   // Update status if needed
   if (this.seatsAvailable === 0) {
     this.status = 'sold_out';
   } else if (this.seatsAvailable <= this.totalSeats * 0.1) { // Less than 10% seats available
     this.status = 'almost_full';
   }
-  
+
   // Increment version
   this.version += 1;
-  
+
   return this.save();
 };
 
 // Method to release reserved seats
 ScreeningSchema.methods.releaseSeats = async function(seatIds) {
   let releasedCount = 0;
-  
+
   // Update seat status to available
   this.seats.forEach(seat => {
     if (seatIds.includes(seat._id.toString()) && seat.status === 'reserved') {
@@ -408,20 +487,20 @@ ScreeningSchema.methods.releaseSeats = async function(seatIds) {
       releasedCount++;
     }
   });
-  
+
   // Update available seats count
   this.seatsAvailable += releasedCount;
-  
+
   // Update status if needed
   if (this.status === 'sold_out' || this.status === 'almost_full') {
     if (this.seatsAvailable > this.totalSeats * 0.1) {
       this.status = 'open';
     }
   }
-  
+
   // Increment version
   this.version += 1;
-  
+
   return this.save();
 };
 

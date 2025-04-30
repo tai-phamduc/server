@@ -19,31 +19,67 @@ const RecommendedMovieSchema = new mongoose.Schema({
   score: {
     type: Number,
     required: true,
-    min: 0,
-    max: 1,
+    min: [0, 'Score cannot be less than 0'],
+    max: [1, 'Score cannot be more than 1'],
   },
   reason: {
     type: String,
     trim: true,
   },
-}, { _id: false });
+  genres: {
+    type: [String],
+    default: [],
+  },
+  releaseYear: {
+    type: Number,
+  },
+  director: {
+    type: String,
+    trim: true,
+  },
+  cast: {
+    type: [String],
+    default: [],
+  },
+  rating: {
+    type: Number,
+    min: [0, 'Rating cannot be less than 0'],
+    max: [10, 'Rating cannot be more than 10'],
+  },
+  duration: {
+    type: Number, // in minutes
+  },
+  ageRating: {
+    type: String,
+    trim: true,
+  },
+}, { _id: true });
 
 const RecommendationSchema = new mongoose.Schema(
   {
     user_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      required: [true, 'User is required'],
       index: true,
     },
     type: {
       type: String,
       enum: {
-        values: ['personalized', 'similar_movies', 'popular', 'trending', 'new_releases', 'genre_based'],
+        values: ['personalized', 'similar_movies', 'trending', 'popular', 'new_releases', 'genre_based', 'director_based', 'actor_based', 'mood_based', 'time_based'],
         message: '{VALUE} is not a valid recommendation type',
       },
-      required: true,
+      required: [true, 'Recommendation type is required'],
       index: true,
+    },
+    title: {
+      type: String,
+      required: [true, 'Title is required'],
+      trim: true,
+    },
+    description: {
+      type: String,
+      trim: true,
     },
     source_movie_id: {
       type: mongoose.Schema.Types.ObjectId,
@@ -55,6 +91,18 @@ const RecommendationSchema = new mongoose.Schema(
       trim: true,
       index: true,
     },
+    source_director: {
+      type: String,
+      trim: true,
+    },
+    source_actor: {
+      type: String,
+      trim: true,
+    },
+    source_mood: {
+      type: String,
+      trim: true,
+    },
     recommended_movies: [RecommendedMovieSchema],
     created_at: {
       type: Date,
@@ -65,23 +113,111 @@ const RecommendationSchema = new mongoose.Schema(
       type: Date,
       index: true,
     },
+    is_active: {
+      type: Boolean,
+      default: true,
+      index: true,
+    },
     is_viewed: {
       type: Boolean,
       default: false,
     },
+    viewed_at: {
+      type: Date,
+    },
     view_count: {
       type: Number,
       default: 0,
-      min: 0,
+      min: [0, 'View count cannot be negative'],
     },
     click_count: {
       type: Number,
       default: 0,
-      min: 0,
+      min: [0, 'Click count cannot be negative'],
+    },
+    booking_count: {
+      type: Number,
+      default: 0,
+      min: [0, 'Booking count cannot be negative'],
+    },
+    feedback_rating: {
+      type: Number,
+      min: [1, 'Feedback rating cannot be less than 1'],
+      max: [5, 'Feedback rating cannot be more than 5'],
+    },
+    feedback_comment: {
+      type: String,
+      trim: true,
+    },
+    feedback_date: {
+      type: Date,
     },
     algorithm_version: {
       type: String,
       trim: true,
+    },
+    ai_model: {
+      type: String,
+      trim: true,
+    },
+    ai_confidence_score: {
+      type: Number,
+      min: [0, 'AI confidence score cannot be less than 0'],
+      max: [1, 'AI confidence score cannot be more than 1'],
+    },
+    ai_explanation: {
+      type: String,
+      trim: true,
+    },
+    user_preferences: {
+      favorite_genres: {
+        type: [String],
+        default: [],
+      },
+      favorite_actors: {
+        type: [String],
+        default: [],
+      },
+      favorite_directors: {
+        type: [String],
+        default: [],
+      },
+      watch_history: [{
+        movie_id: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Movie',
+        },
+        rating: {
+          type: Number,
+          min: [0, 'Rating cannot be less than 0'],
+          max: [5, 'Rating cannot be more than 5'],
+        },
+      }],
+    },
+    contextual_factors: {
+      time: {
+        type: Date,
+      },
+      location: {
+        type: String,
+        trim: true,
+      },
+      weather: {
+        type: String,
+        trim: true,
+      },
+      season: {
+        type: String,
+        trim: true,
+      },
+      holiday: {
+        type: String,
+        trim: true,
+      },
+      special_event: {
+        type: String,
+        trim: true,
+      },
     },
     metadata: {
       type: Object,
@@ -89,6 +225,8 @@ const RecommendationSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
 
@@ -101,16 +239,16 @@ RecommendationSchema.index({ expires_at: 1 });
 // Static method to find recommendations by user
 RecommendationSchema.statics.findByUser = function(userId, options = {}) {
   const { type, limit = 10, skip = 0 } = options;
-  
+
   const query = {
     user_id: userId,
     expires_at: { $gt: new Date() },
   };
-  
+
   if (type) {
     query.type = type;
   }
-  
+
   return this.find(query)
     .sort({ created_at: -1 })
     .skip(skip)
@@ -142,10 +280,10 @@ RecommendationSchema.statics.findByGenre = function(userId, genre) {
 // Static method to create personalized recommendations
 RecommendationSchema.statics.createPersonalized = async function(userId, movies, options = {}) {
   const { expirationDays = 7, algorithmVersion = '1.0' } = options;
-  
+
   const expiresAt = new Date();
   expiresAt.setDate(expiresAt.getDate() + expirationDays);
-  
+
   // Format recommended movies
   const recommendedMovies = movies.map(movie => ({
     movie_id: movie._id,
@@ -154,7 +292,7 @@ RecommendationSchema.statics.createPersonalized = async function(userId, movies,
     score: movie.score || 0.5,
     reason: movie.reason || 'Based on your viewing history',
   }));
-  
+
   // Create recommendation
   return this.create({
     user_id: userId,

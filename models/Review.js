@@ -1,5 +1,90 @@
 const mongoose = require('mongoose');
 
+// Schema for detailed ratings
+const DetailedRatingSchema = new mongoose.Schema({
+  category: {
+    type: String,
+    enum: {
+      values: ['acting', 'directing', 'story', 'visuals', 'sound', 'overall', 'experience', 'comfort', 'service', 'cleanliness', 'value', 'location', 'amenities', 'food', 'technology'],
+      message: '{VALUE} is not a valid rating category',
+    },
+    required: true,
+  },
+  score: {
+    type: Number,
+    required: true,
+    min: [0, 'Score cannot be less than 0'],
+    max: [5, 'Score cannot be more than 5'],
+  },
+  comment: {
+    type: String,
+    trim: true,
+  },
+}, { _id: false });
+
+// Schema for review replies
+const ReviewReplySchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  userName: {
+    type: String,
+    trim: true,
+  },
+  userImage: {
+    type: String,
+    default: '',
+  },
+  userRole: {
+    type: String,
+    enum: {
+      values: ['user', 'admin', 'moderator', 'owner'],
+      default: 'user',
+    },
+  },
+  content: {
+    type: String,
+    required: true,
+    trim: true,
+    maxlength: [500, 'Reply cannot be more than 500 characters'],
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  isEdited: {
+    type: Boolean,
+    default: false,
+  },
+  editedAt: {
+    type: Date,
+  },
+  isApproved: {
+    type: Boolean,
+    default: true,
+  },
+  likes: {
+    type: Number,
+    default: 0,
+    min: [0, 'Likes cannot be negative'],
+  },
+  likedBy: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  }],
+  isReported: {
+    type: Boolean,
+    default: false,
+  },
+  reportCount: {
+    type: Number,
+    default: 0,
+    min: [0, 'Report count cannot be negative'],
+  },
+}, { _id: true, timestamps: true });
+
 const ReviewSchema = new mongoose.Schema(
   {
     user: {
@@ -26,10 +111,15 @@ const ReviewSchema = new mongoose.Schema(
       ref: 'Theater',
       index: true,
     },
+    cinema: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Cinema',
+      index: true,
+    },
     reviewType: {
       type: String,
       enum: {
-        values: ['movie', 'theater'],
+        values: ['movie', 'theater', 'cinema'],
         message: '{VALUE} is not a valid review type',
       },
       required: [true, 'Review type is required'],
@@ -41,6 +131,7 @@ const ReviewSchema = new mongoose.Schema(
       min: [1, 'Rating must be at least 1'],
       max: [5, 'Rating cannot be more than 5'],
     },
+    detailedRatings: [DetailedRatingSchema],
     title: {
       type: String,
       required: [true, 'Title is required'],
@@ -51,7 +142,15 @@ const ReviewSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Comment is required'],
       trim: true,
-      maxlength: [1000, 'Comment cannot be more than 1000 characters'],
+      maxlength: [2000, 'Comment cannot be more than 2000 characters'],
+    },
+    pros: {
+      type: [String],
+      default: [],
+    },
+    cons: {
+      type: [String],
+      default: [],
     },
     isApproved: {
       type: Boolean,
@@ -61,6 +160,13 @@ const ReviewSchema = new mongoose.Schema(
     isVerified: {
       type: Boolean,
       default: false,
+    },
+    verificationMethod: {
+      type: String,
+      enum: {
+        values: ['booking', 'purchase', 'admin', 'none'],
+        default: 'none',
+      },
     },
     isPublished: {
       type: Boolean,
@@ -100,6 +206,21 @@ const ReviewSchema = new mongoose.Schema(
     lastEditDate: {
       type: Date,
     },
+    editHistory: [{
+      content: {
+        type: String,
+        trim: true,
+      },
+      rating: {
+        type: Number,
+        min: [1, 'Rating must be at least 1'],
+        max: [5, 'Rating cannot be more than 5'],
+      },
+      editDate: {
+        type: Date,
+        default: Date.now,
+      },
+    }],
     isReported: {
       type: Boolean,
       default: false,
@@ -120,6 +241,25 @@ const ReviewSchema = new mongoose.Schema(
         message: '{VALUE} is not a valid report reason',
       },
     }],
+    moderationStatus: {
+      type: String,
+      enum: {
+        values: ['approved', 'pending', 'rejected', 'flagged'],
+        default: 'approved',
+      },
+      index: true,
+    },
+    moderationNotes: {
+      type: String,
+      trim: true,
+    },
+    moderatedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    moderatedAt: {
+      type: Date,
+    },
     spoiler: {
       type: Boolean,
       default: false,
@@ -154,11 +294,21 @@ const ReviewSchema = new mongoose.Schema(
       default: 0,
       min: [0, 'Reply count cannot be negative'],
     },
+    replies: [ReviewReplySchema],
     featured: {
       type: Boolean,
       default: false,
       index: true,
     },
+    helpfulCount: {
+      type: Number,
+      default: 0,
+      min: [0, 'Helpful count cannot be negative'],
+    },
+    markedHelpfulBy: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    }],
     adminResponse: {
       content: {
         type: String,
@@ -171,6 +321,31 @@ const ReviewSchema = new mongoose.Schema(
       respondedAt: {
         type: Date,
       },
+    },
+    sentiment: {
+      type: String,
+      enum: {
+        values: ['positive', 'negative', 'neutral', 'mixed'],
+        default: 'neutral',
+      },
+    },
+    sentimentScore: {
+      type: Number,
+      min: [-1, 'Sentiment score cannot be less than -1'],
+      max: [1, 'Sentiment score cannot be more than 1'],
+    },
+    aiSummary: {
+      type: String,
+      trim: true,
+    },
+    aiTags: {
+      type: [String],
+      default: [],
+    },
+    viewCount: {
+      type: Number,
+      default: 0,
+      min: [0, 'View count cannot be negative'],
     },
   },
   {

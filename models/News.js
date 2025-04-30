@@ -1,6 +1,95 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
+// Schema for news sections
+const NewsSectionSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  content: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  image: {
+    type: String,
+    default: '',
+  },
+  imageCaption: {
+    type: String,
+    trim: true,
+  },
+  imagePosition: {
+    type: String,
+    enum: {
+      values: ['left', 'right', 'center', 'full-width'],
+      default: 'full-width',
+    },
+  },
+  order: {
+    type: Number,
+    default: 0,
+  },
+  type: {
+    type: String,
+    enum: {
+      values: ['text', 'image', 'video', 'quote', 'gallery', 'embed'],
+      default: 'text',
+    },
+  },
+  videoUrl: {
+    type: String,
+    trim: true,
+  },
+  embedCode: {
+    type: String,
+    trim: true,
+  },
+  quoteAuthor: {
+    type: String,
+    trim: true,
+  },
+  galleryImages: [{
+    url: {
+      type: String,
+      required: true,
+    },
+    caption: {
+      type: String,
+      trim: true,
+    },
+    altText: {
+      type: String,
+      trim: true,
+    },
+  }],
+}, { _id: true });
+
+// Schema for news sources
+const NewsSourceSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  url: {
+    type: String,
+    trim: true,
+  },
+  type: {
+    type: String,
+    enum: {
+      values: ['website', 'press_release', 'interview', 'social_media', 'other'],
+      default: 'website',
+    },
+  },
+  date: {
+    type: Date,
+  },
+}, { _id: true });
+
 const NewsSchema = new mongoose.Schema(
   {
     title: {
@@ -27,6 +116,7 @@ const NewsSchema = new mongoose.Schema(
       trim: true,
       maxlength: [500, 'Excerpt cannot be more than 500 characters'],
     },
+    sections: [NewsSectionSchema],
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -40,6 +130,24 @@ const NewsSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    authorBio: {
+      type: String,
+      trim: true,
+    },
+    coAuthors: [{
+      author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+      name: {
+        type: String,
+        trim: true,
+      },
+      image: {
+        type: String,
+        default: '',
+      },
+    }],
     featuredImage: {
       type: String, // URL to image
       required: [true, 'Please provide a featured image URL'],
@@ -50,10 +158,32 @@ const NewsSchema = new mongoose.Schema(
         message: 'Please provide a valid URL for the featured image',
       },
     },
+    featuredImageCaption: {
+      type: String,
+      trim: true,
+    },
+    featuredImageAltText: {
+      type: String,
+      trim: true,
+    },
     gallery: {
       type: [String], // URLs to images
       default: [],
     },
+    galleryImages: [{
+      url: {
+        type: String,
+        required: true,
+      },
+      caption: {
+        type: String,
+        trim: true,
+      },
+      altText: {
+        type: String,
+        trim: true,
+      },
+    }],
     categories: {
       type: [String],
       default: [],
@@ -88,10 +218,13 @@ const NewsSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    updatedDate: {
+      type: Date,
+    },
     status: {
       type: String,
       enum: {
-        values: ['published', 'draft', 'archived'],
+        values: ['published', 'draft', 'scheduled', 'archived', 'pending_review'],
         message: '{VALUE} is not a valid status',
       },
       default: 'published',
@@ -102,7 +235,33 @@ const NewsSchema = new mongoose.Schema(
       default: false,
       index: true,
     },
+    isTrending: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+    isBreakingNews: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+    isSponsored: {
+      type: Boolean,
+      default: false,
+    },
+    sponsoredBy: {
+      type: String,
+      trim: true,
+    },
+    sponsoredByLogo: {
+      type: String,
+      default: '',
+    },
     views: {
+      type: Number,
+      default: 0,
+    },
+    uniqueViews: {
       type: Number,
       default: 0,
     },
@@ -114,6 +273,15 @@ const NewsSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    shares: {
+      type: Number,
+      default: 0,
+    },
+    readTime: {
+      type: Number, // in minutes
+      default: 0,
+    },
+    sources: [NewsSourceSchema],
     relatedMovies: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Movie',
@@ -121,6 +289,10 @@ const NewsSchema = new mongoose.Schema(
     relatedEvents: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Event',
+    }],
+    relatedNews: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'News',
     }],
     socialMedia: {
       facebook: {
@@ -139,6 +311,14 @@ const NewsSchema = new mongoose.Schema(
         type: String,
         default: '',
       },
+      linkedIn: {
+        type: String,
+        default: '',
+      },
+    },
+    allowComments: {
+      type: Boolean,
+      default: true,
     },
     metaTitle: {
       type: String,
@@ -151,6 +331,30 @@ const NewsSchema = new mongoose.Schema(
     metaKeywords: {
       type: [String],
       default: [],
+    },
+    canonicalUrl: {
+      type: String,
+      trim: true,
+    },
+    aiSummary: {
+      type: String,
+      trim: true,
+    },
+    aiTags: {
+      type: [String],
+      default: [],
+    },
+    aiSentiment: {
+      type: String,
+      enum: {
+        values: ['positive', 'negative', 'neutral', 'mixed'],
+        default: 'neutral',
+      },
+    },
+    aiSentimentScore: {
+      type: Number,
+      min: [-1, 'Sentiment score cannot be less than -1'],
+      max: [1, 'Sentiment score cannot be more than 1'],
     },
   },
   {

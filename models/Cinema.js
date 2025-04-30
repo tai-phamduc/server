@@ -24,6 +24,11 @@ const SeatLayoutSchema = new mongoose.Schema({
   isActive: {
     type: Boolean,
     default: true,
+  },
+  seatNumber: {
+    type: String,
+    required: true,
+    trim: true,
   }
 }, { _id: false });
 
@@ -44,7 +49,7 @@ const RoomSchema = new mongoose.Schema({
   type: {
     type: String,
     enum: {
-      values: ['standard', 'imax', '3d', 'vip', 'premium', '4dx'],
+      values: ['standard', 'imax', '3d', 'vip', 'premium', '4dx', 'dolby-atmos', 'screenx'],
       message: '{VALUE} is not a valid room type',
     },
     default: 'standard',
@@ -72,6 +77,33 @@ const RoomSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  screenSize: {
+    type: String,
+    enum: {
+      values: ['standard', 'large', 'extra-large', 'imax'],
+      default: 'standard'
+    }
+  },
+  soundSystem: {
+    type: String,
+    enum: {
+      values: ['standard', 'dolby-digital', 'dolby-atmos', 'dtsx'],
+      default: 'standard'
+    }
+  },
+  specialFeatures: {
+    type: [String],
+    default: []
+  },
+  maintenanceSchedule: {
+    lastMaintenance: {
+      type: Date,
+      default: Date.now
+    },
+    nextMaintenance: {
+      type: Date
+    }
+  }
 }, { _id: true });
 
 // Schema for opening hours
@@ -145,6 +177,7 @@ const CinemaSchema = new mongoose.Schema(
         type: String,
         required: [true, 'Country is required'],
         trim: true,
+        default: 'USA'
       },
       coordinates: {
         type: {
@@ -168,6 +201,13 @@ const CinemaSchema = new mongoose.Schema(
         type: String,
         default: '',
       },
+      region: {
+        type: String,
+        enum: {
+          values: ['Northeast', 'Southeast', 'Midwest', 'Southwest', 'West'],
+          default: 'Northeast'
+        }
+      }
     },
     rooms: [RoomSchema],
     amenities: {
@@ -301,6 +341,56 @@ const CinemaSchema = new mongoose.Schema(
         default: '',
       },
     },
+    accessibility: {
+      wheelchairAccessible: {
+        type: Boolean,
+        default: true
+      },
+      assistiveListeningDevices: {
+        type: Boolean,
+        default: false
+      },
+      closedCaptioning: {
+        type: Boolean,
+        default: false
+      },
+      audioDescription: {
+        type: Boolean,
+        default: false
+      }
+    },
+    parkingInfo: {
+      hasParkingLot: {
+        type: Boolean,
+        default: true
+      },
+      isParkingFree: {
+        type: Boolean,
+        default: false
+      },
+      parkingFee: {
+        type: Number,
+        default: 0
+      },
+      parkingNotes: {
+        type: String,
+        trim: true
+      }
+    },
+    concessions: {
+      hasFullMenu: {
+        type: Boolean,
+        default: false
+      },
+      hasAlcohol: {
+        type: Boolean,
+        default: false
+      },
+      hasDineInService: {
+        type: Boolean,
+        default: false
+      }
+    }
   },
   {
     timestamps: true,
