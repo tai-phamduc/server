@@ -149,6 +149,9 @@ app.use('/api/tags', require('./routes/tagRoutes'));
 app.use('/api/pages', require('./routes/pageRoutes'));
 app.use('/api/settings', require('./routes/settingRoutes'));
 app.use('/api/booking-history', require('./routes/bookingHistoryRoutes'));
+app.use('/api/languages', require('./routes/languageRoutes'));
+app.use('/api/countries', require('./routes/countryRoutes'));
+app.use('/api/products', require('./routes/productRoutes'));
 // Basic route for testing API
 app.get('/api', (req, res) => {
   res.json({ message: 'Welcome to the Movie Booking API' });

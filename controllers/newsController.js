@@ -41,6 +41,20 @@ const getNewsByCategory = async (req, res) => {
   }
 };
 
+// @desc    Get featured news articles
+// @route   GET /api/news/featured
+// @access  Public
+const getFeaturedNews = async (req, res) => {
+  try {
+    const news = await News.find({ isFeatured: true })
+      .populate('author', 'name')
+      .sort({ createdAt: -1 });
+    res.json(news);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // @desc    Create a news article
 // @route   POST /api/news
 // @access  Private/Admin
@@ -50,7 +64,7 @@ const createNews = async (req, res) => {
       ...req.body,
       author: req.user._id,
     });
-    
+
     const createdNews = await news.save();
     res.status(201).json(createdNews);
   } catch (error) {
@@ -64,17 +78,17 @@ const createNews = async (req, res) => {
 const updateNews = async (req, res) => {
   try {
     const news = await News.findById(req.params.id);
-    
+
     if (!news) {
       return res.status(404).json({ message: 'News article not found' });
     }
-    
+
     const updatedNews = await News.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true }
     );
-    
+
     res.json(updatedNews);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -87,12 +101,12 @@ const updateNews = async (req, res) => {
 const deleteNews = async (req, res) => {
   try {
     const news = await News.findById(req.params.id);
-    
+
     if (!news) {
       return res.status(404).json({ message: 'News article not found' });
     }
-    
-    await news.remove();
+
+    await News.deleteOne({ _id: req.params.id });
     res.json({ message: 'News article removed' });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -103,6 +117,7 @@ module.exports = {
   getNews,
   getNewsById,
   getNewsByCategory,
+  getFeaturedNews,
   createNews,
   updateNews,
   deleteNews,

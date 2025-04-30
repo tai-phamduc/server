@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { 
+const {
   getPages,
   getMenuPages,
   getFooterPages,
@@ -9,7 +9,8 @@ const {
   createPage,
   updatePage,
   deletePage,
-  getAllPages
+  getAllPages,
+  reorderPages
 } = require('../controllers/pageController');
 const { protect, admin } = require('../middleware/authMiddleware');
 
@@ -23,6 +24,7 @@ router.get('/:id', getPageById);
 // Admin routes
 router.get('/admin', protect, admin, getAllPages);
 router.post('/', protect, admin, createPage);
+router.put('/reorder', protect, admin, reorderPages);
 router.put('/:id', protect, admin, updatePage);
 router.delete('/:id', protect, admin, deletePage);
 

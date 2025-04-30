@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { 
+const {
   getTags,
   getFeaturedTags,
   getTagById,
@@ -22,8 +22,8 @@ router.get('/:id/content', getContentByTag);
 
 // Admin routes
 router.post('/', protect, admin, createTag);
+router.put('/reorder', protect, admin, reorderTags);
 router.put('/:id', protect, admin, updateTag);
 router.delete('/:id', protect, admin, deleteTag);
-router.put('/reorder', protect, admin, reorderTags);
 
 module.exports = router;

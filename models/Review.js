@@ -369,13 +369,7 @@ ReviewSchema.virtual('userInfo', {
   options: { select: 'name profilePicture' },
 });
 
-// Create virtual for replies
-ReviewSchema.virtual('replies', {
-  ref: 'Reply',
-  localField: '_id',
-  foreignField: 'review',
-  justOne: false,
-});
+// Note: replyCount is already defined as a field in the schema
 
 // Prevent user from submitting more than one review per movie or theater
 ReviewSchema.index({ user: 1, movie: 1, reviewType: 1 }, { unique: true, sparse: true });

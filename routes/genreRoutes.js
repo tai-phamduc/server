@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { 
-  getGenres, 
-  getGenreById, 
+const {
+  getGenres,
+  getGenreById,
   getGenreBySlug,
   getMoviesByGenre,
-  createGenre, 
-  updateGenre, 
-  deleteGenre 
+  createGenre,
+  updateGenre,
+  deleteGenre,
+  reorderGenres
 } = require('../controllers/genreController');
 const { protect, admin } = require('../middleware/authMiddleware');
 
@@ -19,6 +20,7 @@ router.get('/:id/movies', getMoviesByGenre);
 
 // Admin routes
 router.post('/', protect, admin, createGenre);
+router.put('/reorder', protect, admin, reorderGenres);
 router.put('/:id', protect, admin, updateGenre);
 router.delete('/:id', protect, admin, deleteGenre);
 

@@ -39,6 +39,19 @@ const getFeaturedEvents = async (req, res) => {
   }
 };
 
+// @desc    Get upcoming events
+// @route   GET /api/events/upcoming
+// @access  Public
+const getUpcomingEvents = async (req, res) => {
+  try {
+    const currentDate = new Date();
+    const events = await Event.find({ date: { $gte: currentDate } }).sort({ date: 1 });
+    res.json(events);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // @desc    Create an event
 // @route   POST /api/events
 // @access  Private/Admin
@@ -97,6 +110,7 @@ module.exports = {
   getEvents,
   getEventById,
   getFeaturedEvents,
+  getUpcomingEvents,
   createEvent,
   updateEvent,
   deleteEvent,
