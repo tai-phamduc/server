@@ -1,0 +1,545 @@
+{
+  "info": {
+    "name": "Review API Collection",
+    "description": "A collection of API requests for testing review-related endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "description": "Endpoints for user authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "login"]
+            },
+            "description": "Login to get authentication token"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "description": "Endpoints for review operations",
+      "item": [
+        {
+          "name": "Get All Reviews (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews"]
+            },
+            "description": "Get a list of all reviews (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Reviews with Pagination",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get a paginated list of reviews"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Review by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/{{reviewId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "{{reviewId}}"]
+            },
+            "description": "Get details of a specific review by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Reviews by Movie",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/movie/{{movieId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "movie", "{{movieId}}"]
+            },
+            "description": "Get all reviews for a specific movie"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Reviews by User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/user/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "user", "{{userId}}"]
+            },
+            "description": "Get all reviews by a specific user (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Reviews",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/my-reviews",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "my-reviews"]
+            },
+            "description": "Get all reviews by the authenticated user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Top Rated Reviews",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/top-rated?limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "top-rated"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            },
+            "description": "Get top rated reviews"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Review",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"movieId\": \"{{movieId}}\",\n    \"rating\": 8,\n    \"title\": \"Great movie!\",\n    \"content\": \"This is a detailed review of the movie. I really enjoyed it and would recommend it to others.\",\n    \"tags\": [\"action\", \"thriller\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews"]
+            },
+            "description": "Create a new review for a movie"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Review",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"rating\": 9,\n    \"title\": \"Updated title\",\n    \"content\": \"Updated review content\",\n    \"tags\": [\"action\", \"adventure\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/{{reviewId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "{{reviewId}}"]
+            },
+            "description": "Update an existing review"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Review",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/{{reviewId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "{{reviewId}}"]
+            },
+            "description": "Delete a review"
+          },
+          "response": []
+        },
+        {
+          "name": "Like Review",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/{{reviewId}}/like",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "{{reviewId}}", "like"]
+            },
+            "description": "Like a review"
+          },
+          "response": []
+        },
+        {
+          "name": "Unlike Review",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/{{reviewId}}/unlike",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "{{reviewId}}", "unlike"]
+            },
+            "description": "Remove a like from a review"
+          },
+          "response": []
+        },
+        {
+          "name": "Dislike Review",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/{{reviewId}}/dislike",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "{{reviewId}}", "dislike"]
+            },
+            "description": "Dislike a review"
+          },
+          "response": []
+        },
+        {
+          "name": "Undislike Review",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/{{reviewId}}/undislike",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "{{reviewId}}", "undislike"]
+            },
+            "description": "Remove a dislike from a review"
+          },
+          "response": []
+        },
+        {
+          "name": "Flag Review (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"reason\": \"Inappropriate content\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/{{reviewId}}/flag",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "{{reviewId}}", "flag"]
+            },
+            "description": "Flag a review as inappropriate (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Unflag Review (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/{{reviewId}}/unflag",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "{{reviewId}}", "unflag"]
+            },
+            "description": "Remove a flag from a review (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Flagged Reviews (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/flagged",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "flagged"]
+            },
+            "description": "Get all flagged reviews (admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Review Comments",
+      "description": "Endpoints for review comments",
+      "item": [
+        {
+          "name": "Get Comments for Review",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/{{reviewId}}/comments",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "{{reviewId}}", "comments"]
+            },
+            "description": "Get all comments for a specific review"
+          },
+          "response": []
+        },
+        {
+          "name": "Add Comment to Review",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"content\": \"I agree with this review!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/{{reviewId}}/comments",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "{{reviewId}}", "comments"]
+            },
+            "description": "Add a comment to a review"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Comment",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"content\": \"Updated comment content\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/comments/{{commentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "comments", "{{commentId}}"]
+            },
+            "description": "Update an existing comment"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Comment",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/comments/{{commentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "comments", "{{commentId}}"]
+            },
+            "description": "Delete a comment"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Review Statistics",
+      "description": "Endpoints for review statistics",
+      "item": [
+        {
+          "name": "Get Movie Rating Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/statistics/movie/{{movieId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "statistics", "movie", "{{movieId}}"]
+            },
+            "description": "Get rating statistics for a specific movie"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Overall Review Statistics (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/statistics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "statistics"]
+            },
+            "description": "Get overall review statistics (admin only)"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Get today's date in YYYY-MM-DD format",
+          "const today = new Date();",
+          "const todayFormatted = today.toISOString().split('T')[0];",
+          "",
+          "// Format display date (e.g., \"December 25, 2023\")",
+          "const options = { year: 'numeric', month: 'long', day: 'numeric' };",
+          "const displayDate = today.toLocaleDateString('en-US', options);",
+          "",
+          "// Get day of week",
+          "const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];",
+          "const dayOfWeek = daysOfWeek[today.getDay()];",
+          "",
+          "// Set environment variables",
+          "pm.environment.set('date', todayFormatted);",
+          "pm.environment.set('displayDate', displayDate);",
+          "pm.environment.set('dayOfWeek', dayOfWeek);"
+        ]
+      }
+    }
+  ]
+}

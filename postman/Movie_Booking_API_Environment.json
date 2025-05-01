@@ -28,7 +28,7 @@
     },
     {
       "key": "cinemaId",
-      "value": "",
+      "value": "68121d9d5e6e61cab67ae98f",
       "type": "default",
       "enabled": true
     },
@@ -40,13 +40,13 @@
     },
     {
       "key": "roomId",
-      "value": "",
+      "value": "68130d92c247fa7fe1e9f7e1",
       "type": "default",
       "enabled": true
     },
     {
       "key": "screeningId",
-      "value": "",
+      "value": "68130ea74c4a54833380aeab",
       "type": "default",
       "enabled": true
     },
@@ -93,20 +93,44 @@
       "enabled": true
     },
     {
-      "key": "date",
+      "key": "bookingId",
       "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "paymentId",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "paymentMethodId",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "commentId",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "date",
+      "value": "2026-05-01",
       "type": "default",
       "enabled": true
     },
     {
       "key": "displayDate",
-      "value": "December 25, 2023",
+      "value": "May 1, 2026",
       "type": "default",
       "enabled": true
     },
     {
       "key": "dayOfWeek",
-      "value": "",
+      "value": "Friday",
       "type": "default",
       "enabled": true
     },

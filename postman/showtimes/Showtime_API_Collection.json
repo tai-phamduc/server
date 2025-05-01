@@ -1,0 +1,479 @@
+{
+  "info": {
+    "name": "Showtime API Collection",
+    "description": "A collection of API requests for testing showtime-related endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "description": "Endpoints for user authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "login"]
+            },
+            "description": "Login to get authentication token"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Showtimes",
+      "description": "Endpoints for showtime operations",
+      "item": [
+        {
+          "name": "Get All Showtimes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes"]
+            },
+            "description": "Get a list of all showtimes"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Showtimes with Pagination",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get a paginated list of showtimes"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Showtime by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes/{{showtimeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes", "{{showtimeId}}"]
+            },
+            "description": "Get details of a specific showtime by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Showtimes by Movie",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes/movie/{{movieId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes", "movie", "{{movieId}}"]
+            },
+            "description": "Get all showtimes for a specific movie"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Showtimes by Theater",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes/theater/{{theaterId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes", "theater", "{{theaterId}}"]
+            },
+            "description": "Get all showtimes for a specific theater"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Showtimes by Date",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes/date/{{date}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes", "date", "{{date}}"]
+            },
+            "description": "Get all showtimes for a specific date"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Showtimes by Movie and Date",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes/movie/{{movieId}}/date/{{date}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes", "movie", "{{movieId}}", "date", "{{date}}"]
+            },
+            "description": "Get all showtimes for a specific movie on a specific date"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Showtimes by Theater and Date",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes/theater/{{theaterId}}/date/{{date}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes", "theater", "{{theaterId}}", "date", "{{date}}"]
+            },
+            "description": "Get all showtimes for a specific theater on a specific date"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Showtimes by Movie, Theater, and Date",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes/movie/{{movieId}}/theater/{{theaterId}}/date/{{date}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes", "movie", "{{movieId}}", "theater", "{{theaterId}}", "date", "{{date}}"]
+            },
+            "description": "Get all showtimes for a specific movie at a specific theater on a specific date"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Showtime (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"movieId\": \"{{movieId}}\",\n    \"theaterId\": \"{{theaterId}}\",\n    \"roomId\": \"{{roomId}}\",\n    \"date\": \"{{date}}\",\n    \"startTime\": \"19:30\",\n    \"endTime\": \"21:45\",\n    \"format\": \"2D\",\n    \"language\": \"English\",\n    \"price\": 12.50,\n    \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes"]
+            },
+            "description": "Create a new showtime (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Showtime (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"startTime\": \"20:00\",\n    \"endTime\": \"22:15\",\n    \"format\": \"3D\",\n    \"price\": 15.00,\n    \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes/{{showtimeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes", "{{showtimeId}}"]
+            },
+            "description": "Update an existing showtime (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Showtime (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes/{{showtimeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes", "{{showtimeId}}"]
+            },
+            "description": "Delete a showtime (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Available Seats for Showtime",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes/{{showtimeId}}/seats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes", "{{showtimeId}}", "seats"]
+            },
+            "description": "Get available seats for a specific showtime"
+          },
+          "response": []
+        },
+        {
+          "name": "Check Showtime Availability",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes/{{showtimeId}}/availability",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes", "{{showtimeId}}", "availability"]
+            },
+            "description": "Check if a showtime is available (has seats)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Showtime Schedules",
+      "description": "Endpoints for managing showtime schedules",
+      "item": [
+        {
+          "name": "Generate Weekly Schedule (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"movieId\": \"{{movieId}}\",\n    \"theaterId\": \"{{theaterId}}\",\n    \"roomId\": \"{{roomId}}\",\n    \"startDate\": \"{{date}}\",\n    \"endDate\": \"2023-12-31\",\n    \"showtimes\": [\n        {\n            \"time\": \"14:30\",\n            \"format\": \"2D\",\n            \"price\": 10.00,\n            \"daysOfWeek\": [1, 2, 3, 4, 5]\n        },\n        {\n            \"time\": \"19:00\",\n            \"format\": \"3D\",\n            \"price\": 15.00,\n            \"daysOfWeek\": [1, 2, 3, 4, 5, 6, 0]\n        },\n        {\n            \"time\": \"12:00\",\n            \"format\": \"2D\",\n            \"price\": 8.00,\n            \"daysOfWeek\": [6, 0]\n        }\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes/schedule/generate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes", "schedule", "generate"]
+            },
+            "description": "Generate a weekly schedule of showtimes (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Weekly Schedule",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes/schedule/week?startDate={{date}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes", "schedule", "week"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "{{date}}"
+                }
+              ]
+            },
+            "description": "Get the schedule for a week starting from a specific date"
+          },
+          "response": []
+        },
+        {
+          "name": "Clear Schedule (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"movieId\": \"{{movieId}}\",\n    \"theaterId\": \"{{theaterId}}\",\n    \"startDate\": \"{{date}}\",\n    \"endDate\": \"2023-12-31\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes/schedule/clear",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes", "schedule", "clear"]
+            },
+            "description": "Clear showtimes for a specific period (admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Showtime Statistics",
+      "description": "Endpoints for showtime statistics",
+      "item": [
+        {
+          "name": "Get Showtime Statistics (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes/statistics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes", "statistics"]
+            },
+            "description": "Get overall showtime statistics (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Showtime Statistics by Movie (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes/statistics/movie/{{movieId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes", "statistics", "movie", "{{movieId}}"]
+            },
+            "description": "Get showtime statistics for a specific movie (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Showtime Statistics by Theater (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes/statistics/theater/{{theaterId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes", "statistics", "theater", "{{theaterId}}"]
+            },
+            "description": "Get showtime statistics for a specific theater (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Showtime Statistics by Date Range (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/showtimes/statistics/date-range?startDate={{date}}&endDate=2023-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "showtimes", "statistics", "date-range"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "{{date}}"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2023-12-31"
+                }
+              ]
+            },
+            "description": "Get showtime statistics for a specific date range (admin only)"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Get today's date in YYYY-MM-DD format",
+          "const today = new Date();",
+          "const todayFormatted = today.toISOString().split('T')[0];",
+          "",
+          "// Format display date (e.g., \"December 25, 2023\")",
+          "const options = { year: 'numeric', month: 'long', day: 'numeric' };",
+          "const displayDate = today.toLocaleDateString('en-US', options);",
+          "",
+          "// Get day of week",
+          "const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];",
+          "const dayOfWeek = daysOfWeek[today.getDay()];",
+          "",
+          "// Set environment variables",
+          "pm.environment.set('date', todayFormatted);",
+          "pm.environment.set('displayDate', displayDate);",
+          "pm.environment.set('dayOfWeek', dayOfWeek);"
+        ]
+      }
+    }
+  ]
+}

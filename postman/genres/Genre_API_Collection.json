@@ -1,0 +1,315 @@
+{
+  "info": {
+    "name": "Genre API Collection",
+    "description": "A collection of API requests for testing genre-related endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "description": "Endpoints for user authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "login"]
+            },
+            "description": "Login to get authentication token"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Genres",
+      "description": "Endpoints for genre operations",
+      "item": [
+        {
+          "name": "Get All Genres",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/genres",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "genres"]
+            },
+            "description": "Get a list of all genres"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Genre by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/genres/{{genreId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "genres", "{{genreId}}"]
+            },
+            "description": "Get details of a specific genre by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Movies by Genre",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/genres/{{genreId}}/movies",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "genres", "{{genreId}}", "movies"]
+            },
+            "description": "Get all movies in a specific genre"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Popular Genres",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/genres/popular?limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "genres", "popular"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            },
+            "description": "Get most popular genres based on movie count"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Genre (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Science Fiction\",\n    \"description\": \"Movies that explore scientific concepts, technology, and the future\",\n    \"icon\": \"sci-fi-icon\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/genres",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "genres"]
+            },
+            "description": "Create a new genre (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Genre (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Sci-Fi\",\n    \"description\": \"Updated description for science fiction genre\",\n    \"icon\": \"updated-sci-fi-icon\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/genres/{{genreId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "genres", "{{genreId}}"]
+            },
+            "description": "Update an existing genre (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Genre (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/genres/{{genreId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "genres", "{{genreId}}"]
+            },
+            "description": "Delete a genre (admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Movie-Genre Associations",
+      "description": "Endpoints for managing movie-genre associations",
+      "item": [
+        {
+          "name": "Add Genre to Movie (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"genreId\": \"{{genreId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/movies/{{movieId}}/genres",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "movies", "{{movieId}}", "genres"]
+            },
+            "description": "Add a genre to a movie (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Remove Genre from Movie (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/movies/{{movieId}}/genres/{{genreId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "movies", "{{movieId}}", "genres", "{{genreId}}"]
+            },
+            "description": "Remove a genre from a movie (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Genres for Movie",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/movies/{{movieId}}/genres",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "movies", "{{movieId}}", "genres"]
+            },
+            "description": "Get all genres for a specific movie"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Genre Statistics",
+      "description": "Endpoints for genre statistics",
+      "item": [
+        {
+          "name": "Get Genre Statistics (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/genres/statistics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "genres", "statistics"]
+            },
+            "description": "Get statistics about genres (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Genre Distribution (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/genres/distribution",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "genres", "distribution"]
+            },
+            "description": "Get distribution of movies across genres (admin only)"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Get today's date in YYYY-MM-DD format",
+          "const today = new Date();",
+          "const todayFormatted = today.toISOString().split('T')[0];",
+          "",
+          "// Format display date (e.g., \"December 25, 2023\")",
+          "const options = { year: 'numeric', month: 'long', day: 'numeric' };",
+          "const displayDate = today.toLocaleDateString('en-US', options);",
+          "",
+          "// Get day of week",
+          "const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];",
+          "const dayOfWeek = daysOfWeek[today.getDay()];",
+          "",
+          "// Set environment variables",
+          "pm.environment.set('date', todayFormatted);",
+          "pm.environment.set('displayDate', displayDate);",
+          "pm.environment.set('dayOfWeek', dayOfWeek);"
+        ]
+      }
+    }
+  ]
+}
