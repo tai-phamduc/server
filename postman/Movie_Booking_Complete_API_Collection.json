@@ -197,7 +197,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"name\": \"Updated Name\",\n    \"phone\": \"1234567890\",\n    \"address\": \"123 Main St, City, Country\",\n    \"preferences\": {\n        \"favoriteGenres\": [\"Action\", \"Comedy\"],\n        \"preferredSeatingArea\": \"middle\",\n        \"preferredShowtimePeriod\": \"evening\"\n    }\n}"
+                  "raw": "{\n    \"name\": \"Updated Name\",\n    \"phone\": \"1234567890\",\n    \"address\": \"123 Main St, City, Country\",\n    \"preferences\": {\n        \"favoriteGenres\": [\"Action\", \"Comedy\"],\n        \"preferredSeatingArea\": \"middle\",\n        \"preferredScreeningPeriod\": \"evening\"\n    }\n}"
                 },
                 "url": {
                   "raw": "{{baseUrl}}/api/users/profile",
@@ -538,7 +538,7 @@
                     "now-playing"
                   ]
                 },
-                "description": "Get movies currently playing in theaters"
+                "description": "Get movies currently playing in cinemas"
               },
               "response": []
             },
@@ -1891,7 +1891,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"name\": \"AMC Empire 25\",\n    \"slug\": \"amc-empire-25\",\n    \"location\": {\n        \"address\": \"234 W 42nd St\",\n        \"city\": \"New York\",\n        \"state\": \"NY\",\n        \"zipCode\": \"10036\",\n        \"country\": \"USA\",\n        \"coordinates\": {\n            \"type\": \"Point\",\n            \"coordinates\": [-73.9896, 40.7569]\n        }\n    },\n    \"contactInfo\": {\n        \"phone\": \"2123984970\",\n        \"email\": \"contact@amcempire25.com\",\n        \"website\": \"https://www.amctheatres.com/movie-theatres/new-york-city/amc-empire-25\"\n    },\n    \"openingHours\": {\n        \"monday\": { \"open\": \"10:00\", \"close\": \"23:00\" },\n        \"tuesday\": { \"open\": \"10:00\", \"close\": \"23:00\" },\n        \"wednesday\": { \"open\": \"10:00\", \"close\": \"23:00\" },\n        \"thursday\": { \"open\": \"10:00\", \"close\": \"23:00\" },\n        \"friday\": { \"open\": \"10:00\", \"close\": \"00:00\" },\n        \"saturday\": { \"open\": \"10:00\", \"close\": \"00:00\" },\n        \"sunday\": { \"open\": \"10:00\", \"close\": \"23:00\" }\n    },\n    \"displayHours\": \"10:00 AM - 11:00 PM\",\n    \"description\": \"AMC Empire 25 is a popular movie theater located in Times Square, featuring 25 screens and the latest movies.\",\n    \"shortDescription\": \"25-screen multiplex in Times Square\",\n    \"featuredImage\": \"https://example.com/images/amc-empire-25.jpg\",\n    \"amenities\": [\"IMAX\", \"Dolby Cinema\", \"RealD 3D\", \"Wheelchair Accessible\", \"Food Court\"],\n    \"ticketPriceRange\": {\n        \"min\": 12.99,\n        \"max\": 24.99\n    },\n    \"socialMedia\": {\n        \"facebook\": \"https://facebook.com/amctheatres\",\n        \"twitter\": \"https://twitter.com/amctheatres\",\n        \"instagram\": \"https://instagram.com/amctheatres\"\n    },\n    \"accessibility\": {\n        \"wheelchairAccessible\": true,\n        \"assistiveListeningDevices\": true,\n        \"closedCaptioning\": true,\n        \"audioDescription\": true\n    },\n    \"parkingInfo\": {\n        \"hasParkingLot\": true,\n        \"isParkingFree\": false,\n        \"parkingFee\": 15,\n        \"parkingNotes\": \"Parking available in nearby garages. Validation available for discounted rates.\"\n    },\n    \"concessions\": {\n        \"hasFullMenu\": true,\n        \"hasAlcohol\": true,\n        \"hasDineInService\": false\n    }\n}"
+                  "raw": "{\n    \"name\": \"AMC Empire 25\",\n    \"slug\": \"amc-empire-25\",\n    \"location\": {\n        \"address\": \"234 W 42nd St\",\n        \"city\": \"New York\",\n        \"state\": \"NY\",\n        \"zipCode\": \"10036\",\n        \"country\": \"USA\",\n        \"coordinates\": {\n            \"type\": \"Point\",\n            \"coordinates\": [-73.9896, 40.7569]\n        }\n    },\n    \"contactInfo\": {\n        \"phone\": \"2123984970\",\n        \"email\": \"contact@amcempire25.com\",\n        \"website\": \"https://www.amctheatres.com/movie-theatres/new-york-city/amc-empire-25\"\n    },\n    \"openingHours\": {\n        \"monday\": { \"open\": \"10:00\", \"close\": \"23:00\" },\n        \"tuesday\": { \"open\": \"10:00\", \"close\": \"23:00\" },\n        \"wednesday\": { \"open\": \"10:00\", \"close\": \"23:00\" },\n        \"thursday\": { \"open\": \"10:00\", \"close\": \"23:00\" },\n        \"friday\": { \"open\": \"10:00\", \"close\": \"00:00\" },\n        \"saturday\": { \"open\": \"10:00\", \"close\": \"00:00\" },\n        \"sunday\": { \"open\": \"10:00\", \"close\": \"23:00\" }\n    },\n    \"displayHours\": \"10:00 AM - 11:00 PM\",\n    \"description\": \"AMC Empire 25 is a popular movie cinema located in Times Square, featuring 25 screens and the latest movies.\",\n    \"shortDescription\": \"25-screen multiplex in Times Square\",\n    \"featuredImage\": \"https://example.com/images/amc-empire-25.jpg\",\n    \"amenities\": [\"IMAX\", \"Dolby Cinema\", \"RealD 3D\", \"Wheelchair Accessible\", \"Food Court\"],\n    \"ticketPriceRange\": {\n        \"min\": 12.99,\n        \"max\": 24.99\n    },\n    \"socialMedia\": {\n        \"facebook\": \"https://facebook.com/amctheatres\",\n        \"twitter\": \"https://twitter.com/amctheatres\",\n        \"instagram\": \"https://instagram.com/amctheatres\"\n    },\n    \"accessibility\": {\n        \"wheelchairAccessible\": true,\n        \"assistiveListeningDevices\": true,\n        \"closedCaptioning\": true,\n        \"audioDescription\": true\n    },\n    \"parkingInfo\": {\n        \"hasParkingLot\": true,\n        \"isParkingFree\": false,\n        \"parkingFee\": 15,\n        \"parkingNotes\": \"Parking available in nearby garages. Validation available for discounted rates.\"\n    },\n    \"concessions\": {\n        \"hasFullMenu\": true,\n        \"hasAlcohol\": true,\n        \"hasDineInService\": false\n    }\n}"
                 },
                 "url": {
                   "raw": "{{baseUrl}}/api/cinemas",
@@ -1987,7 +1987,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"name\": \"IMAX Theater\",\n    \"capacity\": 250,\n    \"type\": \"imax\",\n    \"features\": [\"Reclining Seats\", \"Dolby Atmos\", \"Laser Projection\"],\n    \"seatLayout\": {\n        \"rows\": 15,\n        \"columns\": 20,\n        \"seats\": [\n            {\n                \"row\": \"A\",\n                \"column\": 1,\n                \"type\": \"standard\",\n                \"price\": 14.99,\n                \"isActive\": true,\n                \"seatNumber\": \"A1\"\n            },\n            {\n                \"row\": \"A\",\n                \"column\": 2,\n                \"type\": \"standard\",\n                \"price\": 14.99,\n                \"isActive\": true,\n                \"seatNumber\": \"A2\"\n            },\n            {\n                \"row\": \"B\",\n                \"column\": 1,\n                \"type\": \"premium\",\n                \"price\": 19.99,\n                \"isActive\": true,\n                \"seatNumber\": \"B1\"\n            },\n            {\n                \"row\": \"B\",\n                \"column\": 2,\n                \"type\": \"premium\",\n                \"price\": 19.99,\n                \"isActive\": true,\n                \"seatNumber\": \"B2\"\n            }\n        ]\n    },\n    \"screenSize\": \"imax\",\n    \"soundSystem\": \"dolby-atmos\",\n    \"specialFeatures\": [\"4K Projection\", \"3D Capability\"]\n}"
+                  "raw": "{\n    \"name\": \"IMAX Cinema\",\n    \"capacity\": 250,\n    \"type\": \"imax\",\n    \"features\": [\"Reclining Seats\", \"Dolby Atmos\", \"Laser Projection\"],\n    \"seatLayout\": {\n        \"rows\": 15,\n        \"columns\": 20,\n        \"seats\": [\n            {\n                \"row\": \"A\",\n                \"column\": 1,\n                \"type\": \"standard\",\n                \"price\": 14.99,\n                \"isActive\": true,\n                \"seatNumber\": \"A1\"\n            },\n            {\n                \"row\": \"A\",\n                \"column\": 2,\n                \"type\": \"standard\",\n                \"price\": 14.99,\n                \"isActive\": true,\n                \"seatNumber\": \"A2\"\n            },\n            {\n                \"row\": \"B\",\n                \"column\": 1,\n                \"type\": \"premium\",\n                \"price\": 19.99,\n                \"isActive\": true,\n                \"seatNumber\": \"B1\"\n            },\n            {\n                \"row\": \"B\",\n                \"column\": 2,\n                \"type\": \"premium\",\n                \"price\": 19.99,\n                \"isActive\": true,\n                \"seatNumber\": \"B2\"\n            }\n        ]\n    },\n    \"screenSize\": \"imax\",\n    \"soundSystem\": \"dolby-atmos\",\n    \"specialFeatures\": [\"4K Projection\", \"3D Capability\"]\n}"
                 },
                 "url": {
                   "raw": "{{baseUrl}}/api/cinemas/{{cinemaId}}/rooms",
@@ -2021,7 +2021,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"name\": \"IMAX Theater - Updated\",\n    \"capacity\": 275,\n    \"features\": [\"Reclining Seats\", \"Dolby Atmos\", \"Laser Projection\", \"Reserved Seating\"],\n    \"screenSize\": \"imax\"\n}"
+                  "raw": "{\n    \"name\": \"IMAX Cinema - Updated\",\n    \"capacity\": 275,\n    \"features\": [\"Reclining Seats\", \"Dolby Atmos\", \"Laser Projection\", \"Reserved Seating\"],\n    \"screenSize\": \"imax\"\n}"
                 },
                 "url": {
                   "raw": "{{baseUrl}}/api/cinemas/{{cinemaId}}/rooms/{{roomId}}",
@@ -5068,97 +5068,97 @@
           ]
         },
         {
-          "name": "Theaters",
-          "description": "Endpoints for theaters related to movies",
+          "name": "Cinemas",
+          "description": "Endpoints for cinemas related to movies",
           "item": [
             {
-              "name": "Get Theaters by Movie and Date",
+              "name": "Get Cinemas by Movie and Date",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters/movie/{{movieId}}/date/2023-12-25",
+                  "raw": "{{baseUrl}}/api/cinemas/movie/{{movieId}}/date/2023-12-25",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters",
+                    "cinemas",
                     "movie",
                     "{{movieId}}",
                     "date",
                     "2023-12-25"
                   ]
                 },
-                "description": "Get theaters showing a specific movie on a specific date"
+                "description": "Get cinemas showing a specific movie on a specific date"
               },
               "response": []
             },
             {
-              "name": "Get All Theaters",
+              "name": "Get All Cinemas",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters",
+                  "raw": "{{baseUrl}}/api/cinemas",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters"
+                    "cinemas"
                   ]
                 },
-                "description": "Get a list of all theaters"
+                "description": "Get a list of all cinemas"
               },
               "response": []
             },
             {
-              "name": "Get Theater by ID",
+              "name": "Get Cinema by ID",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters/{{theaterId}}",
+                  "raw": "{{baseUrl}}/api/cinemas/{{cinemaId}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters",
-                    "{{theaterId}}"
+                    "cinemas",
+                    "{{cinemaId}}"
                   ]
                 },
-                "description": "Get details of a specific theater"
+                "description": "Get details of a specific cinema"
               },
               "response": []
             },
             {
-              "name": "Get Theaters by City",
+              "name": "Get Cinemas by City",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters/city/New York",
+                  "raw": "{{baseUrl}}/api/cinemas/city/New York",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters",
+                    "cinemas",
                     "city",
                     "New York"
                   ]
                 },
-                "description": "Get theaters in a specific city"
+                "description": "Get cinemas in a specific city"
               },
               "response": []
             }
           ]
         },
         {
-          "name": "Screenings (Replaced Showtimes)",
-          "description": "Endpoints for movie screenings (previously called showtimes)",
+          "name": "Screenings",
+          "description": "Endpoints for movie screenings",
           "item": [
             {
               "name": "Get Screenings by Movie and Date",
@@ -9351,23 +9351,23 @@
               "response": []
             },
             {
-              "name": "Get Rooms by Theater",
+              "name": "Get Rooms by Cinema",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/rooms/theater/{{theaterId}}",
+                  "raw": "{{baseUrl}}/api/rooms/cinema/{{cinemaId}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
                     "rooms",
-                    "theater",
-                    "{{theaterId}}"
+                    "cinema",
+                    "{{cinemaId}}"
                   ]
                 },
-                "description": "Get all rooms in a specific theater"
+                "description": "Get all rooms in a specific cinema"
               },
               "response": []
             },
@@ -9408,7 +9408,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"name\": \"IMAX Theater\",\n    \"theater_id\": \"{{theaterId}}\",\n    \"capacity\": 200,\n    \"type\": \"IMAX\",\n    \"layout\": {\n        \"rows\": 10,\n        \"columns\": 20\n    },\n    \"seats\": [],\n    \"isActive\": true,\n    \"specialFeatures\": [\"Dolby Atmos\", \"Recliner Seats\"],\n    \"maintenanceSchedule\": {\n        \"lastMaintenance\": \"2023-01-01\",\n        \"nextMaintenance\": \"2023-06-01\"\n    }\n}"
+                  "raw": "{\n    \"name\": \"IMAX Cinema\",\n    \"cinema_id\": \"{{cinemaId}}\",\n    \"capacity\": 200,\n    \"type\": \"IMAX\",\n    \"layout\": {\n        \"rows\": 10,\n        \"columns\": 20\n    },\n    \"seats\": [],\n    \"isActive\": true,\n    \"specialFeatures\": [\"Dolby Atmos\", \"Recliner Seats\"],\n    \"maintenanceSchedule\": {\n        \"lastMaintenance\": \"2023-01-01\",\n        \"nextMaintenance\": \"2023-06-01\"\n    }\n}"
                 },
                 "url": {
                   "raw": "{{baseUrl}}/api/rooms",
@@ -9440,7 +9440,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"name\": \"IMAX Theater - Updated\",\n    \"capacity\": 220,\n    \"type\": \"IMAX\",\n    \"isActive\": true,\n    \"specialFeatures\": [\"Dolby Atmos\", \"Recliner Seats\", \"4K Projection\"],\n    \"maintenanceSchedule\": {\n        \"lastMaintenance\": \"2023-01-15\",\n        \"nextMaintenance\": \"2023-07-15\"\n    }\n}"
+                  "raw": "{\n    \"name\": \"IMAX Cinema - Updated\",\n    \"capacity\": 220,\n    \"type\": \"IMAX\",\n    \"isActive\": true,\n    \"specialFeatures\": [\"Dolby Atmos\", \"Recliner Seats\", \"4K Projection\"],\n    \"maintenanceSchedule\": {\n        \"lastMaintenance\": \"2023-01-15\",\n        \"nextMaintenance\": \"2023-07-15\"\n    }\n}"
                 },
                 "url": {
                   "raw": "{{baseUrl}}/api/rooms/{{roomId}}",
@@ -10271,7 +10271,7 @@
         },
         {
           "name": "Deprecated Endpoints",
-          "description": "These endpoints have been deprecated and replaced by Screenings API",
+          "description": "These endpoints have been deprecated",
           "item": [
             {
               "name": "Note",
@@ -10288,7 +10288,7 @@
                     "health"
                   ]
                 },
-                "description": "All showtimes endpoints have been deprecated and replaced by screenings endpoints. Please use the Screenings API instead."
+                "description": "These endpoints have been deprecated."
               },
               "response": []
             }
@@ -11265,23 +11265,23 @@
               "response": []
             },
             {
-              "name": "Get Available Seats (Showtime)",
+              "name": "Get Available Seats (Screening)",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/{{showtimeId}}/seats",
+                  "raw": "{{baseUrl}}/api/screenings/{{screeningId}}/seats",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes",
-                    "{{showtimeId}}",
+                    "screenings",
+                    "{{screeningId}}",
                     "seats"
                   ]
                 },
-                "description": "Get available seats for a specific showtime (legacy endpoint)"
+                "description": "Get available seats for a specific screening (legacy endpoint)"
               },
               "response": []
             },
@@ -11463,8 +11463,8 @@
       ]
     },
     {
-      "name": "Showtimes",
-      "description": "API endpoints for showtimes",
+      "name": "Screenings",
+      "description": "API endpoints for screenings",
       "item": [
         {
           "name": "Authentication",
@@ -11502,41 +11502,41 @@
           ]
         },
         {
-          "name": "Showtimes",
-          "description": "Endpoints for showtime operations",
+          "name": "Screenings",
+          "description": "Endpoints for screening operations",
           "item": [
             {
-              "name": "Get All Showtimes",
+              "name": "Get All Screenings",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes",
+                  "raw": "{{baseUrl}}/api/screenings",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes"
+                    "screenings"
                   ]
                 },
-                "description": "Get a list of all showtimes"
+                "description": "Get a list of all screenings"
               },
               "response": []
             },
             {
-              "name": "Get Showtimes with Pagination",
+              "name": "Get Screenings with Pagination",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes?page=1&limit=10",
+                  "raw": "{{baseUrl}}/api/screenings?page=1&limit=10",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes"
+                    "screenings"
                   ],
                   "query": [
                     {
@@ -11549,166 +11549,166 @@
                     }
                   ]
                 },
-                "description": "Get a paginated list of showtimes"
+                "description": "Get a paginated list of screenings"
               },
               "response": []
             },
             {
-              "name": "Get Showtime by ID",
+              "name": "Get Screening by ID",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/{{showtimeId}}",
+                  "raw": "{{baseUrl}}/api/screenings/{{screeningId}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes",
-                    "{{showtimeId}}"
+                    "screenings",
+                    "{{screeningId}}"
                   ]
                 },
-                "description": "Get details of a specific showtime by ID"
+                "description": "Get details of a specific screening by ID"
               },
               "response": []
             },
             {
-              "name": "Get Showtimes by Movie",
+              "name": "Get Screenings by Movie",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/movie/{{movieId}}",
+                  "raw": "{{baseUrl}}/api/screenings/movie/{{movieId}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes",
+                    "screenings",
                     "movie",
                     "{{movieId}}"
                   ]
                 },
-                "description": "Get all showtimes for a specific movie"
+                "description": "Get all screenings for a specific movie"
               },
               "response": []
             },
             {
-              "name": "Get Showtimes by Theater",
+              "name": "Get Screenings by Cinema",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/theater/{{theaterId}}",
+                  "raw": "{{baseUrl}}/api/screenings/cinema/{{cinemaId}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes",
-                    "theater",
-                    "{{theaterId}}"
+                    "screenings",
+                    "cinema",
+                    "{{cinemaId}}"
                   ]
                 },
-                "description": "Get all showtimes for a specific theater"
+                "description": "Get all screenings for a specific cinema"
               },
               "response": []
             },
             {
-              "name": "Get Showtimes by Date",
+              "name": "Get Screenings by Date",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/date/{{date}}",
+                  "raw": "{{baseUrl}}/api/screenings/date/{{date}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes",
+                    "screenings",
                     "date",
                     "{{date}}"
                   ]
                 },
-                "description": "Get all showtimes for a specific date"
+                "description": "Get all screenings for a specific date"
               },
               "response": []
             },
             {
-              "name": "Get Showtimes by Movie and Date",
+              "name": "Get Screenings by Movie and Date",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/movie/{{movieId}}/date/{{date}}",
+                  "raw": "{{baseUrl}}/api/screenings/movie/{{movieId}}/date/{{date}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes",
+                    "screenings",
                     "movie",
                     "{{movieId}}",
                     "date",
                     "{{date}}"
                   ]
                 },
-                "description": "Get all showtimes for a specific movie on a specific date"
+                "description": "Get all screenings for a specific movie on a specific date"
               },
               "response": []
             },
             {
-              "name": "Get Showtimes by Theater and Date",
+              "name": "Get Screenings by Cinema and Date",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/theater/{{theaterId}}/date/{{date}}",
+                  "raw": "{{baseUrl}}/api/screenings/cinema/{{cinemaId}}/date/{{date}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes",
-                    "theater",
-                    "{{theaterId}}",
+                    "screenings",
+                    "cinema",
+                    "{{cinemaId}}",
                     "date",
                     "{{date}}"
                   ]
                 },
-                "description": "Get all showtimes for a specific theater on a specific date"
+                "description": "Get all screenings for a specific cinema on a specific date"
               },
               "response": []
             },
             {
-              "name": "Get Showtimes by Movie, Theater, and Date",
+              "name": "Get Screenings by Movie, Cinema, and Date",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/movie/{{movieId}}/theater/{{theaterId}}/date/{{date}}",
+                  "raw": "{{baseUrl}}/api/screenings/movie/{{movieId}}/cinema/{{cinemaId}}/date/{{date}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes",
+                    "screenings",
                     "movie",
                     "{{movieId}}",
-                    "theater",
-                    "{{theaterId}}",
+                    "cinema",
+                    "{{cinemaId}}",
                     "date",
                     "{{date}}"
                   ]
                 },
-                "description": "Get all showtimes for a specific movie at a specific theater on a specific date"
+                "description": "Get all screenings for a specific movie at a specific cinema on a specific date"
               },
               "response": []
             },
             {
-              "name": "Create Showtime (Admin)",
+              "name": "Create Screening (Admin)",
               "request": {
                 "method": "POST",
                 "header": [
@@ -11723,24 +11723,24 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"movieId\": \"{{movieId}}\",\n    \"theaterId\": \"{{theaterId}}\",\n    \"roomId\": \"{{roomId}}\",\n    \"date\": \"{{date}}\",\n    \"startTime\": \"19:30\",\n    \"endTime\": \"21:45\",\n    \"format\": \"2D\",\n    \"language\": \"English\",\n    \"price\": 12.50,\n    \"isActive\": true\n}"
+                  "raw": "{\n    \"movieId\": \"{{movieId}}\",\n    \"cinemaId\": \"{{cinemaId}}\",\n    \"roomId\": \"{{roomId}}\",\n    \"date\": \"{{date}}\",\n    \"startTime\": \"19:30\",\n    \"endTime\": \"21:45\",\n    \"format\": \"2D\",\n    \"language\": \"English\",\n    \"price\": 12.50,\n    \"isActive\": true\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes",
+                  "raw": "{{baseUrl}}/api/screenings",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes"
+                    "screenings"
                   ]
                 },
-                "description": "Create a new showtime (admin only)"
+                "description": "Create a new screening (admin only)"
               },
               "response": []
             },
             {
-              "name": "Update Showtime (Admin)",
+              "name": "Update Screening (Admin)",
               "request": {
                 "method": "PUT",
                 "header": [
@@ -11758,22 +11758,22 @@
                   "raw": "{\n    \"startTime\": \"20:00\",\n    \"endTime\": \"22:15\",\n    \"format\": \"3D\",\n    \"price\": 15.00,\n    \"isActive\": true\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/{{showtimeId}}",
+                  "raw": "{{baseUrl}}/api/screenings/{{screeningId}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes",
-                    "{{showtimeId}}"
+                    "screenings",
+                    "{{screeningId}}"
                   ]
                 },
-                "description": "Update an existing showtime (admin only)"
+                "description": "Update an existing screening (admin only)"
               },
               "response": []
             },
             {
-              "name": "Delete Showtime (Admin)",
+              "name": "Delete Screening (Admin)",
               "request": {
                 "method": "DELETE",
                 "header": [
@@ -11783,67 +11783,67 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/{{showtimeId}}",
+                  "raw": "{{baseUrl}}/api/screenings/{{screeningId}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes",
-                    "{{showtimeId}}"
+                    "screenings",
+                    "{{screeningId}}"
                   ]
                 },
-                "description": "Delete a showtime (admin only)"
+                "description": "Delete a screening (admin only)"
               },
               "response": []
             },
             {
-              "name": "Get Available Seats for Showtime",
+              "name": "Get Available Seats for Screening",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/{{showtimeId}}/seats",
+                  "raw": "{{baseUrl}}/api/screenings/{{screeningId}}/seats",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes",
-                    "{{showtimeId}}",
+                    "screenings",
+                    "{{screeningId}}",
                     "seats"
                   ]
                 },
-                "description": "Get available seats for a specific showtime"
+                "description": "Get available seats for a specific screening"
               },
               "response": []
             },
             {
-              "name": "Check Showtime Availability",
+              "name": "Check Screening Availability",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/{{showtimeId}}/availability",
+                  "raw": "{{baseUrl}}/api/screenings/{{screeningId}}/availability",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes",
-                    "{{showtimeId}}",
+                    "screenings",
+                    "{{screeningId}}",
                     "availability"
                   ]
                 },
-                "description": "Check if a showtime is available (has seats)"
+                "description": "Check if a screening is available (has seats)"
               },
               "response": []
             }
           ]
         },
         {
-          "name": "Showtime Schedules",
-          "description": "Endpoints for managing showtime schedules",
+          "name": "Screening Schedules",
+          "description": "Endpoints for managing screening schedules",
           "item": [
             {
               "name": "Generate Weekly Schedule (Admin)",
@@ -11861,21 +11861,21 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"movieId\": \"{{movieId}}\",\n    \"theaterId\": \"{{theaterId}}\",\n    \"roomId\": \"{{roomId}}\",\n    \"startDate\": \"{{date}}\",\n    \"endDate\": \"2023-12-31\",\n    \"showtimes\": [\n        {\n            \"time\": \"14:30\",\n            \"format\": \"2D\",\n            \"price\": 10.00,\n            \"daysOfWeek\": [1, 2, 3, 4, 5]\n        },\n        {\n            \"time\": \"19:00\",\n            \"format\": \"3D\",\n            \"price\": 15.00,\n            \"daysOfWeek\": [1, 2, 3, 4, 5, 6, 0]\n        },\n        {\n            \"time\": \"12:00\",\n            \"format\": \"2D\",\n            \"price\": 8.00,\n            \"daysOfWeek\": [6, 0]\n        }\n    ]\n}"
+                  "raw": "{\n    \"movieId\": \"{{movieId}}\",\n    \"cinemaId\": \"{{cinemaId}}\",\n    \"roomId\": \"{{roomId}}\",\n    \"startDate\": \"{{date}}\",\n    \"endDate\": \"2023-12-31\",\n    \"screenings\": [\n        {\n            \"time\": \"14:30\",\n            \"format\": \"2D\",\n            \"price\": 10.00,\n            \"daysOfWeek\": [1, 2, 3, 4, 5]\n        },\n        {\n            \"time\": \"19:00\",\n            \"format\": \"3D\",\n            \"price\": 15.00,\n            \"daysOfWeek\": [1, 2, 3, 4, 5, 6, 0]\n        },\n        {\n            \"time\": \"12:00\",\n            \"format\": \"2D\",\n            \"price\": 8.00,\n            \"daysOfWeek\": [6, 0]\n        }\n    ]\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/schedule/generate",
+                  "raw": "{{baseUrl}}/api/screenings/schedule/generate",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes",
+                    "screenings",
                     "schedule",
                     "generate"
                   ]
                 },
-                "description": "Generate a weekly schedule of showtimes (admin only)"
+                "description": "Generate a weekly schedule of screenings (admin only)"
               },
               "response": []
             },
@@ -11885,13 +11885,13 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/schedule/week?startDate={{date}}",
+                  "raw": "{{baseUrl}}/api/screenings/schedule/week?startDate={{date}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes",
+                    "screenings",
                     "schedule",
                     "week"
                   ],
@@ -11922,32 +11922,32 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"movieId\": \"{{movieId}}\",\n    \"theaterId\": \"{{theaterId}}\",\n    \"startDate\": \"{{date}}\",\n    \"endDate\": \"2023-12-31\"\n}"
+                  "raw": "{\n    \"movieId\": \"{{movieId}}\",\n    \"cinemaId\": \"{{cinemaId}}\",\n    \"startDate\": \"{{date}}\",\n    \"endDate\": \"2023-12-31\"\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/schedule/clear",
+                  "raw": "{{baseUrl}}/api/screenings/schedule/clear",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes",
+                    "screenings",
                     "schedule",
                     "clear"
                   ]
                 },
-                "description": "Clear showtimes for a specific period (admin only)"
+                "description": "Clear screenings for a specific period (admin only)"
               },
               "response": []
             }
           ]
         },
         {
-          "name": "Showtime Statistics",
-          "description": "Endpoints for showtime statistics",
+          "name": "Screening Statistics",
+          "description": "Endpoints for screening statistics",
           "item": [
             {
-              "name": "Get Showtime Statistics (Admin)",
+              "name": "Get Screening Statistics (Admin)",
               "request": {
                 "method": "GET",
                 "header": [
@@ -11957,22 +11957,22 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/statistics",
+                  "raw": "{{baseUrl}}/api/screenings/statistics",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes",
+                    "screenings",
                     "statistics"
                   ]
                 },
-                "description": "Get overall showtime statistics (admin only)"
+                "description": "Get overall screening statistics (admin only)"
               },
               "response": []
             },
             {
-              "name": "Get Showtime Statistics by Movie (Admin)",
+              "name": "Get Screening Statistics by Movie (Admin)",
               "request": {
                 "method": "GET",
                 "header": [
@@ -11982,24 +11982,24 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/statistics/movie/{{movieId}}",
+                  "raw": "{{baseUrl}}/api/screenings/statistics/movie/{{movieId}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes",
+                    "screenings",
                     "statistics",
                     "movie",
                     "{{movieId}}"
                   ]
                 },
-                "description": "Get showtime statistics for a specific movie (admin only)"
+                "description": "Get screening statistics for a specific movie (admin only)"
               },
               "response": []
             },
             {
-              "name": "Get Showtime Statistics by Theater (Admin)",
+              "name": "Get Screening Statistics by Cinema (Admin)",
               "request": {
                 "method": "GET",
                 "header": [
@@ -12009,24 +12009,24 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/statistics/theater/{{theaterId}}",
+                  "raw": "{{baseUrl}}/api/screenings/statistics/cinema/{{cinemaId}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes",
+                    "screenings",
                     "statistics",
-                    "theater",
-                    "{{theaterId}}"
+                    "cinema",
+                    "{{cinemaId}}"
                   ]
                 },
-                "description": "Get showtime statistics for a specific theater (admin only)"
+                "description": "Get screening statistics for a specific cinema (admin only)"
               },
               "response": []
             },
             {
-              "name": "Get Showtime Statistics by Date Range (Admin)",
+              "name": "Get Screening Statistics by Date Range (Admin)",
               "request": {
                 "method": "GET",
                 "header": [
@@ -12036,13 +12036,13 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/statistics/date-range?startDate={{date}}&endDate=2023-12-31",
+                  "raw": "{{baseUrl}}/api/screenings/statistics/date-range?startDate={{date}}&endDate=2023-12-31",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes",
+                    "screenings",
                     "statistics",
                     "date-range"
                   ],
@@ -12057,7 +12057,7 @@
                     }
                   ]
                 },
-                "description": "Get showtime statistics for a specific date range (admin only)"
+                "description": "Get screening statistics for a specific date range (admin only)"
               },
               "response": []
             }
@@ -12066,8 +12066,8 @@
       ]
     },
     {
-      "name": "Theaters",
-      "description": "API endpoints for theaters",
+      "name": "Cinemas",
+      "description": "API endpoints for cinemas",
       "item": [
         {
           "name": "Authentication",
@@ -12105,41 +12105,41 @@
           ]
         },
         {
-          "name": "Theaters",
-          "description": "Endpoints for theater operations",
+          "name": "Cinemas",
+          "description": "Endpoints for cinema operations",
           "item": [
             {
-              "name": "Get All Theaters",
+              "name": "Get All Cinemas",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters",
+                  "raw": "{{baseUrl}}/api/cinemas",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters"
+                    "cinemas"
                   ]
                 },
-                "description": "Get a list of all theaters"
+                "description": "Get a list of all cinemas"
               },
               "response": []
             },
             {
-              "name": "Get Theaters with Pagination",
+              "name": "Get Cinemas with Pagination",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters?page=1&limit=10",
+                  "raw": "{{baseUrl}}/api/cinemas?page=1&limit=10",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters"
+                    "cinemas"
                   ],
                   "query": [
                     {
@@ -12152,108 +12152,108 @@
                     }
                   ]
                 },
-                "description": "Get a paginated list of theaters"
+                "description": "Get a paginated list of cinemas"
               },
               "response": []
             },
             {
-              "name": "Get Theater by ID",
+              "name": "Get Cinema by ID",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters/{{theaterId}}",
+                  "raw": "{{baseUrl}}/api/cinemas/{{cinemaId}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters",
-                    "{{theaterId}}"
+                    "cinemas",
+                    "{{cinemaId}}"
                   ]
                 },
-                "description": "Get details of a specific theater by ID"
+                "description": "Get details of a specific cinema by ID"
               },
               "response": []
             },
             {
-              "name": "Get Theaters by City",
+              "name": "Get Cinemas by City",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters/city/{{city}}",
+                  "raw": "{{baseUrl}}/api/cinemas/city/{{city}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters",
+                    "cinemas",
                     "city",
                     "{{city}}"
                   ]
                 },
-                "description": "Get all theaters in a specific city"
+                "description": "Get all cinemas in a specific city"
               },
               "response": []
             },
             {
-              "name": "Get Theaters by Movie",
+              "name": "Get Cinemas by Movie",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters/movie/{{movieId}}",
+                  "raw": "{{baseUrl}}/api/cinemas/movie/{{movieId}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters",
+                    "cinemas",
                     "movie",
                     "{{movieId}}"
                   ]
                 },
-                "description": "Get all theaters showing a specific movie"
+                "description": "Get all cinemas showing a specific movie"
               },
               "response": []
             },
             {
-              "name": "Get Theaters by Movie and Date",
+              "name": "Get Cinemas by Movie and Date",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters/movie/{{movieId}}/date/{{date}}",
+                  "raw": "{{baseUrl}}/api/cinemas/movie/{{movieId}}/date/{{date}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters",
+                    "cinemas",
                     "movie",
                     "{{movieId}}",
                     "date",
                     "{{date}}"
                   ]
                 },
-                "description": "Get all theaters showing a specific movie on a specific date"
+                "description": "Get all cinemas showing a specific movie on a specific date"
               },
               "response": []
             },
             {
-              "name": "Get Theaters by Location",
+              "name": "Get Cinemas by Location",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters/location?latitude=40.7128&longitude=-74.0060&radius=10",
+                  "raw": "{{baseUrl}}/api/cinemas/location?latitude=40.7128&longitude=-74.0060&radius=10",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters",
+                    "cinemas",
                     "location"
                   ],
                   "query": [
@@ -12271,12 +12271,12 @@
                     }
                   ]
                 },
-                "description": "Get theaters near a specific location"
+                "description": "Get cinemas near a specific location"
               },
               "response": []
             },
             {
-              "name": "Create Theater (Admin)",
+              "name": "Create Cinema (Admin)",
               "request": {
                 "method": "POST",
                 "header": [
@@ -12291,24 +12291,24 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"name\": \"AMC Empire 25\",\n    \"location\": {\n        \"address\": \"234 W 42nd St\",\n        \"city\": \"New York\",\n        \"state\": \"NY\",\n        \"zipCode\": \"10036\",\n        \"country\": \"USA\",\n        \"coordinates\": {\n            \"type\": \"Point\",\n            \"coordinates\": [-73.9896, 40.7569]\n        }\n    },\n    \"contactInfo\": {\n        \"phone\": \"+12123984970\",\n        \"email\": \"info@amcempire25.com\",\n        \"website\": \"https://www.amctheatres.com/movie-theatres/new-york-city/amc-empire-25\"\n    },\n    \"amenities\": [\"IMAX\", \"Dolby Cinema\", \"RealD 3D\", \"Wheelchair Accessible\"],\n    \"displayHours\": \"10:00 AM - 12:00 AM\",\n    \"images\": [\"https://example.com/theater1.jpg\", \"https://example.com/theater2.jpg\"],\n    \"featuredImage\": \"https://example.com/featured.jpg\",\n    \"isActive\": true,\n    \"isFeatured\": true\n}"
+                  "raw": "{\n    \"name\": \"AMC Empire 25\",\n    \"location\": {\n        \"address\": \"234 W 42nd St\",\n        \"city\": \"New York\",\n        \"state\": \"NY\",\n        \"zipCode\": \"10036\",\n        \"country\": \"USA\",\n        \"coordinates\": {\n            \"type\": \"Point\",\n            \"coordinates\": [-73.9896, 40.7569]\n        }\n    },\n    \"contactInfo\": {\n        \"phone\": \"+12123984970\",\n        \"email\": \"info@amcempire25.com\",\n        \"website\": \"https://www.amctheatres.com/movie-theatres/new-york-city/amc-empire-25\"\n    },\n    \"amenities\": [\"IMAX\", \"Dolby Cinema\", \"RealD 3D\", \"Wheelchair Accessible\"],\n    \"displayHours\": \"10:00 AM - 12:00 AM\",\n    \"images\": [\"https://example.com/cinema1.jpg\", \"https://example.com/cinema2.jpg\"],\n    \"featuredImage\": \"https://example.com/featured.jpg\",\n    \"isActive\": true,\n    \"isFeatured\": true\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters",
+                  "raw": "{{baseUrl}}/api/cinemas",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters"
+                    "cinemas"
                   ]
                 },
-                "description": "Create a new theater (admin only)"
+                "description": "Create a new cinema (admin only)"
               },
               "response": []
             },
             {
-              "name": "Update Theater (Admin)",
+              "name": "Update Cinema (Admin)",
               "request": {
                 "method": "PUT",
                 "header": [
@@ -12326,22 +12326,22 @@
                   "raw": "{\n    \"name\": \"AMC Empire 25 - Updated\",\n    \"contactInfo\": {\n        \"phone\": \"+12123984971\",\n        \"email\": \"updated@amcempire25.com\"\n    },\n    \"amenities\": [\"IMAX\", \"Dolby Cinema\", \"RealD 3D\", \"Wheelchair Accessible\", \"Recliner Seats\"],\n    \"isActive\": true,\n    \"isFeatured\": true\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters/{{theaterId}}",
+                  "raw": "{{baseUrl}}/api/cinemas/{{cinemaId}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters",
-                    "{{theaterId}}"
+                    "cinemas",
+                    "{{cinemaId}}"
                   ]
                 },
-                "description": "Update an existing theater (admin only)"
+                "description": "Update an existing cinema (admin only)"
               },
               "response": []
             },
             {
-              "name": "Delete Theater (Admin)",
+              "name": "Delete Cinema (Admin)",
               "request": {
                 "method": "DELETE",
                 "header": [
@@ -12351,44 +12351,44 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters/{{theaterId}}",
+                  "raw": "{{baseUrl}}/api/cinemas/{{cinemaId}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters",
-                    "{{theaterId}}"
+                    "cinemas",
+                    "{{cinemaId}}"
                   ]
                 },
-                "description": "Delete a theater (admin only)"
+                "description": "Delete a cinema (admin only)"
               },
               "response": []
             }
           ]
         },
         {
-          "name": "Theater Rooms",
-          "description": "Endpoints for managing theater rooms",
+          "name": "Cinema Rooms",
+          "description": "Endpoints for managing cinema rooms",
           "item": [
             {
-              "name": "Get All Rooms in Theater",
+              "name": "Get All Rooms in Cinema",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters/{{theaterId}}/rooms",
+                  "raw": "{{baseUrl}}/api/cinemas/{{cinemaId}}/rooms",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters",
-                    "{{theaterId}}",
+                    "cinemas",
+                    "{{cinemaId}}",
                     "rooms"
                   ]
                 },
-                "description": "Get all rooms in a specific theater"
+                "description": "Get all rooms in a specific cinema"
               },
               "response": []
             },
@@ -12398,13 +12398,13 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters/rooms/{{roomId}}",
+                  "raw": "{{baseUrl}}/api/cinemas/rooms/{{roomId}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters",
+                    "cinemas",
                     "rooms",
                     "{{roomId}}"
                   ]
@@ -12414,7 +12414,7 @@
               "response": []
             },
             {
-              "name": "Add Room to Theater (Admin)",
+              "name": "Add Room to Cinema (Admin)",
               "request": {
                 "method": "POST",
                 "header": [
@@ -12429,21 +12429,21 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"name\": \"IMAX Theater\",\n    \"capacity\": 200,\n    \"type\": \"IMAX\",\n    \"seatLayout\": {\n        \"rows\": 10,\n        \"columns\": 20,\n        \"seats\": []\n    },\n    \"specialFeatures\": [\"Dolby Atmos\", \"Recliner Seats\"],\n    \"isActive\": true\n}"
+                  "raw": "{\n    \"name\": \"IMAX Cinema\",\n    \"capacity\": 200,\n    \"type\": \"IMAX\",\n    \"seatLayout\": {\n        \"rows\": 10,\n        \"columns\": 20,\n        \"seats\": []\n    },\n    \"specialFeatures\": [\"Dolby Atmos\", \"Recliner Seats\"],\n    \"isActive\": true\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters/{{theaterId}}/rooms",
+                  "raw": "{{baseUrl}}/api/cinemas/{{cinemaId}}/rooms",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters",
-                    "{{theaterId}}",
+                    "cinemas",
+                    "{{cinemaId}}",
                     "rooms"
                   ]
                 },
-                "description": "Add a new room to a theater (admin only)"
+                "description": "Add a new room to a cinema (admin only)"
               },
               "response": []
             },
@@ -12463,16 +12463,16 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"name\": \"IMAX Theater - Updated\",\n    \"capacity\": 220,\n    \"type\": \"IMAX\",\n    \"specialFeatures\": [\"Dolby Atmos\", \"Recliner Seats\", \"4K Projection\"],\n    \"isActive\": true\n}"
+                  "raw": "{\n    \"name\": \"IMAX Cinema - Updated\",\n    \"capacity\": 220,\n    \"type\": \"IMAX\",\n    \"specialFeatures\": [\"Dolby Atmos\", \"Recliner Seats\", \"4K Projection\"],\n    \"isActive\": true\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters/rooms/{{roomId}}",
+                  "raw": "{{baseUrl}}/api/cinemas/rooms/{{roomId}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters",
+                    "cinemas",
                     "rooms",
                     "{{roomId}}"
                   ]
@@ -12492,13 +12492,13 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters/rooms/{{roomId}}",
+                  "raw": "{{baseUrl}}/api/cinemas/rooms/{{roomId}}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters",
+                    "cinemas",
                     "rooms",
                     "{{roomId}}"
                   ]
@@ -12513,13 +12513,13 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters/rooms/{{roomId}}/seats",
+                  "raw": "{{baseUrl}}/api/cinemas/rooms/{{roomId}}/seats",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters",
+                    "cinemas",
                     "rooms",
                     "{{roomId}}",
                     "seats"
@@ -12548,13 +12548,13 @@
                   "raw": "{\n    \"rows\": 10,\n    \"columns\": 20,\n    \"seats\": [\n        {\n            \"row\": \"A\",\n            \"column\": 1,\n            \"type\": \"standard\",\n            \"price\": 10,\n            \"isActive\": true\n        },\n        {\n            \"row\": \"A\",\n            \"column\": 2,\n            \"type\": \"standard\",\n            \"price\": 10,\n            \"isActive\": true\n        }\n    ]\n}"
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters/rooms/{{roomId}}/seats",
+                  "raw": "{{baseUrl}}/api/cinemas/rooms/{{roomId}}/seats",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters",
+                    "cinemas",
                     "rooms",
                     "{{roomId}}",
                     "seats"
@@ -12567,11 +12567,11 @@
           ]
         },
         {
-          "name": "Theater Statistics",
-          "description": "Endpoints for theater statistics",
+          "name": "Cinema Statistics",
+          "description": "Endpoints for cinema statistics",
           "item": [
             {
-              "name": "Get Theater Statistics (Admin)",
+              "name": "Get Cinema Statistics (Admin)",
               "request": {
                 "method": "GET",
                 "header": [
@@ -12581,22 +12581,22 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters/statistics",
+                  "raw": "{{baseUrl}}/api/cinemas/statistics",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters",
+                    "cinemas",
                     "statistics"
                   ]
                 },
-                "description": "Get overall theater statistics (admin only)"
+                "description": "Get overall cinema statistics (admin only)"
               },
               "response": []
             },
             {
-              "name": "Get Theater Statistics by ID (Admin)",
+              "name": "Get Cinema Statistics by ID (Admin)",
               "request": {
                 "method": "GET",
                 "header": [
@@ -12606,23 +12606,23 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters/{{theaterId}}/statistics",
+                  "raw": "{{baseUrl}}/api/cinemas/{{cinemaId}}/statistics",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters",
-                    "{{theaterId}}",
+                    "cinemas",
+                    "{{cinemaId}}",
                     "statistics"
                   ]
                 },
-                "description": "Get statistics for a specific theater (admin only)"
+                "description": "Get statistics for a specific cinema (admin only)"
               },
               "response": []
             },
             {
-              "name": "Get Theater Occupancy (Admin)",
+              "name": "Get Cinema Occupancy (Admin)",
               "request": {
                 "method": "GET",
                 "header": [
@@ -12632,14 +12632,14 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters/{{theaterId}}/occupancy?startDate={{date}}&endDate=2023-12-31",
+                  "raw": "{{baseUrl}}/api/cinemas/{{cinemaId}}/occupancy?startDate={{date}}&endDate=2023-12-31",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters",
-                    "{{theaterId}}",
+                    "cinemas",
+                    "{{cinemaId}}",
                     "occupancy"
                   ],
                   "query": [
@@ -12653,12 +12653,12 @@
                     }
                   ]
                 },
-                "description": "Get occupancy statistics for a specific theater (admin only)"
+                "description": "Get occupancy statistics for a specific cinema (admin only)"
               },
               "response": []
             },
             {
-              "name": "Get Theater Revenue (Admin)",
+              "name": "Get Cinema Revenue (Admin)",
               "request": {
                 "method": "GET",
                 "header": [
@@ -12668,14 +12668,14 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{baseUrl}}/api/theaters/{{theaterId}}/revenue?startDate={{date}}&endDate=2023-12-31",
+                  "raw": "{{baseUrl}}/api/cinemas/{{cinemaId}}/revenue?startDate={{date}}&endDate=2023-12-31",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "theaters",
-                    "{{theaterId}}",
+                    "cinemas",
+                    "{{cinemaId}}",
                     "revenue"
                   ],
                   "query": [
@@ -12689,7 +12689,7 @@
                     }
                   ]
                 },
-                "description": "Get revenue statistics for a specific theater (admin only)"
+                "description": "Get revenue statistics for a specific cinema (admin only)"
               },
               "response": []
             }
