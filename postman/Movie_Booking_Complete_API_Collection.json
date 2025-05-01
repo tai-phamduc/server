@@ -6,46 +6,662 @@
   },
   "item": [
     {
-      "name": "Actors",
-      "description": "API endpoints for actors",
+      "name": "Authentication",
+      "description": "Endpoints for user authentication and authorization",
       "item": [
         {
-          "name": "Authentication",
-          "description": "Endpoints for user authentication",
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "login"
+              ]
+            },
+            "description": "Login to get authentication token"
+          },
+          "response": []
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Test User\",\n    \"email\": \"user@example.com\",\n    \"password\": \"password123\",\n    \"confirmPassword\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "register"
+              ]
+            },
+            "description": "Register a new user"
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"refreshToken\": \"{{refreshToken}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/refresh-token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "refresh-token"
+              ]
+            },
+            "description": "Refresh access token using refresh token"
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "logout"
+              ]
+            },
+            "description": "Logout and invalidate the current token"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "description": "API endpoints for user management",
+      "item": [
+        {
+          "name": "User Management",
+          "description": "Endpoints for managing users",
           "item": [
             {
-              "name": "Login",
+              "name": "Get Current User",
               "request": {
-                "method": "POST",
+                "method": "GET",
                 "header": [
                   {
-                    "key": "Content-Type",
-                    "value": "application/json"
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
                   }
                 ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password123\"\n}"
-                },
                 "url": {
-                  "raw": "{{baseUrl}}/api/users/login",
+                  "raw": "{{baseUrl}}/api/users/me",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
                     "users",
-                    "login"
+                    "me"
                   ]
                 },
-                "description": "Login to get authentication token"
+                "description": "Get details of the currently authenticated user"
+              },
+              "response": []
+            },
+            {
+              "name": "Get User Profile",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/users/profile",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "profile"
+                  ]
+                },
+                "description": "Get current user's profile"
+              },
+              "response": []
+            },
+            {
+              "name": "Update User Profile",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"Updated Name\",\n    \"phone\": \"1234567890\",\n    \"address\": \"123 Main St, City, Country\",\n    \"preferences\": {\n        \"favoriteGenres\": [\"Action\", \"Comedy\"],\n        \"preferredSeatingArea\": \"middle\",\n        \"preferredShowtimePeriod\": \"evening\"\n    }\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/users/profile",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "profile"
+                  ]
+                },
+                "description": "Update the current user's profile and preferences"
+              },
+              "response": []
+            },
+            {
+              "name": "Upload Profile Picture",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "image",
+                      "type": "file",
+                      "src": "/path/to/profile-picture.jpg"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/users/profile-picture",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "profile-picture"
+                  ]
+                },
+                "description": "Upload user profile picture"
+              },
+              "response": []
+            },
+            {
+              "name": "Change Password",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"currentPassword\": \"password123\",\n    \"newPassword\": \"newPassword123\",\n    \"confirmPassword\": \"newPassword123\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/users/change-password",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "change-password"
+                  ]
+                },
+                "description": "Change the current user's password"
+              },
+              "response": []
+            },
+            {
+              "name": "Get All Users (Admin)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/users",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users"
+                  ]
+                },
+                "description": "Get a list of all users (admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Get User by ID (Admin)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/users/{{userId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "{{userId}}"
+                  ]
+                },
+                "description": "Get details of a specific user by ID (admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Update User Role (Admin)",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"role\": \"admin\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/users/{{userId}}/role",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "{{userId}}",
+                    "role"
+                  ]
+                },
+                "description": "Update a user's role (admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Delete User (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/users/{{userId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "{{userId}}"
+                  ]
+                },
+                "description": "Delete a user (admin only)"
               },
               "response": []
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "name": "Movies",
+      "description": "API endpoints for movies",
+      "item": [
         {
-          "name": "Actors",
+          "name": "Movie Operations",
+          "description": "Endpoints for movie operations",
+          "item": [
+            {
+              "name": "Get All Movies",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/movies",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "movies"
+                  ]
+                },
+                "description": "Get a list of all movies"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Movies with Pagination",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/movies?page=1&limit=10",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "movies"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ]
+                },
+                "description": "Get a paginated list of movies"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Movie by ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/movies/{{movieId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "movies",
+                    "{{movieId}}"
+                  ]
+                },
+                "description": "Get details of a specific movie by ID"
+              },
+              "response": []
+            },
+            {
+              "name": "Search Movies",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/movies/search?keyword=avengers",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "movies",
+                    "search"
+                  ],
+                  "query": [
+                    {
+                      "key": "keyword",
+                      "value": "avengers"
+                    }
+                  ]
+                },
+                "description": "Search for movies by title, description, etc."
+              },
+              "response": []
+            },
+            {
+              "name": "Filter Movies by Genre",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/movies/filter?genres=action,adventure",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "movies",
+                    "filter"
+                  ],
+                  "query": [
+                    {
+                      "key": "genres",
+                      "value": "action,adventure"
+                    }
+                  ]
+                },
+                "description": "Filter movies by genre(s)"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Now Playing Movies",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/movies/now-playing",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "movies",
+                    "now-playing"
+                  ]
+                },
+                "description": "Get movies currently playing in theaters"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Upcoming Movies",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/movies/upcoming",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "movies",
+                    "upcoming"
+                  ]
+                },
+                "description": "Get upcoming movies"
+              },
+              "response": []
+            },
+            {
+              "name": "Create Movie (Admin)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"Avengers: Endgame\",\n    \"description\": \"After the devastating events of Avengers: Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos' actions and restore balance to the universe.\",\n    \"releaseDate\": \"2019-04-26\",\n    \"duration\": 181,\n    \"genres\": [\"Action\", \"Adventure\", \"Sci-Fi\"],\n    \"director\": \"Anthony Russo, Joe Russo\",\n    \"cast\": [\"Robert Downey Jr.\", \"Chris Evans\", \"Mark Ruffalo\"],\n    \"rating\": \"PG-13\",\n    \"posterUrl\": \"https://example.com/avengers-endgame.jpg\",\n    \"trailerUrl\": \"https://www.youtube.com/watch?v=TcMBFSGVi1c\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/movies",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "movies"
+                  ]
+                },
+                "description": "Create a new movie (admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Update Movie (Admin)",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"Avengers: Endgame (Updated)\",\n    \"description\": \"Updated description for Avengers: Endgame.\",\n    \"rating\": \"PG-13\",\n    \"posterUrl\": \"https://example.com/avengers-endgame-updated.jpg\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/movies/{{movieId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "movies",
+                    "{{movieId}}"
+                  ]
+                },
+                "description": "Update an existing movie (admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Movie (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/movies/{{movieId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "movies",
+                    "{{movieId}}"
+                  ]
+                },
+                "description": "Delete a movie (admin only)"
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Actors",
+      "description": "API endpoints for actors",
+      "item": [
+        {
+          "name": "Actor Operations",
           "description": "Endpoints for actor operations",
           "item": [
             {
@@ -630,42 +1246,7 @@
       "description": "API endpoints for bookings",
       "item": [
         {
-          "name": "Authentication",
-          "description": "Endpoints for user authentication",
-          "item": [
-            {
-              "name": "Login",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password123\"\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/users/login",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "users",
-                    "login"
-                  ]
-                },
-                "description": "Login to get authentication token"
-              },
-              "response": []
-            }
-          ]
-        },
-        {
-          "name": "Bookings",
+          "name": "Booking Operations",
           "description": "Endpoints for booking operations",
           "item": [
             {
@@ -689,6 +1270,31 @@
                   ]
                 },
                 "description": "Get a list of all bookings (admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Get My Bookings",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/users/bookings",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "bookings"
+                  ]
+                },
+                "description": "Get current user's booking history"
               },
               "response": []
             },
@@ -751,31 +1357,7 @@
               },
               "response": []
             },
-            {
-              "name": "Get My Bookings",
-              "request": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{userToken}}"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/bookings/my-bookings",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "bookings",
-                    "my-bookings"
-                  ]
-                },
-                "description": "Get all bookings for the authenticated user"
-              },
-              "response": []
-            },
+
             {
               "name": "Get Bookings by User (Admin)",
               "request": {
@@ -1178,42 +1760,7 @@
       "description": "API endpoints for cinemas",
       "item": [
         {
-          "name": "Authentication",
-          "description": "Endpoints for user authentication (required for admin operations)",
-          "item": [
-            {
-              "name": "Login Admin",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password123\"\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/users/login",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "users",
-                    "login"
-                  ]
-                },
-                "description": "Login as admin to get authentication token for protected cinema operations"
-              },
-              "response": []
-            }
-          ]
-        },
-        {
-          "name": "Cinemas",
+          "name": "Cinema Operations",
           "description": "Endpoints for cinema operations",
           "item": [
             {
@@ -4610,54 +5157,54 @@
           ]
         },
         {
-          "name": "Showtimes",
-          "description": "Endpoints for movie showtimes",
+          "name": "Screenings (Replaced Showtimes)",
+          "description": "Endpoints for movie screenings (previously called showtimes)",
           "item": [
             {
-              "name": "Get Showtimes by Movie and Date",
+              "name": "Get Screenings by Movie and Date",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/movie/{{movieId}}/date/2023-12-25",
+                  "raw": "{{baseUrl}}/api/screenings/movie/{{movieId}}/date/2023-12-25",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes",
+                    "screenings",
                     "movie",
                     "{{movieId}}",
                     "date",
                     "2023-12-25"
                   ]
                 },
-                "description": "Get showtimes for a specific movie on a specific date"
+                "description": "Get screenings for a specific movie on a specific date"
               },
               "response": []
             },
             {
-              "name": "Get Showtimes by Movie, Theater and Date",
+              "name": "Get Screenings by Movie, Cinema and Date",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/movie/{{movieId}}/theater/{{theaterId}}/date/2023-12-25",
+                  "raw": "{{baseUrl}}/api/screenings/movie/{{movieId}}/cinema/{{cinemaId}}/date/2023-12-25",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes",
+                    "screenings",
                     "movie",
                     "{{movieId}}",
-                    "theater",
-                    "{{theaterId}}",
+                    "cinema",
+                    "{{cinemaId}}",
                     "date",
                     "2023-12-25"
                   ]
                 },
-                "description": "Get showtimes for a specific movie at a specific theater on a specific date"
+                "description": "Get screenings for a specific movie at a specific cinema on a specific date"
               },
               "response": []
             },
@@ -4667,18 +5214,18 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/{{showtimeId}}/seats",
+                  "raw": "{{baseUrl}}/api/screenings/{{screeningId}}/seats",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes",
-                    "{{showtimeId}}",
+                    "screenings",
+                    "{{screeningId}}",
                     "seats"
                   ]
                 },
-                "description": "Get available seats for a specific showtime"
+                "description": "Get available seats for a specific screening"
               },
               "response": []
             }
@@ -9723,93 +10270,25 @@
           ]
         },
         {
-          "name": "Legacy Showtimes",
-          "description": "Legacy endpoints for showtime operations",
+          "name": "Deprecated Endpoints",
+          "description": "These endpoints have been deprecated and replaced by Screenings API",
           "item": [
             {
-              "name": "Get All Showtimes",
+              "name": "Note",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/api/showtimes",
+                  "raw": "{{baseUrl}}/api/health",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
-                    "showtimes"
+                    "health"
                   ]
                 },
-                "description": "Get a list of all showtimes (legacy endpoint)"
-              },
-              "response": []
-            },
-            {
-              "name": "Get Showtime by ID",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/{{showtimeId}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "showtimes",
-                    "{{showtimeId}}"
-                  ]
-                },
-                "description": "Get details of a specific showtime by ID (legacy endpoint)"
-              },
-              "response": []
-            },
-            {
-              "name": "Get Showtimes by Movie and Date",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/movie/{{movieId}}/date/{{date}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "showtimes",
-                    "movie",
-                    "{{movieId}}",
-                    "date",
-                    "{{date}}"
-                  ]
-                },
-                "description": "Get all showtimes for a specific movie on a specific date across all theaters (legacy endpoint)"
-              },
-              "response": []
-            },
-            {
-              "name": "Get Showtimes by Movie, Theater and Date",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/api/showtimes/movie/{{movieId}}/theater/{{theaterId}}/date/{{date}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "showtimes",
-                    "movie",
-                    "{{movieId}}",
-                    "theater",
-                    "{{theaterId}}",
-                    "date",
-                    "{{date}}"
-                  ]
-                },
-                "description": "Get showtimes for a specific movie at a specific theater on a specific date (legacy endpoint)"
+                "description": "All showtimes endpoints have been deprecated and replaced by screenings endpoints. Please use the Screenings API instead."
               },
               "response": []
             }
@@ -12222,412 +12701,9 @@
       "name": "Users",
       "description": "API endpoints for users",
       "item": [
-        {
-          "name": "Authentication",
-          "description": "Endpoints for user authentication",
-          "item": [
-            {
-              "name": "Register User",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"name\": \"Test User\",\n    \"email\": \"testuser@example.com\",\n    \"password\": \"password123\"\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/users/register",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "users",
-                    "register"
-                  ]
-                },
-                "description": "Register a new user"
-              },
-              "response": []
-            },
-            {
-              "name": "Login User",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"email\": \"testuser@example.com\",\n    \"password\": \"password123\"\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/users/login",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "users",
-                    "login"
-                  ]
-                },
-                "description": "Login and get authentication token"
-              },
-              "response": []
-            },
-            {
-              "name": "Login Admin",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password123\"\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/users/login",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "users",
-                    "login"
-                  ]
-                },
-                "description": "Login as admin and get authentication token"
-              },
-              "response": []
-            },
-            {
-              "name": "Forgot Password",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"email\": \"testuser@example.com\"\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/users/forgot-password",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "users",
-                    "forgot-password"
-                  ]
-                },
-                "description": "Request password reset email"
-              },
-              "response": []
-            },
-            {
-              "name": "Reset Password",
-              "request": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"password\": \"newpassword123\"\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/users/reset-password/{{resetToken}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "users",
-                    "reset-password",
-                    "{{resetToken}}"
-                  ]
-                },
-                "description": "Reset password using token received via email"
-              },
-              "response": []
-            }
-          ]
-        },
-        {
-          "name": "User Profile",
-          "description": "Endpoints for user profile management",
-          "item": [
-            {
-              "name": "Get User Profile",
-              "request": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{userToken}}"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/users/profile",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "users",
-                    "profile"
-                  ]
-                },
-                "description": "Get current user's profile"
-              },
-              "response": []
-            },
-            {
-              "name": "Update User Profile",
-              "request": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{userToken}}"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"name\": \"Updated Name\",\n    \"email\": \"updated@example.com\",\n    \"phone\": \"1234567890\",\n    \"bio\": \"This is my updated bio\"\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/users/profile",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "users",
-                    "profile"
-                  ]
-                },
-                "description": "Update current user's profile"
-              },
-              "response": []
-            },
-            {
-              "name": "Update Password",
-              "request": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{userToken}}"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"currentPassword\": \"password123\",\n    \"newPassword\": \"newpassword123\"\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/users/password",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "users",
-                    "password"
-                  ]
-                },
-                "description": "Update user's password"
-              },
-              "response": []
-            },
-            {
-              "name": "Upload Profile Picture",
-              "request": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{userToken}}"
-                  }
-                ],
-                "body": {
-                  "mode": "formdata",
-                  "formdata": [
-                    {
-                      "key": "image",
-                      "type": "file",
-                      "src": "/path/to/profile-picture.jpg"
-                    }
-                  ]
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/users/profile-picture",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "users",
-                    "profile-picture"
-                  ]
-                },
-                "description": "Upload user profile picture"
-              },
-              "response": []
-            }
-          ]
-        },
-        {
-          "name": "User Bookings",
-          "description": "Endpoints for user booking management",
-          "item": [
-            {
-              "name": "Get User Bookings",
-              "request": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{userToken}}"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/users/bookings",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "users",
-                    "bookings"
-                  ]
-                },
-                "description": "Get current user's booking history"
-              },
-              "response": []
-            },
-            {
-              "name": "Create Booking",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{userToken}}"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"movie\": \"{{movieId}}\",\n    \"showtime\": \"{{showtimeId}}\",\n    \"seats\": [\"A1\", \"A2\"],\n    \"totalPrice\": 30.00,\n    \"paymentMethod\": \"credit_card\"\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/bookings",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "bookings"
-                  ]
-                },
-                "description": "Create a new booking"
-              },
-              "response": []
-            },
-            {
-              "name": "Get Booking by ID",
-              "request": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{userToken}}"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/bookings/{{bookingId}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "bookings",
-                    "{{bookingId}}"
-                  ]
-                },
-                "description": "Get details of a specific booking"
-              },
-              "response": []
-            },
-            {
-              "name": "Cancel Booking",
-              "request": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{userToken}}"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"reason\": \"Change of plans\"\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/bookings/{{bookingId}}/cancel",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "bookings",
-                    "{{bookingId}}",
-                    "cancel"
-                  ]
-                },
-                "description": "Cancel a booking"
-              },
-              "response": []
-            }
-          ]
-        },
+
+
+
         {
           "name": "Two-Factor Authentication",
           "description": "Endpoints for two-factor authentication",
@@ -12784,181 +12860,11 @@
             }
           ]
         },
-        {
-          "name": "Admin User Management",
-          "description": "Endpoints for admin user management",
-          "item": [
-            {
-              "name": "Get All Users (Admin)",
-              "request": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{adminToken}}"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/users",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "users"
-                  ]
-                },
-                "description": "Get a list of all users (admin only)"
-              },
-              "response": []
-            },
-            {
-              "name": "Get User by ID (Admin)",
-              "request": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{adminToken}}"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/users/{{userId}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "users",
-                    "{{userId}}"
-                  ]
-                },
-                "description": "Get details of a specific user (admin only)"
-              },
-              "response": []
-            },
-            {
-              "name": "Update User (Admin)",
-              "request": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{adminToken}}"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"name\": \"Updated User Name\",\n    \"email\": \"updated@example.com\",\n    \"role\": \"editor\"\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/users/{{userId}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "users",
-                    "{{userId}}"
-                  ]
-                },
-                "description": "Update a user (admin only)"
-              },
-              "response": []
-            },
-            {
-              "name": "Delete User (Admin)",
-              "request": {
-                "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{adminToken}}"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/users/{{userId}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "users",
-                    "{{userId}}"
-                  ]
-                },
-                "description": "Delete a user (admin only)"
-              },
-              "response": []
-            },
-            {
-              "name": "Get All Bookings (Admin)",
-              "request": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{adminToken}}"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/bookings/admin",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "bookings",
-                    "admin"
-                  ]
-                },
-                "description": "Get a list of all bookings (admin only)"
-              },
-              "response": []
-            }
-          ]
-        },
+
         {
           "name": "User Preferences",
           "description": "Endpoints for user preferences",
           "item": [
-            {
-              "name": "Update User Preferences",
-              "request": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{userToken}}"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"preferences\": {\n        \"favoriteGenres\": [\"Action\", \"Comedy\"],\n        \"preferredSeatingArea\": \"middle\",\n        \"preferredShowtimePeriod\": \"evening\"\n    }\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/users/profile",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "users",
-                    "profile"
-                  ]
-                },
-                "description": "Update user preferences"
-              },
-              "response": []
-            },
             {
               "name": "Add Movie to Watchlist",
               "request": {
@@ -13074,6 +12980,601 @@
                   ]
                 },
                 "description": "Remove a movie from user's favorites"
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Screenings",
+      "description": "API endpoints for movie screenings",
+      "item": [
+        {
+          "name": "Screening Operations",
+          "description": "Endpoints for screening operations",
+          "item": [
+            {
+              "name": "Get All Screenings",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/screenings",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "screenings"
+                  ]
+                },
+                "description": "Get a list of all screenings"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Screenings by Movie",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/screenings/movie/{{movieId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "screenings",
+                    "movie",
+                    "{{movieId}}"
+                  ]
+                },
+                "description": "Get all screenings for a specific movie"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Screenings by Cinema",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/screenings/cinema/{{cinemaId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "screenings",
+                    "cinema",
+                    "{{cinemaId}}"
+                  ]
+                },
+                "description": "Get all screenings for a specific cinema"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Screenings by Date",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/screenings/date/{{date}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "screenings",
+                    "date",
+                    "{{date}}"
+                  ]
+                },
+                "description": "Get all screenings for a specific date"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Screening by ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/screenings/{{screeningId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "screenings",
+                    "{{screeningId}}"
+                  ]
+                },
+                "description": "Get details of a specific screening by ID"
+              },
+              "response": []
+            },
+            {
+              "name": "Create Screening (Admin)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"movieId\": \"{{movieId}}\",\n    \"cinemaId\": \"{{cinemaId}}\",\n    \"roomId\": \"{{roomId}}\",\n    \"startTime\": \"2023-12-15T18:30:00Z\",\n    \"endTime\": \"2023-12-15T20:45:00Z\",\n    \"format\": \"2D\",\n    \"language\": \"English\",\n    \"subtitles\": \"None\",\n    \"price\": {\n        \"standard\": 12.99,\n        \"premium\": 16.99,\n        \"vip\": 24.99\n    },\n    \"isActive\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/screenings",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "screenings"
+                  ]
+                },
+                "description": "Create a new screening (admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Update Screening (Admin)",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"startTime\": \"2023-12-15T19:00:00Z\",\n    \"endTime\": \"2023-12-15T21:15:00Z\",\n    \"price\": {\n        \"standard\": 13.99,\n        \"premium\": 17.99,\n        \"vip\": 25.99\n    }\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/screenings/{{screeningId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "screenings",
+                    "{{screeningId}}"
+                  ]
+                },
+                "description": "Update an existing screening (admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Screening (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/screenings/{{screeningId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "screenings",
+                    "{{screeningId}}"
+                  ]
+                },
+                "description": "Delete a screening (admin only)"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Seat Operations",
+          "description": "Endpoints for seat operations",
+          "item": [
+            {
+              "name": "Get Available Seats",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/screenings/{{screeningId}}/seats",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "screenings",
+                    "{{screeningId}}",
+                    "seats"
+                  ]
+                },
+                "description": "Get available seats for a specific screening"
+              },
+              "response": []
+            },
+            {
+              "name": "Reserve Seats",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"seats\": [\"A1\", \"A2\"],\n    \"holdDurationMinutes\": 15\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/screenings/{{screeningId}}/seats/reserve",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "screenings",
+                    "{{screeningId}}",
+                    "seats",
+                    "reserve"
+                  ]
+                },
+                "description": "Reserve seats for a specific screening"
+              },
+              "response": []
+            },
+            {
+              "name": "Release Seat Reservation",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"seats\": [\"A1\", \"A2\"],\n    \"reservationId\": \"{{reservationId}}\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/screenings/{{screeningId}}/seats/release",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "screenings",
+                    "{{screeningId}}",
+                    "seats",
+                    "release"
+                  ]
+                },
+                "description": "Release reserved seats"
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "description": "API endpoints for movie reviews and ratings",
+      "item": [
+        {
+          "name": "Review Operations",
+          "description": "Endpoints for review operations",
+          "item": [
+            {
+              "name": "Get All Reviews for Movie",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/movies/{{movieId}}/reviews",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "movies",
+                    "{{movieId}}",
+                    "reviews"
+                  ]
+                },
+                "description": "Get all reviews for a specific movie"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Review by ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/reviews/{{reviewId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reviews",
+                    "{{reviewId}}"
+                  ]
+                },
+                "description": "Get a specific review by ID"
+              },
+              "response": []
+            },
+            {
+              "name": "Get User Reviews",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/users/me/reviews",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "me",
+                    "reviews"
+                  ]
+                },
+                "description": "Get all reviews by the current user"
+              },
+              "response": []
+            },
+            {
+              "name": "Create Review",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"movieId\": \"{{movieId}}\",\n    \"rating\": 4.5,\n    \"title\": \"Great movie!\",\n    \"content\": \"This was an excellent film with great performances and an engaging story.\",\n    \"tags\": [\"action\", \"entertaining\"]\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/reviews",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reviews"
+                  ]
+                },
+                "description": "Create a new review"
+              },
+              "response": []
+            },
+            {
+              "name": "Update Review",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"rating\": 5,\n    \"title\": \"Amazing movie!\",\n    \"content\": \"Updated review: This was an outstanding film with exceptional performances and a compelling story.\",\n    \"tags\": [\"action\", \"entertaining\", \"must-see\"]\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/reviews/{{reviewId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reviews",
+                    "{{reviewId}}"
+                  ]
+                },
+                "description": "Update an existing review"
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Review",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/reviews/{{reviewId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reviews",
+                    "{{reviewId}}"
+                  ]
+                },
+                "description": "Delete a review"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Review Moderation",
+          "description": "Endpoints for review moderation (admin only)",
+          "item": [
+            {
+              "name": "Get Flagged Reviews (Admin)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/reviews/flagged",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reviews",
+                    "flagged"
+                  ]
+                },
+                "description": "Get all flagged reviews (admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Flag Review",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{userToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"reason\": \"Inappropriate content\",\n    \"details\": \"This review contains offensive language.\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/reviews/{{reviewId}}/flag",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reviews",
+                    "{{reviewId}}",
+                    "flag"
+                  ]
+                },
+                "description": "Flag a review for moderation"
+              },
+              "response": []
+            },
+            {
+              "name": "Approve Review (Admin)",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/reviews/{{reviewId}}/approve",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reviews",
+                    "{{reviewId}}",
+                    "approve"
+                  ]
+                },
+                "description": "Approve a flagged review (admin only)"
+              },
+              "response": []
+            },
+            {
+              "name": "Reject Review (Admin)",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"reason\": \"Violates community guidelines\",\n    \"notifyUser\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/reviews/{{reviewId}}/reject",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reviews",
+                    "{{reviewId}}",
+                    "reject"
+                  ]
+                },
+                "description": "Reject a flagged review (admin only)"
               },
               "response": []
             }

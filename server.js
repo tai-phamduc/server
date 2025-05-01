@@ -120,8 +120,8 @@ app.use('/api/events', require('./routes/eventRoutes'));
 app.use('/api/news', require('./routes/newsRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/upload', require('./routes/uploadRoutes'));
-app.use('/api/theaters', require('./routes/theaterRoutes'));
-app.use('/api/showtimes', require('./routes/showtimeRoutes'));
+// Removed theaterRoutes - using cinemaRoutes instead
+// Removed showtimeRoutes - using screeningRoutes instead
 // New routes using updated models
 app.use('/api/cinemas', require('./routes/cinemaRoutes'));
 app.use('/api/screenings', require('./routes/screeningRoutes'));

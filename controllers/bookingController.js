@@ -1,7 +1,7 @@
 const Booking = require('../models/Booking');
-const Showtime = require('../models/Showtime');
+const Screening = require('../models/Screening');
 const Movie = require('../models/Movie');
-const Theater = require('../models/Theater');
+const Cinema = require('../models/Cinema');
 const User = require('../models/User');
 const { generateQRCode } = require('../utils/qrCodeGenerator');
 const { sendBookingConfirmationEmail, sendBookingCancellationEmail } = require('../utils/emailSender');
@@ -20,10 +20,10 @@ const createBooking = async (req, res) => {
   try {
     const { movieId, showtimeId, seats, paymentMethod } = req.body;
 
-    // Check if showtime exists
-    const showtime = await Showtime.findById(showtimeId);
+    // Check if screening exists
+    const showtime = await Screening.findById(showtimeId);
     if (!showtime) {
-      return res.status(404).json({ message: 'Showtime not found' });
+      return res.status(404).json({ message: 'Screening not found' });
     }
 
     // Check if movie exists
@@ -32,10 +32,10 @@ const createBooking = async (req, res) => {
       return res.status(404).json({ message: 'Movie not found' });
     }
 
-    // Check if theater exists
-    const theater = await Theater.findById(showtime.theater);
-    if (!theater) {
-      return res.status(404).json({ message: 'Theater not found' });
+    // Check if cinema exists
+    const cinema = await Cinema.findById(showtime.cinema_id);
+    if (!cinema) {
+      return res.status(404).json({ message: 'Cinema not found' });
     }
 
     // Check if seats are available
@@ -68,9 +68,9 @@ const createBooking = async (req, res) => {
       showtime: showtimeId,
       showtimeDate: showtime.startTime,
       showtimeDisplay: showtime.displayTime,
-      theater: showtime.theater,
-      theaterName: theater.name,
-      hall: showtime.hall,
+      cinema: showtime.cinema_id,
+      cinemaName: cinema.name,
+      room: showtime.room_id,
       seats,
       totalPrice,
       ticketPrice,
@@ -310,10 +310,10 @@ const cancelBooking = async (req, res) => {
       return res.status(400).json({ message: 'Booking is already cancelled' });
     }
 
-    // Check if showtime has passed
-    const showtime = await Showtime.findById(booking.showtime);
+    // Check if screening has passed
+    const showtime = await Screening.findById(booking.showtime);
     if (!showtime) {
-      return res.status(404).json({ message: 'Showtime not found' });
+      return res.status(404).json({ message: 'Screening not found' });
     }
 
     const now = new Date();
