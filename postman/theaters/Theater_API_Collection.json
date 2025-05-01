@@ -1,0 +1,515 @@
+{
+  "info": {
+    "name": "Theater API Collection",
+    "description": "A collection of API requests for testing theater-related endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "description": "Endpoints for user authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "login"]
+            },
+            "description": "Login to get authentication token"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Theaters",
+      "description": "Endpoints for theater operations",
+      "item": [
+        {
+          "name": "Get All Theaters",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/theaters",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "theaters"]
+            },
+            "description": "Get a list of all theaters"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Theaters with Pagination",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/theaters?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "theaters"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get a paginated list of theaters"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Theater by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/theaters/{{theaterId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "theaters", "{{theaterId}}"]
+            },
+            "description": "Get details of a specific theater by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Theaters by City",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/theaters/city/{{city}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "theaters", "city", "{{city}}"]
+            },
+            "description": "Get all theaters in a specific city"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Theaters by Movie",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/theaters/movie/{{movieId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "theaters", "movie", "{{movieId}}"]
+            },
+            "description": "Get all theaters showing a specific movie"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Theaters by Movie and Date",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/theaters/movie/{{movieId}}/date/{{date}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "theaters", "movie", "{{movieId}}", "date", "{{date}}"]
+            },
+            "description": "Get all theaters showing a specific movie on a specific date"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Theaters by Location",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/theaters/location?latitude=40.7128&longitude=-74.0060&radius=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "theaters", "location"],
+              "query": [
+                {
+                  "key": "latitude",
+                  "value": "40.7128"
+                },
+                {
+                  "key": "longitude",
+                  "value": "-74.0060"
+                },
+                {
+                  "key": "radius",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get theaters near a specific location"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Theater (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"AMC Empire 25\",\n    \"location\": {\n        \"address\": \"234 W 42nd St\",\n        \"city\": \"New York\",\n        \"state\": \"NY\",\n        \"zipCode\": \"10036\",\n        \"country\": \"USA\",\n        \"coordinates\": {\n            \"type\": \"Point\",\n            \"coordinates\": [-73.9896, 40.7569]\n        }\n    },\n    \"contactInfo\": {\n        \"phone\": \"+12123984970\",\n        \"email\": \"info@amcempire25.com\",\n        \"website\": \"https://www.amctheatres.com/movie-theatres/new-york-city/amc-empire-25\"\n    },\n    \"amenities\": [\"IMAX\", \"Dolby Cinema\", \"RealD 3D\", \"Wheelchair Accessible\"],\n    \"displayHours\": \"10:00 AM - 12:00 AM\",\n    \"images\": [\"https://example.com/theater1.jpg\", \"https://example.com/theater2.jpg\"],\n    \"featuredImage\": \"https://example.com/featured.jpg\",\n    \"isActive\": true,\n    \"isFeatured\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/theaters",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "theaters"]
+            },
+            "description": "Create a new theater (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Theater (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"AMC Empire 25 - Updated\",\n    \"contactInfo\": {\n        \"phone\": \"+12123984971\",\n        \"email\": \"updated@amcempire25.com\"\n    },\n    \"amenities\": [\"IMAX\", \"Dolby Cinema\", \"RealD 3D\", \"Wheelchair Accessible\", \"Recliner Seats\"],\n    \"isActive\": true,\n    \"isFeatured\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/theaters/{{theaterId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "theaters", "{{theaterId}}"]
+            },
+            "description": "Update an existing theater (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Theater (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/theaters/{{theaterId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "theaters", "{{theaterId}}"]
+            },
+            "description": "Delete a theater (admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Theater Rooms",
+      "description": "Endpoints for managing theater rooms",
+      "item": [
+        {
+          "name": "Get All Rooms in Theater",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/theaters/{{theaterId}}/rooms",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "theaters", "{{theaterId}}", "rooms"]
+            },
+            "description": "Get all rooms in a specific theater"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Room by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/theaters/rooms/{{roomId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "theaters", "rooms", "{{roomId}}"]
+            },
+            "description": "Get details of a specific room by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Add Room to Theater (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"IMAX Theater\",\n    \"capacity\": 200,\n    \"type\": \"IMAX\",\n    \"seatLayout\": {\n        \"rows\": 10,\n        \"columns\": 20,\n        \"seats\": []\n    },\n    \"specialFeatures\": [\"Dolby Atmos\", \"Recliner Seats\"],\n    \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/theaters/{{theaterId}}/rooms",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "theaters", "{{theaterId}}", "rooms"]
+            },
+            "description": "Add a new room to a theater (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Room (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"IMAX Theater - Updated\",\n    \"capacity\": 220,\n    \"type\": \"IMAX\",\n    \"specialFeatures\": [\"Dolby Atmos\", \"Recliner Seats\", \"4K Projection\"],\n    \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/theaters/rooms/{{roomId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "theaters", "rooms", "{{roomId}}"]
+            },
+            "description": "Update an existing room (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Room (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/theaters/rooms/{{roomId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "theaters", "rooms", "{{roomId}}"]
+            },
+            "description": "Delete a room (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Room Seat Layout",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/theaters/rooms/{{roomId}}/seats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "theaters", "rooms", "{{roomId}}", "seats"]
+            },
+            "description": "Get the seat layout for a specific room"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Room Seat Layout (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"rows\": 10,\n    \"columns\": 20,\n    \"seats\": [\n        {\n            \"row\": \"A\",\n            \"column\": 1,\n            \"type\": \"standard\",\n            \"price\": 10,\n            \"isActive\": true\n        },\n        {\n            \"row\": \"A\",\n            \"column\": 2,\n            \"type\": \"standard\",\n            \"price\": 10,\n            \"isActive\": true\n        }\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/theaters/rooms/{{roomId}}/seats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "theaters", "rooms", "{{roomId}}", "seats"]
+            },
+            "description": "Update the seat layout for a specific room (admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Theater Statistics",
+      "description": "Endpoints for theater statistics",
+      "item": [
+        {
+          "name": "Get Theater Statistics (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/theaters/statistics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "theaters", "statistics"]
+            },
+            "description": "Get overall theater statistics (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Theater Statistics by ID (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/theaters/{{theaterId}}/statistics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "theaters", "{{theaterId}}", "statistics"]
+            },
+            "description": "Get statistics for a specific theater (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Theater Occupancy (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/theaters/{{theaterId}}/occupancy?startDate={{date}}&endDate=2023-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "theaters", "{{theaterId}}", "occupancy"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "{{date}}"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2023-12-31"
+                }
+              ]
+            },
+            "description": "Get occupancy statistics for a specific theater (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Theater Revenue (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/theaters/{{theaterId}}/revenue?startDate={{date}}&endDate=2023-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "theaters", "{{theaterId}}", "revenue"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "{{date}}"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2023-12-31"
+                }
+              ]
+            },
+            "description": "Get revenue statistics for a specific theater (admin only)"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Get today's date in YYYY-MM-DD format",
+          "const today = new Date();",
+          "const todayFormatted = today.toISOString().split('T')[0];",
+          "",
+          "// Format display date (e.g., \"December 25, 2023\")",
+          "const options = { year: 'numeric', month: 'long', day: 'numeric' };",
+          "const displayDate = today.toLocaleDateString('en-US', options);",
+          "",
+          "// Get day of week",
+          "const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];",
+          "const dayOfWeek = daysOfWeek[today.getDay()];",
+          "",
+          "// Set environment variables",
+          "pm.environment.set('date', todayFormatted);",
+          "pm.environment.set('displayDate', displayDate);",
+          "pm.environment.set('dayOfWeek', dayOfWeek);"
+        ]
+      }
+    }
+  ]
+}

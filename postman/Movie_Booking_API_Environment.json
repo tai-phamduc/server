@@ -117,6 +117,48 @@
       "enabled": true
     },
     {
+      "key": "productId",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "productId2",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "productId3",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "categoryId",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "comboId",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "orderId",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "orderItemId",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
       "key": "date",
       "value": "2026-05-01",
       "type": "default",

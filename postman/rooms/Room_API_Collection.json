@@ -1,0 +1,523 @@
+{
+  "info": {
+    "name": "Room API Collection",
+    "description": "A collection of API requests for testing room-related endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "description": "Endpoints for user authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "login"]
+            },
+            "description": "Login to get authentication token"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Rooms",
+      "description": "Endpoints for room operations",
+      "item": [
+        {
+          "name": "Get All Rooms",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms"]
+            },
+            "description": "Get a list of all rooms (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Rooms with Pagination",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get a paginated list of rooms (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Room by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms/{{roomId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms", "{{roomId}}"]
+            },
+            "description": "Get details of a specific room by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Rooms by Theater",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms/theater/{{theaterId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms", "theater", "{{theaterId}}"]
+            },
+            "description": "Get all rooms in a specific theater"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Rooms by Type",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms/type/IMAX",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms", "type", "IMAX"]
+            },
+            "description": "Get all rooms of a specific type"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Room (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"IMAX Theater\",\n    \"theater_id\": \"{{theaterId}}\",\n    \"capacity\": 200,\n    \"type\": \"IMAX\",\n    \"layout\": {\n        \"rows\": 10,\n        \"columns\": 20\n    },\n    \"seats\": [],\n    \"isActive\": true,\n    \"specialFeatures\": [\"Dolby Atmos\", \"Recliner Seats\"],\n    \"maintenanceSchedule\": {\n        \"lastMaintenance\": \"2023-01-01\",\n        \"nextMaintenance\": \"2023-06-01\"\n    }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms"]
+            },
+            "description": "Create a new room (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Room (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"IMAX Theater - Updated\",\n    \"capacity\": 220,\n    \"type\": \"IMAX\",\n    \"isActive\": true,\n    \"specialFeatures\": [\"Dolby Atmos\", \"Recliner Seats\", \"4K Projection\"],\n    \"maintenanceSchedule\": {\n        \"lastMaintenance\": \"2023-01-15\",\n        \"nextMaintenance\": \"2023-07-15\"\n    }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms/{{roomId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms", "{{roomId}}"]
+            },
+            "description": "Update an existing room (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Room (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms/{{roomId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms", "{{roomId}}"]
+            },
+            "description": "Delete a room (admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Room Seats",
+      "description": "Endpoints for managing room seats",
+      "item": [
+        {
+          "name": "Get Room Seat Layout",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms/{{roomId}}/seats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms", "{{roomId}}", "seats"]
+            },
+            "description": "Get the seat layout for a specific room"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Room Seat Layout (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"layout\": {\n        \"rows\": 10,\n        \"columns\": 20\n    },\n    \"seats\": [\n        {\n            \"row\": \"A\",\n            \"column\": 1,\n            \"seatNumber\": \"A1\",\n            \"type\": \"standard\",\n            \"price\": 10,\n            \"isActive\": true\n        },\n        {\n            \"row\": \"A\",\n            \"column\": 2,\n            \"seatNumber\": \"A2\",\n            \"type\": \"standard\",\n            \"price\": 10,\n            \"isActive\": true\n        }\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms/{{roomId}}/seats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms", "{{roomId}}", "seats"]
+            },
+            "description": "Update the seat layout for a specific room (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Seat Status (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"isActive\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms/{{roomId}}/seats/{{seatId1}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms", "{{roomId}}", "seats", "{{seatId1}}"]
+            },
+            "description": "Update the status of a specific seat (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Seat Type (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\": \"premium\",\n    \"price\": 15\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms/{{roomId}}/seats/{{seatId1}}/type",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms", "{{roomId}}", "seats", "{{seatId1}}", "type"]
+            },
+            "description": "Update the type and price of a specific seat (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Bulk Update Seats (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"seatIds\": [\"{{seatId1}}\", \"{{seatId2}}\"],\n    \"updates\": {\n        \"type\": \"premium\",\n        \"price\": 15,\n        \"isActive\": true\n    }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms/{{roomId}}/seats/bulk-update",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms", "{{roomId}}", "seats", "bulk-update"]
+            },
+            "description": "Update multiple seats at once (admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Room Maintenance",
+      "description": "Endpoints for room maintenance",
+      "item": [
+        {
+          "name": "Get Room Maintenance Schedule",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms/{{roomId}}/maintenance",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms", "{{roomId}}", "maintenance"]
+            },
+            "description": "Get the maintenance schedule for a specific room (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Room Maintenance Schedule (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"lastMaintenance\": \"2023-01-15\",\n    \"nextMaintenance\": \"2023-07-15\",\n    \"notes\": \"Replaced projector bulb\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms/{{roomId}}/maintenance",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms", "{{roomId}}", "maintenance"]
+            },
+            "description": "Update the maintenance schedule for a specific room (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Set Room Out of Service (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"isActive\": false,\n    \"reason\": \"Maintenance\",\n    \"startDate\": \"2023-06-01\",\n    \"endDate\": \"2023-06-03\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms/{{roomId}}/out-of-service",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms", "{{roomId}}", "out-of-service"]
+            },
+            "description": "Set a room as out of service for a specific period (admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Room Statistics",
+      "description": "Endpoints for room statistics",
+      "item": [
+        {
+          "name": "Get Room Statistics (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms/{{roomId}}/statistics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms", "{{roomId}}", "statistics"]
+            },
+            "description": "Get statistics for a specific room (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Room Occupancy (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms/{{roomId}}/occupancy?startDate={{date}}&endDate=2023-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms", "{{roomId}}", "occupancy"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "{{date}}"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2023-12-31"
+                }
+              ]
+            },
+            "description": "Get occupancy statistics for a specific room (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Room Revenue (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms/{{roomId}}/revenue?startDate={{date}}&endDate=2023-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms", "{{roomId}}", "revenue"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "{{date}}"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2023-12-31"
+                }
+              ]
+            },
+            "description": "Get revenue statistics for a specific room (admin only)"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Get today's date in YYYY-MM-DD format",
+          "const today = new Date();",
+          "const todayFormatted = today.toISOString().split('T')[0];",
+          "",
+          "// Format display date (e.g., \"December 25, 2023\")",
+          "const options = { year: 'numeric', month: 'long', day: 'numeric' };",
+          "const displayDate = today.toLocaleDateString('en-US', options);",
+          "",
+          "// Get day of week",
+          "const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];",
+          "const dayOfWeek = daysOfWeek[today.getDay()];",
+          "",
+          "// Set environment variables",
+          "pm.environment.set('date', todayFormatted);",
+          "pm.environment.set('displayDate', displayDate);",
+          "pm.environment.set('dayOfWeek', dayOfWeek);"
+        ]
+      }
+    }
+  ]
+}

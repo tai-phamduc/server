@@ -1,0 +1,647 @@
+{
+  "info": {
+    "name": "Product API Collection",
+    "description": "A collection of API requests for testing product-related endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "description": "Endpoints for user authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "login"]
+            },
+            "description": "Login to get authentication token"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "description": "Endpoints for product operations",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"]
+            },
+            "description": "Get a list of all products"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Products with Pagination",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get a paginated list of products"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "{{productId}}"]
+            },
+            "description": "Get details of a specific product by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Products by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/category/Food",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "category", "Food"]
+            },
+            "description": "Get all products in a specific category"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Featured Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/featured",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "featured"]
+            },
+            "description": "Get all featured products"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/search?keyword=popcorn",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "search"],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": "popcorn"
+                }
+              ]
+            },
+            "description": "Search for products by keyword"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Product (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Large Popcorn\",\n    \"description\": \"Freshly popped popcorn in a large bucket\",\n    \"category\": \"Food\",\n    \"price\": 8.99,\n    \"discountPrice\": 7.99,\n    \"image\": \"https://example.com/popcorn.jpg\",\n    \"isAvailable\": true,\n    \"isFeatured\": true,\n    \"attributes\": {\n        \"size\": \"Large\",\n        \"calories\": 600,\n        \"ingredients\": [\"Corn\", \"Oil\", \"Salt\"]\n    },\n    \"stock\": 100\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"]
+            },
+            "description": "Create a new product (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Product (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Large Buttered Popcorn\",\n    \"description\": \"Freshly popped popcorn with butter in a large bucket\",\n    \"price\": 9.99,\n    \"discountPrice\": 8.99,\n    \"isAvailable\": true,\n    \"isFeatured\": true,\n    \"attributes\": {\n        \"size\": \"Large\",\n        \"calories\": 800,\n        \"ingredients\": [\"Corn\", \"Oil\", \"Salt\", \"Butter\"]\n    },\n    \"stock\": 80\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "{{productId}}"]
+            },
+            "description": "Update an existing product (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Product (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "{{productId}}"]
+            },
+            "description": "Delete a product (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Product Stock (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"stock\": 120\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}/stock",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "{{productId}}", "stock"]
+            },
+            "description": "Update the stock of a product (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Product Availability (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"isAvailable\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}/availability",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "{{productId}}", "availability"]
+            },
+            "description": "Update the availability of a product (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Product Featured Status (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"isFeatured\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}/featured",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "{{productId}}", "featured"]
+            },
+            "description": "Update the featured status of a product (admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Product Categories",
+      "description": "Endpoints for product category operations",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "categories"]
+            },
+            "description": "Get a list of all product categories"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Category (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Beverages\",\n    \"description\": \"Drinks and beverages\",\n    \"icon\": \"drink-icon\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "categories"]
+            },
+            "description": "Create a new product category (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Category (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Drinks\",\n    \"description\": \"Soft drinks, water, and other beverages\",\n    \"icon\": \"beverage-icon\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "categories", "{{categoryId}}"]
+            },
+            "description": "Update an existing product category (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Category (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "categories", "{{categoryId}}"]
+            },
+            "description": "Delete a product category (admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Product Combos",
+      "description": "Endpoints for product combo operations",
+      "item": [
+        {
+          "name": "Get All Combos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/combos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "combos"]
+            },
+            "description": "Get a list of all product combos"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Combo by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/combos/{{comboId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "combos", "{{comboId}}"]
+            },
+            "description": "Get details of a specific combo by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Combo (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Movie Night Combo\",\n    \"description\": \"Large popcorn, large drink, and candy\",\n    \"products\": [\n        {\n            \"productId\": \"{{productId}}\",\n            \"quantity\": 1\n        },\n        {\n            \"productId\": \"{{productId2}}\",\n            \"quantity\": 1\n        },\n        {\n            \"productId\": \"{{productId3}}\",\n            \"quantity\": 1\n        }\n    ],\n    \"price\": 19.99,\n    \"discountPrice\": 16.99,\n    \"image\": \"https://example.com/combo.jpg\",\n    \"isAvailable\": true,\n    \"isFeatured\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products/combos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "combos"]
+            },
+            "description": "Create a new product combo (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Combo (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Ultimate Movie Night Combo\",\n    \"description\": \"Large popcorn, two large drinks, and candy\",\n    \"products\": [\n        {\n            \"productId\": \"{{productId}}\",\n            \"quantity\": 1\n        },\n        {\n            \"productId\": \"{{productId2}}\",\n            \"quantity\": 2\n        },\n        {\n            \"productId\": \"{{productId3}}\",\n            \"quantity\": 1\n        }\n    ],\n    \"price\": 24.99,\n    \"discountPrice\": 19.99,\n    \"isAvailable\": true,\n    \"isFeatured\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products/combos/{{comboId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "combos", "{{comboId}}"]
+            },
+            "description": "Update an existing product combo (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Combo (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/combos/{{comboId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "combos", "{{comboId}}"]
+            },
+            "description": "Delete a product combo (admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Product Statistics",
+      "description": "Endpoints for product statistics",
+      "item": [
+        {
+          "name": "Get Product Sales Statistics (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/statistics/sales",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "statistics", "sales"]
+            },
+            "description": "Get overall product sales statistics (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product Sales by Date Range (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/statistics/sales/date-range?startDate={{date}}&endDate=2023-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "statistics", "sales", "date-range"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "{{date}}"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2023-12-31"
+                }
+              ]
+            },
+            "description": "Get product sales statistics for a specific date range (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Top Selling Products (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/statistics/top-selling?limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "statistics", "top-selling"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            },
+            "description": "Get top selling products (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product Inventory Statistics (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/statistics/inventory",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "statistics", "inventory"]
+            },
+            "description": "Get product inventory statistics (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Low Stock Products (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/statistics/low-stock?threshold=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "statistics", "low-stock"],
+              "query": [
+                {
+                  "key": "threshold",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get products with low stock (admin only)"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Get today's date in YYYY-MM-DD format",
+          "const today = new Date();",
+          "const todayFormatted = today.toISOString().split('T')[0];",
+          "",
+          "// Format display date (e.g., \"December 25, 2023\")",
+          "const options = { year: 'numeric', month: 'long', day: 'numeric' };",
+          "const displayDate = today.toLocaleDateString('en-US', options);",
+          "",
+          "// Get day of week",
+          "const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];",
+          "const dayOfWeek = daysOfWeek[today.getDay()];",
+          "",
+          "// Set environment variables",
+          "pm.environment.set('date', todayFormatted);",
+          "pm.environment.set('displayDate', displayDate);",
+          "pm.environment.set('dayOfWeek', dayOfWeek);"
+        ]
+      }
+    }
+  ]
+}
