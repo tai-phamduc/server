@@ -1,0 +1,552 @@
+{
+  "info": {
+    "name": "Seat API Collection",
+    "description": "A collection of API requests for testing seat-related endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "description": "Endpoints for user authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "login"]
+            },
+            "description": "Login to get authentication token"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Seats",
+      "description": "Endpoints for seat operations",
+      "item": [
+        {
+          "name": "Get All Seats for Room",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/seats/room/{{roomId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seats", "room", "{{roomId}}"]
+            },
+            "description": "Get all seats for a specific room"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Seat by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/seats/{{seatId1}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seats", "{{seatId1}}"]
+            },
+            "description": "Get details of a specific seat by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Available Seats for Screening",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/seats/screening/{{screeningId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seats", "screening", "{{screeningId}}"]
+            },
+            "description": "Get all available seats for a specific screening"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Seats by Type",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/seats/room/{{roomId}}/type/premium",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seats", "room", "{{roomId}}", "type", "premium"]
+            },
+            "description": "Get all seats of a specific type in a room"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Seat (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"roomId\": \"{{roomId}}\",\n    \"row\": \"C\",\n    \"column\": 1,\n    \"seatNumber\": \"C1\",\n    \"type\": \"standard\",\n    \"price\": 10.00,\n    \"isActive\": true,\n    \"attributes\": {\n        \"isWheelchairAccessible\": false,\n        \"hasExtraLegroom\": false,\n        \"isCoupleSeat\": false\n    }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/seats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seats"]
+            },
+            "description": "Create a new seat (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Seat (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\": \"premium\",\n    \"price\": 15.00,\n    \"isActive\": true,\n    \"attributes\": {\n        \"isWheelchairAccessible\": false,\n        \"hasExtraLegroom\": true,\n        \"isCoupleSeat\": false\n    }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/seats/{{seatId1}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seats", "{{seatId1}}"]
+            },
+            "description": "Update an existing seat (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Seat (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/seats/{{seatId1}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seats", "{{seatId1}}"]
+            },
+            "description": "Delete a seat (admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Seat Layout",
+      "description": "Endpoints for seat layout operations",
+      "item": [
+        {
+          "name": "Get Room Seat Layout",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/seats/layout/room/{{roomId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seats", "layout", "room", "{{roomId}}"]
+            },
+            "description": "Get the seat layout for a specific room"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Room Seat Layout (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"roomId\": \"{{roomId}}\",\n    \"rows\": 10,\n    \"columns\": 15,\n    \"layout\": [\n        {\n            \"row\": \"A\",\n            \"column\": 1,\n            \"seatNumber\": \"A1\",\n            \"type\": \"standard\",\n            \"price\": 10.00,\n            \"isActive\": true,\n            \"attributes\": {\n                \"isWheelchairAccessible\": false,\n                \"hasExtraLegroom\": false,\n                \"isCoupleSeat\": false\n            }\n        },\n        {\n            \"row\": \"A\",\n            \"column\": 2,\n            \"seatNumber\": \"A2\",\n            \"type\": \"standard\",\n            \"price\": 10.00,\n            \"isActive\": true,\n            \"attributes\": {\n                \"isWheelchairAccessible\": false,\n                \"hasExtraLegroom\": false,\n                \"isCoupleSeat\": false\n            }\n        },\n        {\n            \"row\": \"B\",\n            \"column\": 1,\n            \"seatNumber\": \"B1\",\n            \"type\": \"premium\",\n            \"price\": 15.00,\n            \"isActive\": true,\n            \"attributes\": {\n                \"isWheelchairAccessible\": false,\n                \"hasExtraLegroom\": true,\n                \"isCoupleSeat\": false\n            }\n        },\n        {\n            \"row\": \"B\",\n            \"column\": 2,\n            \"seatNumber\": \"B2\",\n            \"type\": \"premium\",\n            \"price\": 15.00,\n            \"isActive\": true,\n            \"attributes\": {\n                \"isWheelchairAccessible\": false,\n                \"hasExtraLegroom\": true,\n                \"isCoupleSeat\": false\n            }\n        }\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/seats/layout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seats", "layout"]
+            },
+            "description": "Create a seat layout for a room (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Room Seat Layout (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"rows\": 10,\n    \"columns\": 15,\n    \"updates\": [\n        {\n            \"row\": \"A\",\n            \"column\": 1,\n            \"type\": \"premium\",\n            \"price\": 15.00,\n            \"attributes\": {\n                \"hasExtraLegroom\": true\n            }\n        },\n        {\n            \"row\": \"A\",\n            \"column\": 2,\n            \"type\": \"premium\",\n            \"price\": 15.00,\n            \"attributes\": {\n                \"hasExtraLegroom\": true\n            }\n        }\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/seats/layout/room/{{roomId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seats", "layout", "room", "{{roomId}}"]
+            },
+            "description": "Update the seat layout for a room (admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Seat Reservations",
+      "description": "Endpoints for seat reservation operations",
+      "item": [
+        {
+          "name": "Get Seat Reservation Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/seats/{{seatId1}}/reservation/screening/{{screeningId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seats", "{{seatId1}}", "reservation", "screening", "{{screeningId}}"]
+            },
+            "description": "Get the reservation status of a seat for a specific screening"
+          },
+          "response": []
+        },
+        {
+          "name": "Reserve Seats",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"screeningId\": \"{{screeningId}}\",\n    \"seatIds\": [\"{{seatId1}}\", \"{{seatId2}}\"],\n    \"reservationDuration\": 15\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/seats/reserve",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seats", "reserve"]
+            },
+            "description": "Reserve seats for a specific screening"
+          },
+          "response": []
+        },
+        {
+          "name": "Release Seat Reservation",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/seats/reserve/{{reservationId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seats", "reserve", "{{reservationId}}"]
+            },
+            "description": "Release a seat reservation"
+          },
+          "response": []
+        },
+        {
+          "name": "Extend Seat Reservation",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"reservationId\": \"{{reservationId}}\",\n    \"extensionMinutes\": 5\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/seats/reserve/extend",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seats", "reserve", "extend"]
+            },
+            "description": "Extend a seat reservation"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Seat Types",
+      "description": "Endpoints for seat type operations",
+      "item": [
+        {
+          "name": "Get All Seat Types",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/seats/types",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seats", "types"]
+            },
+            "description": "Get all seat types"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Seat Type (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"VIP\",\n    \"description\": \"VIP seats with extra legroom and reclining capability\",\n    \"basePrice\": 20.00,\n    \"color\": \"#FFD700\",\n    \"icon\": \"vip-seat-icon\",\n    \"attributes\": {\n        \"hasExtraLegroom\": true,\n        \"isReclining\": true,\n        \"hasTableService\": true\n    }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/seats/types",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seats", "types"]
+            },
+            "description": "Create a new seat type (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Seat Type (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"VIP Plus\",\n    \"description\": \"VIP Plus seats with extra legroom, reclining capability, and complimentary snacks\",\n    \"basePrice\": 25.00,\n    \"attributes\": {\n        \"hasExtraLegroom\": true,\n        \"isReclining\": true,\n        \"hasTableService\": true,\n        \"hasComplimentarySnacks\": true\n    }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/seats/types/{{seatTypeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seats", "types", "{{seatTypeId}}"]
+            },
+            "description": "Update an existing seat type (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Seat Type (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/seats/types/{{seatTypeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seats", "types", "{{seatTypeId}}"]
+            },
+            "description": "Delete a seat type (admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Seat Statistics",
+      "description": "Endpoints for seat statistics",
+      "item": [
+        {
+          "name": "Get Seat Occupancy Statistics (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/seats/statistics/occupancy/room/{{roomId}}?startDate={{date}}&endDate=2023-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seats", "statistics", "occupancy", "room", "{{roomId}}"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "{{date}}"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2023-12-31"
+                }
+              ]
+            },
+            "description": "Get seat occupancy statistics for a specific room (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Seat Type Popularity (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/seats/statistics/popularity/types?startDate={{date}}&endDate=2023-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seats", "statistics", "popularity", "types"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "{{date}}"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2023-12-31"
+                }
+              ]
+            },
+            "description": "Get seat type popularity statistics (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Seat Revenue Statistics (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/seats/statistics/revenue?startDate={{date}}&endDate=2023-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seats", "statistics", "revenue"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "{{date}}"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2023-12-31"
+                }
+              ]
+            },
+            "description": "Get seat revenue statistics (admin only)"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Get today's date in YYYY-MM-DD format",
+          "const today = new Date();",
+          "const todayFormatted = today.toISOString().split('T')[0];",
+          "",
+          "// Format display date (e.g., \"December 25, 2023\")",
+          "const options = { year: 'numeric', month: 'long', day: 'numeric' };",
+          "const displayDate = today.toLocaleDateString('en-US', options);",
+          "",
+          "// Get day of week",
+          "const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];",
+          "const dayOfWeek = daysOfWeek[today.getDay()];",
+          "",
+          "// Set environment variables",
+          "pm.environment.set('date', todayFormatted);",
+          "pm.environment.set('displayDate', displayDate);",
+          "pm.environment.set('dayOfWeek', dayOfWeek);"
+        ]
+      }
+    }
+  ]
+}

@@ -75,6 +75,12 @@
       "enabled": true
     },
     {
+      "key": "genreId2",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
       "key": "actorId",
       "value": "",
       "type": "default",
@@ -184,6 +190,18 @@
     },
     {
       "key": "filmId",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "seatTypeId",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "reservationId",
       "value": "",
       "type": "default",
       "enabled": true
