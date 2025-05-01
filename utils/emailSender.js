@@ -53,8 +53,8 @@ const sendBookingConfirmationEmail = async (booking, email) => {
             <h2 style="color: #333; margin-top: 0;">${booking.movieTitle}</h2>
             <p style="margin: 5px 0;"><strong>Date:</strong> ${formattedDate}</p>
             <p style="margin: 5px 0;"><strong>Time:</strong> ${formattedTime}</p>
-            <p style="margin: 5px 0;"><strong>Theater:</strong> ${booking.theaterName}</p>
-            <p style="margin: 5px 0;"><strong>Hall:</strong> ${booking.hall}</p>
+            <p style="margin: 5px 0;"><strong>Cinema:</strong> ${booking.cinemaName}</p>
+            <p style="margin: 5px 0;"><strong>Room:</strong> ${booking.roomName}</p>
             <p style="margin: 5px 0;"><strong>Seats:</strong> ${booking.seats.join(', ')}</p>
             <p style="margin: 5px 0;"><strong>Format:</strong> ${booking.format}</p>
           </div>
@@ -159,8 +159,8 @@ const sendBookingCancellationEmail = async (booking, email) => {
             <h2 style="color: #333; margin-top: 0;">${booking.movieTitle}</h2>
             <p style="margin: 5px 0;"><strong>Date:</strong> ${formattedDate}</p>
             <p style="margin: 5px 0;"><strong>Time:</strong> ${formattedTime}</p>
-            <p style="margin: 5px 0;"><strong>Theater:</strong> ${booking.theaterName}</p>
-            <p style="margin: 5px 0;"><strong>Hall:</strong> ${booking.hall}</p>
+            <p style="margin: 5px 0;"><strong>Cinema:</strong> ${booking.cinemaName}</p>
+            <p style="margin: 5px 0;"><strong>Room:</strong> ${booking.roomName}</p>
             <p style="margin: 5px 0;"><strong>Seats:</strong> ${booking.seats.join(', ')}</p>
             <p style="margin: 5px 0;"><strong>Booking Number:</strong> ${booking.bookingNumber}</p>
           </div>
@@ -254,8 +254,8 @@ const sendBookingReminderEmail = async (booking, email) => {
             <h2 style="color: #333; margin-top: 0;">${booking.movieTitle}</h2>
             <p style="margin: 5px 0;"><strong>Date:</strong> ${formattedDate}</p>
             <p style="margin: 5px 0;"><strong>Time:</strong> ${formattedTime}</p>
-            <p style="margin: 5px 0;"><strong>Theater:</strong> ${booking.theaterName}</p>
-            <p style="margin: 5px 0;"><strong>Hall:</strong> ${booking.hall}</p>
+            <p style="margin: 5px 0;"><strong>Cinema:</strong> ${booking.cinemaName}</p>
+            <p style="margin: 5px 0;"><strong>Room:</strong> ${booking.roomName}</p>
             <p style="margin: 5px 0;"><strong>Seats:</strong> ${booking.seats.join(', ')}</p>
             <p style="margin: 5px 0;"><strong>Booking Number:</strong> ${booking.bookingNumber}</p>
           </div>

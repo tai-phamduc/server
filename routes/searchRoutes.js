@@ -4,7 +4,7 @@ const {
   searchMovies,
   searchEvents,
   searchNews,
-  searchTheaters,
+  searchCinemas,
   searchContent,
   globalSearch,
   autocompleteSearch,
@@ -17,7 +17,7 @@ router.get('/', globalSearch);
 router.get('/movies', searchMovies);
 router.get('/events', searchEvents);
 router.get('/news', searchNews);
-router.get('/theaters', searchTheaters);
+router.get('/cinemas', searchCinemas);
 router.get('/content', searchContent);
 
 // Autocomplete

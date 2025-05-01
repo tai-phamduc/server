@@ -106,11 +106,7 @@ const ReviewSchema = new mongoose.Schema(
       ref: 'Movie',
       index: true,
     },
-    theater: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Theater',
-      index: true,
-    },
+    // theater field removed - using cinema instead
     cinema: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Cinema',
@@ -119,7 +115,7 @@ const ReviewSchema = new mongoose.Schema(
     reviewType: {
       type: String,
       enum: {
-        values: ['movie', 'theater', 'cinema'],
+        values: ['movie', 'cinema'],
         message: '{VALUE} is not a valid review type',
       },
       required: [true, 'Review type is required'],
@@ -371,13 +367,13 @@ ReviewSchema.virtual('userInfo', {
 
 // Note: replyCount is already defined as a field in the schema
 
-// Prevent user from submitting more than one review per movie or theater
+// Prevent user from submitting more than one review per movie or cinema
 ReviewSchema.index({ user: 1, movie: 1, reviewType: 1 }, { unique: true, sparse: true });
-ReviewSchema.index({ user: 1, theater: 1, reviewType: 1 }, { unique: true, sparse: true });
+ReviewSchema.index({ user: 1, cinema: 1, reviewType: 1 }, { unique: true, sparse: true });
 
 // Create indexes for faster queries
 ReviewSchema.index({ movie: 1, isPublished: 1, createdAt: -1 });
-ReviewSchema.index({ theater: 1, isPublished: 1, createdAt: -1 });
+ReviewSchema.index({ cinema: 1, isPublished: 1, createdAt: -1 });
 ReviewSchema.index({ reviewType: 1, rating: -1 });
 ReviewSchema.index({ isApproved: 1, isPublished: 1 });
 ReviewSchema.index({ isReported: 1, reportCount: -1 });
@@ -386,12 +382,12 @@ ReviewSchema.index({ featured: 1, reviewType: 1 });
 // Pre-save hook to ensure data consistency and format display fields
 ReviewSchema.pre('save', function(next) {
   try {
-    // Ensure either movie or theater is provided based on reviewType
+    // Ensure either movie or cinema is provided based on reviewType
     if (this.isModified('reviewType') || this.isNew) {
       if (this.reviewType === 'movie' && !this.movie) {
         return next(new Error('Movie ID is required for movie reviews'));
-      } else if (this.reviewType === 'theater' && !this.theater) {
-        return next(new Error('Theater ID is required for theater reviews'));
+      } else if (this.reviewType === 'cinema' && !this.cinema) {
+        return next(new Error('Cinema ID is required for cinema reviews'));
       }
     }
 
@@ -443,12 +439,12 @@ ReviewSchema.post('save', async function() {
       if (movie && typeof movie.updateRating === 'function') {
         await movie.updateRating(this.rating);
       }
-    } else if (this.reviewType === 'theater' && this.theater) {
-      const Theater = mongoose.model('Theater');
-      const theater = await Theater.findById(this.theater);
+    } else if (this.reviewType === 'cinema' && this.cinema) {
+      const Cinema = mongoose.model('Cinema');
+      const cinema = await Cinema.findById(this.cinema);
 
-      if (theater && typeof theater.updateRating === 'function') {
-        await theater.updateRating(this.rating);
+      if (cinema && typeof cinema.updateRating === 'function') {
+        await cinema.updateRating(this.rating);
       }
     }
 
@@ -497,13 +493,13 @@ ReviewSchema.statics.findByMovie = function(movieId, options = {}) {
     .limit(limit);
 };
 
-// Static method to find reviews by theater
-ReviewSchema.statics.findByTheater = function(theaterId, options = {}) {
+// Static method to find reviews by cinema
+ReviewSchema.statics.findByCinema = function(cinemaId, options = {}) {
   const { sort = { createdAt: -1 }, limit = 10, skip = 0 } = options;
 
   return this.find({
-    theater: theaterId,
-    reviewType: 'theater',
+    cinema: cinemaId,
+    reviewType: 'cinema',
     isApproved: true,
     isPublished: true
   })
@@ -531,7 +527,7 @@ ReviewSchema.statics.findByUser = function(userId, options = {}) {
       select: 'title poster',
     })
     .populate({
-      path: 'theater',
+      path: 'cinema',
       select: 'name location',
     });
 };
@@ -557,7 +553,7 @@ ReviewSchema.statics.findTopRated = function(options = {}) {
       select: 'title poster',
     })
     .populate({
-      path: 'theater',
+      path: 'cinema',
       select: 'name location',
     });
 };
@@ -584,7 +580,7 @@ ReviewSchema.statics.findFeatured = function(options = {}) {
       select: 'title poster',
     })
     .populate({
-      path: 'theater',
+      path: 'cinema',
       select: 'name location',
     });
 };
@@ -606,7 +602,7 @@ ReviewSchema.statics.findReported = function(options = {}) {
       select: 'title poster',
     })
     .populate({
-      path: 'theater',
+      path: 'cinema',
       select: 'name location',
     });
 };

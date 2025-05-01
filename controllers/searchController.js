@@ -69,10 +69,10 @@ const searchNews = async (req, res) => {
   }
 };
 
-// @desc    Search theaters
-// @route   GET /api/search/theaters
+// @desc    Search cinemas
+// @route   GET /api/search/cinemas
 // @access  Public
-const searchTheaters = async (req, res) => {
+const searchCinemas = async (req, res) => {
   try {
     const { query, page = 1, limit = 10 } = req.query;
 
@@ -81,7 +81,7 @@ const searchTheaters = async (req, res) => {
     }
 
     const skip = (page - 1) * limit;
-    const results = await searchService.searchTheaters(query, {
+    const results = await searchService.searchCinemas(query, {
       limit: parseInt(limit),
       skip: parseInt(skip),
     });
@@ -230,7 +230,7 @@ module.exports = {
   searchMovies,
   searchEvents,
   searchNews,
-  searchTheaters,
+  searchCinemas,
   searchContent,
   globalSearch,
   autocompleteSearch,

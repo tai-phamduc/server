@@ -271,9 +271,9 @@ const BookingSchema = new mongoose.Schema(
       required: [true, 'Room is required'],
       index: true,
     },
-    hall: {
+    roomName: {
       type: String,
-      required: [true, 'Hall is required'],
+      required: [true, 'Room name is required'],
       trim: true,
     },
     screeningDate: {
@@ -712,23 +712,24 @@ BookingSchema.pre('save', async function (next) {
     }
 
     // Set expiration date if not set (for tickets)
-    if (this.isModified('showtime') && !this.expireAt && this.showtime) {
-      // Get the showtime document to set expiration
-      const Showtime = mongoose.model('Showtime');
-      const showtimeDoc = await Showtime.findById(this.showtime);
+    if (this.isModified('screening') && !this.expireAt && this.screening) {
+      // Get the screening document to set expiration
+      const Screening = mongoose.model('Screening');
+      const screeningDoc = await Screening.findById(this.screening);
 
-      if (showtimeDoc) {
-        // Set expiration to 2 hours after showtime ends
-        this.expireAt = new Date(showtimeDoc.endTime.getTime() + 2 * 60 * 60 * 1000);
+      if (screeningDoc) {
+        // Set expiration to 2 hours after screening ends
+        const endTime = new Date(screeningDoc.end_time ||
+          (new Date(screeningDoc.start_time).getTime() + 2 * 60 * 60 * 1000)); // Default 2 hours after start
+        this.expireAt = new Date(endTime.getTime() + 2 * 60 * 60 * 1000);
 
-        // Set showtime date and display
-        this.showtimeDate = showtimeDoc.startTime;
-        this.showtimeDisplay = showtimeDoc.displayTime ||
-          showtimeDoc.startTime.toLocaleTimeString('en-US', {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: true
-          });
+        // Set screening date and display
+        this.screeningDate = screeningDoc.start_time;
+        this.screeningTime = new Date(screeningDoc.start_time).toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        });
       }
     }
 
@@ -744,7 +745,7 @@ BookingSchema.pre('save', async function (next) {
       }
     }
 
-    // Set movie and theater info if not provided
+    // Set movie and cinema info if not provided
     if (this.isModified('movie') && !this.movieTitle) {
       const Movie = mongoose.model('Movie');
       const movieDoc = await Movie.findById(this.movie);
@@ -755,12 +756,12 @@ BookingSchema.pre('save', async function (next) {
       }
     }
 
-    if (this.isModified('theater') && !this.theaterName) {
-      const Theater = mongoose.model('Theater');
-      const theaterDoc = await Theater.findById(this.theater);
+    if (this.isModified('cinema') && !this.cinemaName) {
+      const Cinema = mongoose.model('Cinema');
+      const cinemaDoc = await Cinema.findById(this.cinema);
 
-      if (theaterDoc) {
-        this.theaterName = theaterDoc.name;
+      if (cinemaDoc) {
+        this.cinemaName = cinemaDoc.name;
       }
     }
 
@@ -1010,7 +1011,7 @@ BookingSchema.methods.generateQRCode = async function() {
     movie: this.movieTitle,
     date: this.screeningDate,
     cinema: this.cinemaName,
-    hall: this.hall
+    room: this.room
   });
 
   // Generate QR code URL (in a real implementation, you might use a QR code library)

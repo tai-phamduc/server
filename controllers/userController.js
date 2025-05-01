@@ -211,7 +211,7 @@ const getUserBookings = async (req, res) => {
   try {
     const bookings = await Booking.find({ user: req.user._id })
       .populate('movie', 'title poster')
-      .populate('showtime', 'startTime theater hall')
+      .populate('screening', 'start_time cinema_id room_id')
       .sort({ createdAt: -1 });
 
     res.json(bookings);

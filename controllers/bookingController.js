@@ -18,11 +18,11 @@ const generateBookingNumber = () => {
 // @access  Private
 const createBooking = async (req, res) => {
   try {
-    const { movieId, showtimeId, seats, paymentMethod } = req.body;
+    const { movieId, screeningId, seats, paymentMethod } = req.body;
 
     // Check if screening exists
-    const showtime = await Screening.findById(showtimeId);
-    if (!showtime) {
+    const screening = await Screening.findById(screeningId);
+    if (!screening) {
       return res.status(404).json({ message: 'Screening not found' });
     }
 
@@ -33,13 +33,13 @@ const createBooking = async (req, res) => {
     }
 
     // Check if cinema exists
-    const cinema = await Cinema.findById(showtime.cinema_id);
+    const cinema = await Cinema.findById(screening.cinema_id);
     if (!cinema) {
       return res.status(404).json({ message: 'Cinema not found' });
     }
 
     // Check if seats are available
-    const bookedSeats = showtime.bookedSeats || [];
+    const bookedSeats = screening.booked_seats || [];
     const unavailableSeats = seats.filter(seat => bookedSeats.includes(seat));
 
     if (unavailableSeats.length > 0) {
@@ -50,7 +50,7 @@ const createBooking = async (req, res) => {
     }
 
     // Calculate prices
-    const ticketPrice = showtime.price || 10.99;
+    const ticketPrice = screening.price || 10.99;
     const totalTicketPrice = ticketPrice * seats.length;
     const tax = totalTicketPrice * 0.1; // 10% tax
     const serviceFee = seats.length * 1.5; // $1.5 per seat
@@ -65,12 +65,17 @@ const createBooking = async (req, res) => {
       movie: movieId,
       movieTitle: movie.title,
       moviePoster: movie.poster,
-      showtime: showtimeId,
-      showtimeDate: showtime.startTime,
-      showtimeDisplay: showtime.displayTime,
-      cinema: showtime.cinema_id,
+      screening: screeningId,
+      screeningDate: screening.start_time,
+      screeningTime: new Date(screening.start_time).toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      }),
+      cinema: screening.cinema_id,
       cinemaName: cinema.name,
-      room: showtime.room_id,
+      room: screening.room_id,
+      roomName: 'Room ' + screening.room_id, // This should be replaced with actual room name from Room model
       seats,
       totalPrice,
       ticketPrice,
@@ -81,16 +86,16 @@ const createBooking = async (req, res) => {
       bookingStatus: 'pending',
       bookingNumber,
       bookingDate: new Date(),
-      format: showtime.format || '2D'
+      format: screening.format || '2D'
     });
 
-    // Update showtime with booked seats
-    showtime.bookedSeats = [...bookedSeats, ...seats];
-    showtime.seatsAvailable = showtime.totalSeats - showtime.bookedSeats.length;
+    // Update screening with booked seats
+    screening.booked_seats = [...bookedSeats, ...seats];
+    screening.seats_available = screening.total_seats - screening.booked_seats.length;
 
-    // Save booking and updated showtime
+    // Save booking and updated screening
     await booking.save();
-    await showtime.save();
+    await screening.save();
 
     // Add booking to user's booking history
     const user = await User.findById(req.user._id);
@@ -155,8 +160,8 @@ const getUserBookings = async (req, res) => {
           moviePoster: 'https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg',
           showtimeDate: tomorrow,
           showtimeDisplay: '4:00 PM',
-          theaterName: 'Cinema City',
-          hall: '4DX',
+          cinemaName: 'Cinema City',
+          roomName: '4DX',
           seats: ['A1', 'A2'],
           totalPrice: 35.98,
           bookingStatus: 'confirmed',
@@ -171,8 +176,8 @@ const getUserBookings = async (req, res) => {
           moviePoster: 'https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg',
           showtimeDate: nextWeek,
           showtimeDisplay: '7:00 PM',
-          theaterName: 'Cinema City',
-          hall: 'VIP',
+          cinemaName: 'Cinema City',
+          roomName: 'VIP',
           seats: ['C4', 'C5', 'C6'],
           totalPrice: 74.97,
           bookingStatus: 'confirmed',
@@ -187,8 +192,8 @@ const getUserBookings = async (req, res) => {
           moviePoster: 'https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg',
           showtimeDate: yesterday,
           showtimeDisplay: '1:00 PM',
-          theaterName: 'Cinema City',
-          hall: 'VIP',
+          cinemaName: 'Cinema City',
+          roomName: 'VIP',
           seats: ['F7', 'F8'],
           totalPrice: 45.98,
           bookingStatus: 'completed',
@@ -203,8 +208,8 @@ const getUserBookings = async (req, res) => {
           moviePoster: 'https://image.tmdb.org/t/p/w500/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg',
           showtimeDate: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
           showtimeDisplay: '10:00 PM',
-          theaterName: 'Starlight Multiplex',
-          hall: 'IMAX',
+          cinemaName: 'Starlight Multiplex',
+          roomName: 'IMAX',
           seats: ['D10', 'D11'],
           totalPrice: 43.98,
           bookingStatus: 'cancelled',
@@ -223,8 +228,8 @@ const getUserBookings = async (req, res) => {
           moviePoster: 'https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg',
           showtimeDate: new Date(now.getTime() + 10 * 24 * 60 * 60 * 1000),
           showtimeDisplay: '1:00 PM',
-          theaterName: 'Starlight Multiplex',
-          hall: 'IMAX',
+          cinemaName: 'Starlight Multiplex',
+          roomName: 'IMAX',
           seats: ['H3', 'H4', 'H5', 'H6'],
           totalPrice: 79.96,
           bookingStatus: 'confirmed',
@@ -269,8 +274,8 @@ const getBookingById = async (req, res) => {
   try {
     const booking = await Booking.findById(req.params.id)
       .populate('movie', 'title poster director cast genre duration')
-      .populate('showtime', 'startTime endTime theater hall price')
-      .populate('theater', 'name location')
+      .populate('screening', 'start_time end_time cinema_id room_id price')
+      .populate('cinema', 'name location')
       .populate('user', 'name email');
 
     if (!booking) {
@@ -311,20 +316,20 @@ const cancelBooking = async (req, res) => {
     }
 
     // Check if screening has passed
-    const showtime = await Screening.findById(booking.showtime);
-    if (!showtime) {
+    const screening = await Screening.findById(booking.screening);
+    if (!screening) {
       return res.status(404).json({ message: 'Screening not found' });
     }
 
     const now = new Date();
-    const showtimeDate = new Date(showtime.startTime);
+    const screeningDate = new Date(screening.start_time);
 
-    if (showtimeDate < now) {
-      return res.status(400).json({ message: 'Cannot cancel booking for past showtimes' });
+    if (screeningDate < now) {
+      return res.status(400).json({ message: 'Cannot cancel booking for past screenings' });
     }
 
-    // Calculate time until showtime in hours
-    const hoursDifference = (showtimeDate - now) / (1000 * 60 * 60);
+    // Calculate time until screening in hours
+    const hoursDifference = (screeningDate - now) / (1000 * 60 * 60);
 
     // Determine refund amount based on cancellation policy
     let refundAmount = 0;
@@ -368,14 +373,14 @@ const cancelBooking = async (req, res) => {
     booking.refundStatus = refundAmount > 0 ? 'pending' : 'not_applicable';
     booking.notes = req.body.reason || 'Cancelled by user';
 
-    // Remove booked seats from showtime
-    showtime.bookedSeats = showtime.bookedSeats.filter(
+    // Remove booked seats from screening
+    screening.booked_seats = screening.booked_seats.filter(
       seat => !booking.seats.includes(seat)
     );
-    showtime.seatsAvailable = showtime.totalSeats - showtime.bookedSeats.length;
+    screening.seats_available = screening.total_seats - screening.booked_seats.length;
 
-    // Save updated showtime
-    await showtime.save();
+    // Save updated screening
+    await screening.save();
 
     // Process refund if applicable
     if (refundAmount > 0 && booking.paymentStatus === 'completed') {
@@ -438,7 +443,7 @@ const getAllBookings = async (req, res) => {
     const bookings = await Booking.find({})
       .populate('movie', 'title')
       .populate('user', 'name email')
-      .populate('showtime', 'startTime theater hall')
+      .populate('screening', 'start_time cinema_id room_id')
       .sort({ createdAt: -1 });
 
     res.json(bookings);

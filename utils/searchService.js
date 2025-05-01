@@ -1,7 +1,7 @@
 const Movie = require('../models/Movie');
 const Event = require('../models/Event');
 const News = require('../models/News');
-const Theater = require('../models/Theater');
+const Cinema = require('../models/Cinema');
 const Content = require('../models/Content');
 
 // Search movies
@@ -368,8 +368,8 @@ const searchNews = async (query, options = {}) => {
   }
 };
 
-// Search theaters
-const searchTheaters = async (query, options = {}) => {
+// Search cinemas
+const searchCinemas = async (query, options = {}) => {
   try {
     const { limit = 10, skip = 0, sort = { name: 1 } } = options;
 
@@ -377,7 +377,7 @@ const searchTheaters = async (query, options = {}) => {
     const pipeline = [
       {
         $search: {
-          index: 'theaters',
+          index: 'cinemas',
           compound: {
             should: [
               {
@@ -413,13 +413,13 @@ const searchTheaters = async (query, options = {}) => {
     ];
 
     // Execute search
-    const results = await Theater.aggregate(pipeline);
+    const results = await Cinema.aggregate(pipeline);
 
     // Get total count
     const countPipeline = [
       {
         $search: {
-          index: 'theaters',
+          index: 'cinemas',
           compound: {
             should: [
               {
@@ -441,7 +441,7 @@ const searchTheaters = async (query, options = {}) => {
       { $count: 'total' },
     ];
 
-    const countResult = await Theater.aggregate(countPipeline);
+    const countResult = await Cinema.aggregate(countPipeline);
     const total = countResult.length > 0 ? countResult[0].total : 0;
 
     return {
@@ -451,10 +451,10 @@ const searchTheaters = async (query, options = {}) => {
       pages: Math.ceil(total / limit),
     };
   } catch (error) {
-    console.error('Error searching theaters:', error);
+    console.error('Error searching cinemas:', error);
     // Fallback to regular search if Atlas Search is not available
     const regex = new RegExp(query, 'i');
-    const results = await Theater.find({
+    const results = await Cinema.find({
       $or: [
         { name: regex },
         { 'location.address': regex },
@@ -467,7 +467,7 @@ const searchTheaters = async (query, options = {}) => {
       .skip(skip)
       .limit(limit);
 
-    const total = await Theater.countDocuments({
+    const total = await Cinema.countDocuments({
       $or: [
         { name: regex },
         { 'location.address': regex },
@@ -633,7 +633,7 @@ const globalSearch = async (query, options = {}) => {
       searchMovies(query, { limit }),
       searchEvents(query, { limit }),
       searchNews(query, { limit }),
-      searchTheaters(query, { limit }),
+      searchCinemas(query, { limit }),
       searchContent(query, { limit }),
     ]);
 
@@ -662,7 +662,7 @@ module.exports = {
   searchMovies,
   searchEvents,
   searchNews,
-  searchTheaters,
+  searchCinemas,
   searchContent,
   globalSearch,
 };

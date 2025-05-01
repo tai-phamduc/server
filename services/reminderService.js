@@ -97,7 +97,7 @@ class ReminderService {
                 const movieTime = booking.showtimeDisplay || new Date(booking.showtimeDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
                 // Create SMS message
-                const smsMessage = `Reminder: Your movie "${booking.movieTitle}" is scheduled for ${movieDate} at ${movieTime}. Theater: ${booking.theaterName}, Hall: ${booking.hall}, Seats: ${booking.seats.join(', ')}. Booking #: ${booking.bookingNumber}`;
+                const smsMessage = `Reminder: Your movie "${booking.movieTitle}" is scheduled for ${movieDate} at ${movieTime}. Cinema: ${booking.cinemaName}, Room: ${booking.roomName}, Seats: ${booking.seats.join(', ')}. Booking #: ${booking.bookingNumber}`;
 
                 await sendSms(phoneNumber, smsMessage);
                 console.log(`SMS reminder sent to ${phoneNumber} for booking ${booking.bookingNumber}`);
@@ -175,7 +175,7 @@ class ReminderService {
             const movieTime = booking.showtimeDisplay || new Date(booking.showtimeDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
             // Create SMS message
-            const smsMessage = `Reminder: Your movie "${booking.movieTitle}" is scheduled for ${movieDate} at ${movieTime}. Theater: ${booking.theaterName}, Hall: ${booking.hall}, Seats: ${booking.seats.join(', ')}. Booking #: ${booking.bookingNumber}`;
+            const smsMessage = `Reminder: Your movie "${booking.movieTitle}" is scheduled for ${movieDate} at ${movieTime}. Cinema: ${booking.cinemaName}, Room: ${booking.roomName}, Seats: ${booking.seats.join(', ')}. Booking #: ${booking.bookingNumber}`;
 
             await sendSms(phoneNumber, smsMessage);
             console.log(`SMS reminder sent to ${phoneNumber} for booking ${booking.bookingNumber}`);
