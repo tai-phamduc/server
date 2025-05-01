@@ -1,3 +1,0 @@
-// New routes using updated models
-app.use("/api/cinemas", require("./routes/cinemaRoutes"));
-app.use("/api/screenings", require("./routes/screeningRoutes"));
