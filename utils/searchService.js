@@ -94,12 +94,12 @@ const searchMovies = async (query, options = {}) => {
       $or: [
         { title: regex },
         { description: regex },
-        { director: regex },
-        { cast: { $in: [regex] } },
+        { directorName: regex },
         { genre: { $in: [regex] } },
       ],
+      isActive: true
     })
-      .sort(sort)
+      .sort({ releaseDate: -1 })
       .skip(skip)
       .limit(limit);
 
@@ -107,10 +107,10 @@ const searchMovies = async (query, options = {}) => {
       $or: [
         { title: regex },
         { description: regex },
-        { director: regex },
-        { cast: { $in: [regex] } },
+        { directorName: regex },
         { genre: { $in: [regex] } },
       ],
+      isActive: true
     });
 
     return {
@@ -213,9 +213,14 @@ const searchEvents = async (query, options = {}) => {
         { title: regex },
         { description: regex },
         { location: regex },
+        { venue: regex },
+        { city: regex },
+        { category: regex },
+        { categories: { $in: [regex] } },
       ],
+      isActive: true
     })
-      .sort(sort)
+      .sort({ date: 1 })
       .skip(skip)
       .limit(limit);
 
@@ -224,7 +229,12 @@ const searchEvents = async (query, options = {}) => {
         { title: regex },
         { description: regex },
         { location: regex },
+        { venue: regex },
+        { city: regex },
+        { category: regex },
+        { categories: { $in: [regex] } },
       ],
+      isActive: true
     });
 
     return {
@@ -326,11 +336,14 @@ const searchNews = async (query, options = {}) => {
       $or: [
         { title: regex },
         { content: regex },
+        { excerpt: regex },
         { category: regex },
+        { categories: { $in: [regex] } },
         { tags: { $in: [regex] } },
       ],
+      status: 'published'
     })
-      .sort(sort)
+      .sort({ publishDate: -1 })
       .skip(skip)
       .limit(limit);
 
@@ -338,9 +351,12 @@ const searchNews = async (query, options = {}) => {
       $or: [
         { title: regex },
         { content: regex },
+        { excerpt: regex },
         { category: regex },
+        { categories: { $in: [regex] } },
         { tags: { $in: [regex] } },
       ],
+      status: 'published'
     });
 
     return {
