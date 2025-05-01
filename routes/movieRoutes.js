@@ -200,6 +200,105 @@ router.get('/status/:status', cacheMiddleware({
 
 /**
  * @swagger
+ * /movies/now-playing:
+ *   get:
+ *     summary: Get now playing movies
+ *     tags: [Movies]
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of movies to return
+ *     responses:
+ *       200:
+ *         description: List of now playing movies
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Movie'
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ */
+router.get('/now-playing', cacheMiddleware({
+  duration: 300,
+  etag: true
+}), (req, res) => {
+  req.params.status = 'Now Playing';
+  getMoviesByStatus(req, res);
+});
+
+/**
+ * @swagger
+ * /movies/upcoming:
+ *   get:
+ *     summary: Get upcoming movies
+ *     tags: [Movies]
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of movies to return
+ *     responses:
+ *       200:
+ *         description: List of upcoming movies
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Movie'
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ */
+router.get('/upcoming', cacheMiddleware({
+  duration: 300,
+  etag: true
+}), (req, res) => {
+  req.params.status = 'Coming Soon';
+  getMoviesByStatus(req, res);
+});
+
+/**
+ * @swagger
+ * /movies/featured:
+ *   get:
+ *     summary: Get featured movies
+ *     tags: [Movies]
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of movies to return
+ *     responses:
+ *       200:
+ *         description: List of featured movies
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Movie'
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ */
+router.get('/featured', cacheMiddleware({
+  duration: 300,
+  etag: true
+}), (req, res) => {
+  req.params.status = 'Featured';
+  getMoviesByStatus(req, res);
+});
+
+/**
+ * @swagger
  * /movies/genre/{genre}:
  *   get:
  *     summary: Get movies by genre

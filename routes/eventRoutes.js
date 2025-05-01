@@ -5,6 +5,7 @@ const {
   getEventById,
   getFeaturedEvents,
   getUpcomingEvents,
+  getPastEvents,
   createEvent,
   updateEvent,
   deleteEvent
@@ -15,6 +16,7 @@ const { protect, admin } = require('../middleware/authMiddleware');
 router.get('/', getEvents);
 router.get('/featured', getFeaturedEvents);
 router.get('/upcoming', getUpcomingEvents);
+router.get('/past', getPastEvents);
 router.get('/:id', getEventById);
 
 // Protected routes (admin only)

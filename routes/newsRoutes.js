@@ -5,6 +5,7 @@ const {
   getNewsById,
   getNewsByCategory,
   getFeaturedNews,
+  getLatestNews,
   createNews,
   updateNews,
   deleteNews
@@ -14,6 +15,7 @@ const { protect, admin } = require('../middleware/authMiddleware');
 // Public routes
 router.get('/', getNews);
 router.get('/featured', getFeaturedNews);
+router.get('/latest', getLatestNews);
 router.get('/category/:category', getNewsByCategory);
 router.get('/:id', getNewsById);
 

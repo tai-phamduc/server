@@ -5,7 +5,14 @@ const Event = require('../models/Event');
 // @access  Public
 const getEvents = async (req, res) => {
   try {
-    const events = await Event.find().sort({ date: 1 });
+    const limit = req.query.limit ? parseInt(req.query.limit) : 0;
+    const query = Event.find().sort({ date: 1 });
+
+    if (limit > 0) {
+      query.limit(limit);
+    }
+
+    const events = await query;
     res.json(events);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -32,7 +39,14 @@ const getEventById = async (req, res) => {
 // @access  Public
 const getFeaturedEvents = async (req, res) => {
   try {
-    const events = await Event.find({ featured: true }).sort({ date: 1 });
+    const limit = req.query.limit ? parseInt(req.query.limit) : 0;
+    const query = Event.find({ featured: true }).sort({ date: 1 });
+
+    if (limit > 0) {
+      query.limit(limit);
+    }
+
+    const events = await query;
     res.json(events);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -44,8 +58,35 @@ const getFeaturedEvents = async (req, res) => {
 // @access  Public
 const getUpcomingEvents = async (req, res) => {
   try {
+    const limit = req.query.limit ? parseInt(req.query.limit) : 0;
     const currentDate = new Date();
-    const events = await Event.find({ date: { $gte: currentDate } }).sort({ date: 1 });
+    const query = Event.find({ date: { $gte: currentDate } }).sort({ date: 1 });
+
+    if (limit > 0) {
+      query.limit(limit);
+    }
+
+    const events = await query;
+    res.json(events);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Get past events
+// @route   GET /api/events/past
+// @access  Public
+const getPastEvents = async (req, res) => {
+  try {
+    const limit = req.query.limit ? parseInt(req.query.limit) : 0;
+    const currentDate = new Date();
+    const query = Event.find({ date: { $lt: currentDate } }).sort({ date: -1 });
+
+    if (limit > 0) {
+      query.limit(limit);
+    }
+
+    const events = await query;
     res.json(events);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -111,6 +152,7 @@ module.exports = {
   getEventById,
   getFeaturedEvents,
   getUpcomingEvents,
+  getPastEvents,
   createEvent,
   updateEvent,
   deleteEvent,

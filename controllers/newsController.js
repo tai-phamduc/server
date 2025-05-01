@@ -5,7 +5,14 @@ const News = require('../models/News');
 // @access  Public
 const getNews = async (req, res) => {
   try {
-    const news = await News.find().populate('author', 'name').sort({ createdAt: -1 });
+    const limit = req.query.limit ? parseInt(req.query.limit) : 0;
+    const query = News.find().populate('author', 'name').sort({ createdAt: -1 });
+
+    if (limit > 0) {
+      query.limit(limit);
+    }
+
+    const news = await query;
     res.json(news);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -46,9 +53,32 @@ const getNewsByCategory = async (req, res) => {
 // @access  Public
 const getFeaturedNews = async (req, res) => {
   try {
-    const news = await News.find({ isFeatured: true })
+    const limit = req.query.limit ? parseInt(req.query.limit) : 0;
+    const query = News.find({ isFeatured: true })
       .populate('author', 'name')
       .sort({ createdAt: -1 });
+
+    if (limit > 0) {
+      query.limit(limit);
+    }
+
+    const news = await query;
+    res.json(news);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Get latest news articles
+// @route   GET /api/news/latest
+// @access  Public
+const getLatestNews = async (req, res) => {
+  try {
+    const limit = req.query.limit ? parseInt(req.query.limit) : 5;
+    const news = await News.find()
+      .populate('author', 'name')
+      .sort({ createdAt: -1 })
+      .limit(limit);
     res.json(news);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -118,6 +148,7 @@ module.exports = {
   getNewsById,
   getNewsByCategory,
   getFeaturedNews,
+  getLatestNews,
   createNews,
   updateNews,
   deleteNews,
