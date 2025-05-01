@@ -48,15 +48,23 @@ const getCinemas = async (req, res) => {
 // @access  Public
 const getCinemaById = async (req, res) => {
   try {
-    const cinema = await Cinema.findById(req.params.id);
-    
+    // Validate ID format
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: 'Invalid cinema ID format' });
+    }
+
+    // Use lean() for better performance
+    const cinema = await Cinema.findById(req.params.id).lean();
+
     if (!cinema) {
       return res.status(404).json({ message: 'Cinema not found' });
     }
-    
+
+    // Return the cinema data
     res.json(cinema);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error getting cinema by ID:', error);
+    res.status(500).json({ message: 'Server error: ' + error.message });
   }
 };
 
@@ -66,15 +74,15 @@ const getCinemaById = async (req, res) => {
 const updateCinema = async (req, res) => {
   try {
     const cinema = await Cinema.findById(req.params.id);
-    
+
     if (!cinema) {
       return res.status(404).json({ message: 'Cinema not found' });
     }
-    
+
     Object.keys(req.body).forEach(key => {
       cinema[key] = req.body[key];
     });
-    
+
     const updatedCinema = await cinema.save();
     res.json(updatedCinema);
   } catch (error) {
@@ -88,15 +96,15 @@ const updateCinema = async (req, res) => {
 const deleteCinema = async (req, res) => {
   try {
     const cinema = await Cinema.findById(req.params.id);
-    
+
     if (!cinema) {
       return res.status(404).json({ message: 'Cinema not found' });
     }
-    
+
     // Instead of deleting, mark as inactive
     cinema.isActive = false;
     await cinema.save();
-    
+
     res.json({ message: 'Cinema removed' });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -121,13 +129,13 @@ const getCinemasByCity = async (req, res) => {
 const addRoom = async (req, res) => {
   try {
     const cinema = await Cinema.findById(req.params.id);
-    
+
     if (!cinema) {
       return res.status(404).json({ message: 'Cinema not found' });
     }
-    
+
     await cinema.addRoom(req.body);
-    
+
     const updatedCinema = await Cinema.findById(req.params.id);
     res.status(201).json(updatedCinema.rooms[updatedCinema.rooms.length - 1]);
   } catch (error) {
@@ -141,22 +149,22 @@ const addRoom = async (req, res) => {
 const updateRoom = async (req, res) => {
   try {
     const cinema = await Cinema.findById(req.params.id);
-    
+
     if (!cinema) {
       return res.status(404).json({ message: 'Cinema not found' });
     }
-    
+
     await cinema.updateRoom(req.params.roomId, req.body);
-    
+
     const updatedCinema = await Cinema.findById(req.params.id);
-    const updatedRoom = updatedCinema.rooms.find(room => 
+    const updatedRoom = updatedCinema.rooms.find(room =>
       room._id.toString() === req.params.roomId
     );
-    
+
     if (!updatedRoom) {
       return res.status(404).json({ message: 'Room not found' });
     }
-    
+
     res.json(updatedRoom);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -169,13 +177,13 @@ const updateRoom = async (req, res) => {
 const removeRoom = async (req, res) => {
   try {
     const cinema = await Cinema.findById(req.params.id);
-    
+
     if (!cinema) {
       return res.status(404).json({ message: 'Cinema not found' });
     }
-    
+
     await cinema.removeRoom(req.params.roomId);
-    
+
     res.json({ message: 'Room removed' });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -188,42 +196,42 @@ const removeRoom = async (req, res) => {
 const getCinemasByMovieAndDate = async (req, res) => {
   try {
     const { movieId, date } = req.params;
-    
+
     // Validate movieId
     if (!mongoose.Types.ObjectId.isValid(movieId)) {
       return res.status(400).json({ message: 'Invalid movie ID' });
     }
-    
+
     // Validate date format (YYYY-MM-DD)
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!dateRegex.test(date)) {
       return res.status(400).json({ message: 'Invalid date format. Use YYYY-MM-DD' });
     }
-    
+
     // Create date range for the selected date (start of day to end of day)
     const startDate = new Date(date);
     startDate.setHours(0, 0, 0, 0);
-    
+
     const endDate = new Date(date);
     endDate.setHours(23, 59, 59, 999);
-    
+
     // Find screenings for the given movie and date
     const screenings = await Screening.find({
       movie_id: movieId,
       startTime: { $gte: startDate, $lte: endDate },
       isActive: true
     }).distinct('cinema_id');
-    
+
     if (screenings.length === 0) {
       return res.json([]);
     }
-    
+
     // Find cinemas with those screenings
     const cinemas = await Cinema.find({
       _id: { $in: screenings },
       isActive: true
     }).sort({ name: 1 });
-    
+
     res.json(cinemas);
   } catch (error) {
     console.error('Error getting cinemas by movie and date:', error);
