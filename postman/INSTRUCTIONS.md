@@ -38,29 +38,20 @@ This guide provides instructions for importing and using the Postman collections
 
 1. Install [Postman](https://www.postman.com/downloads/) if you haven't already.
 
-### Importing Collections
+### Importing Collections and Environment
 
-Each API domain has its own collection and environment files:
+This API has multiple collections organized by domain and a single consolidated environment file:
 
-#### Movies API
-1. Import `movies/Movie_API_Collection.json`
-2. Import `movies/Movie_API_Environment.json`
+#### Collections
+- `movies/Movie_API_Collection.json` - For movie-related endpoints
+- `users/User_API_Collection.json` - For user-related endpoints
+- `cinemas/Cinema_API_Collection.json` - For cinema-related endpoints
+- `cinemas/Cinema_By_Movie_Date_Collection.json` - For finding cinemas by movie and date
+- `screenings/Screening_API_Collection.json` - For screening-related endpoints
+- `seats/Seats_API_Collection.json` - For seat-related endpoints
 
-#### Users API
-1. Import `users/User_API_Collection.json`
-2. Import `users/User_API_Environment.json`
-
-#### Cinemas API
-1. Import `cinemas/Cinema_API_Collection.json`
-2. Import `cinemas/Cinema_API_Environment.json`
-
-#### Screenings API
-1. Import `screenings/Screening_API_Collection.json`
-2. Import `screenings/Screening_API_Environment.json`
-
-#### Seats API
-1. Import `seats/Seats_API_Collection.json`
-2. Import `seats/Seats_API_Environment.json`
+#### Environment
+- `Movie_Booking_API_Environment.json` - Contains all variables needed for all collections
 
 To import a collection:
 1. Open Postman
@@ -69,11 +60,10 @@ To import a collection:
 4. Click "Upload Files" and select the collection JSON file
 5. Click "Import"
 
-### Setting Up Environments
-
-After importing the environment files:
-1. In the top right corner of Postman, click the environment dropdown
-2. Select the appropriate environment (e.g., "Movie API Environment")
+To import the environment:
+1. Follow the same steps as above but select the `Movie_Booking_API_Environment.json` file
+2. After importing, in the top right corner of Postman, click the environment dropdown
+3. Select "Movie Booking API Environment"
 
 ## Authentication
 
@@ -197,7 +187,7 @@ You can set up date variables manually or using a script:
 #### Using the Script
 1. Click on the collection name "Screening API Collection" in the sidebar
 2. Click on the "Pre-request Scripts" tab
-3. Copy and paste the script from `utils/set_screening_date_variables.js`
+3. Copy and paste the date variables script (see [Date Variables Script](#date-variables-script) section below)
 4. Click "Save"
 5. Run any request in the collection to trigger the script
 
@@ -250,7 +240,7 @@ You can set up date variables manually or using a script:
 
 ### Date Variables Script
 
-The `utils/set_screening_date_variables.js` script helps set up date-related environment variables:
+The following script helps set up date-related environment variables:
 
 ```javascript
 // Get today's date in YYYY-MM-DD format
