@@ -1,6 +1,6 @@
 {
-  "id": "1234567-1234-1234-1234-123456789012",
-  "name": "Movie Ticket Booking API Environment",
+  "id": "movie-api-environment",
+  "name": "Movie API Environment",
   "values": [
     {
       "key": "baseUrl",
@@ -27,14 +27,20 @@
       "enabled": true
     },
     {
-      "key": "eventId",
-      "value": "680f96e264e6bda9cbb83926",
+      "key": "genreId",
+      "value": "",
       "type": "default",
       "enabled": true
     },
     {
-      "key": "newsId",
-      "value": "680fa583205b620d90c2f651",
+      "key": "actorId",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "directorId",
+      "value": "",
       "type": "default",
       "enabled": true
     },
@@ -51,19 +57,11 @@
       "enabled": true
     },
     {
-      "key": "bookingId",
-      "value": "",
-      "type": "default",
-      "enabled": true
-    },
-    {
-      "key": "paymentId",
+      "key": "reviewId",
       "value": "",
       "type": "default",
       "enabled": true
     }
   ],
-  "_postman_variable_scope": "environment",
-  "_postman_exported_at": "2023-05-01T12:00:00.000Z",
-  "_postman_exported_using": "Postman/10.13.0"
+  "_postman_variable_scope": "environment"
 }
