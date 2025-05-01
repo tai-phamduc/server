@@ -159,6 +159,36 @@
       "enabled": true
     },
     {
+      "key": "eventId",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "registrationId",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "newsId",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "awardId",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "filmId",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
       "key": "date",
       "value": "2026-05-01",
       "type": "default",

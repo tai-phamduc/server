@@ -1,0 +1,708 @@
+{
+  "info": {
+    "name": "News API Collection",
+    "description": "A collection of API requests for testing news-related endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "description": "Endpoints for user authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "login"]
+            },
+            "description": "Login to get authentication token"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "News",
+      "description": "Endpoints for news operations",
+      "item": [
+        {
+          "name": "Get All News",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/news",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news"]
+            },
+            "description": "Get a list of all news articles"
+          },
+          "response": []
+        },
+        {
+          "name": "Get News with Pagination",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/news?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get a paginated list of news articles"
+          },
+          "response": []
+        },
+        {
+          "name": "Get News by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/news/{{newsId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "{{newsId}}"]
+            },
+            "description": "Get details of a specific news article by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Latest News",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/news/latest?limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "latest"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            },
+            "description": "Get the latest news articles"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Featured News",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/news/featured",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "featured"]
+            },
+            "description": "Get featured news articles"
+          },
+          "response": []
+        },
+        {
+          "name": "Get News by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/news/category/Movie News",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "category", "Movie News"]
+            },
+            "description": "Get news articles by category"
+          },
+          "response": []
+        },
+        {
+          "name": "Get News by Tag",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/news/tag/marvel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "tag", "marvel"]
+            },
+            "description": "Get news articles by tag"
+          },
+          "response": []
+        },
+        {
+          "name": "Get News by Date Range",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/news/date-range?startDate={{date}}&endDate=2023-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "date-range"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "{{date}}"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2023-12-31"
+                }
+              ]
+            },
+            "description": "Get news articles within a date range"
+          },
+          "response": []
+        },
+        {
+          "name": "Search News",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/news/search?keyword=marvel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "search"],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": "marvel"
+                }
+              ]
+            },
+            "description": "Search for news articles by keyword"
+          },
+          "response": []
+        },
+        {
+          "name": "Get News Related to Movie",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/news/movie/{{movieId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "movie", "{{movieId}}"]
+            },
+            "description": "Get news articles related to a specific movie"
+          },
+          "response": []
+        },
+        {
+          "name": "Create News (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Marvel Announces New Avengers Movie\",\n    \"content\": \"<p>Marvel Studios has announced a new Avengers movie set to release in 2025. The film will feature a new team of heroes following the events of Endgame.</p><p>Kevin Feige, president of Marvel Studios, stated that the new film will 'take the MCU in a bold new direction' and will introduce several new characters to the cinematic universe.</p>\",\n    \"summary\": \"Marvel Studios announces a new Avengers movie set to release in 2025 with a new team of heroes.\",\n    \"category\": \"Movie News\",\n    \"author\": {\n        \"name\": \"John Smith\",\n        \"email\": \"john.smith@example.com\",\n        \"bio\": \"Entertainment reporter with 10 years of experience covering Hollywood news.\"\n    },\n    \"publishDate\": \"2023-12-01T10:00:00Z\",\n    \"image\": \"https://example.com/avengers-news.jpg\",\n    \"featuredImage\": \"https://example.com/avengers-news-featured.jpg\",\n    \"gallery\": [\n        \"https://example.com/avengers-news-1.jpg\",\n        \"https://example.com/avengers-news-2.jpg\"\n    ],\n    \"tags\": [\"marvel\", \"avengers\", \"mcu\", \"upcoming movies\"],\n    \"relatedMovies\": [\"{{movieId}}\"],\n    \"isFeatured\": true,\n    \"status\": \"published\",\n    \"source\": {\n        \"name\": \"Marvel Studios\",\n        \"url\": \"https://www.marvel.com/news\"\n    }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/news",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news"]
+            },
+            "description": "Create a new news article (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update News (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Marvel Announces New Avengers Movie: Heroes Reborn\",\n    \"content\": \"<p>Marvel Studios has announced a new Avengers movie titled 'Heroes Reborn' set to release in 2025. The film will feature a new team of heroes following the events of Endgame.</p><p>Kevin Feige, president of Marvel Studios, stated that the new film will 'take the MCU in a bold new direction' and will introduce several new characters to the cinematic universe.</p><p>Production is set to begin in early 2024 with a star-studded cast that will be announced in the coming months.</p>\",\n    \"summary\": \"Marvel Studios announces a new Avengers movie titled 'Heroes Reborn' set to release in 2025 with a new team of heroes.\",\n    \"tags\": [\"marvel\", \"avengers\", \"mcu\", \"upcoming movies\", \"heroes reborn\"],\n    \"isFeatured\": true,\n    \"status\": \"published\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/news/{{newsId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "{{newsId}}"]
+            },
+            "description": "Update an existing news article (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete News (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/news/{{newsId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "{{newsId}}"]
+            },
+            "description": "Delete a news article (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update News Status (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"status\": \"draft\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/news/{{newsId}}/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "{{newsId}}", "status"]
+            },
+            "description": "Update the status of a news article (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update News Featured Status (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"isFeatured\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/news/{{newsId}}/featured",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "{{newsId}}", "featured"]
+            },
+            "description": "Update the featured status of a news article (admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "News Comments",
+      "description": "Endpoints for news comment operations",
+      "item": [
+        {
+          "name": "Get News Comments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/news/{{newsId}}/comments",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "{{newsId}}", "comments"]
+            },
+            "description": "Get all comments for a specific news article"
+          },
+          "response": []
+        },
+        {
+          "name": "Add Comment to News",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"content\": \"I'm really excited for this new Avengers movie! Can't wait to see who will be in the new team.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/news/{{newsId}}/comments",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "{{newsId}}", "comments"]
+            },
+            "description": "Add a comment to a news article"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Comment",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"content\": \"I'm really excited for this new Avengers movie! Can't wait to see who will be in the new team. I hope they bring back some of the original cast too.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/news/comments/{{commentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "comments", "{{commentId}}"]
+            },
+            "description": "Update a comment"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Comment",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/news/comments/{{commentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "comments", "{{commentId}}"]
+            },
+            "description": "Delete a comment"
+          },
+          "response": []
+        },
+        {
+          "name": "Like Comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/news/comments/{{commentId}}/like",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "comments", "{{commentId}}", "like"]
+            },
+            "description": "Like a comment"
+          },
+          "response": []
+        },
+        {
+          "name": "Unlike Comment",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/news/comments/{{commentId}}/like",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "comments", "{{commentId}}", "like"]
+            },
+            "description": "Unlike a comment"
+          },
+          "response": []
+        },
+        {
+          "name": "Report Comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"reason\": \"Inappropriate content\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/news/comments/{{commentId}}/report",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "comments", "{{commentId}}", "report"]
+            },
+            "description": "Report a comment"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "News Categories",
+      "description": "Endpoints for news category operations",
+      "item": [
+        {
+          "name": "Get All News Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/news/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "categories"]
+            },
+            "description": "Get a list of all news categories"
+          },
+          "response": []
+        },
+        {
+          "name": "Create News Category (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Industry News\",\n    \"description\": \"News about the film industry\",\n    \"icon\": \"industry-news-icon\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/news/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "categories"]
+            },
+            "description": "Create a new news category (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update News Category (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Industry News\",\n    \"description\": \"News and updates about the film and entertainment industry\",\n    \"icon\": \"industry-news-icon-updated\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/news/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "categories", "{{categoryId}}"]
+            },
+            "description": "Update a news category (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete News Category (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/news/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "categories", "{{categoryId}}"]
+            },
+            "description": "Delete a news category (admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "News Statistics",
+      "description": "Endpoints for news statistics",
+      "item": [
+        {
+          "name": "Get News Statistics (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/news/statistics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "statistics"]
+            },
+            "description": "Get overall news statistics (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get News Statistics by Category (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/news/statistics/category",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "statistics", "category"]
+            },
+            "description": "Get news statistics by category (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get News Engagement Statistics (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/news/statistics/engagement",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "statistics", "engagement"]
+            },
+            "description": "Get news engagement statistics (admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Most Popular News (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/news/statistics/popular?limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "statistics", "popular"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            },
+            "description": "Get most popular news articles (admin only)"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Get today's date in YYYY-MM-DD format",
+          "const today = new Date();",
+          "const todayFormatted = today.toISOString().split('T')[0];",
+          "",
+          "// Format display date (e.g., \"December 25, 2023\")",
+          "const options = { year: 'numeric', month: 'long', day: 'numeric' };",
+          "const displayDate = today.toLocaleDateString('en-US', options);",
+          "",
+          "// Get day of week",
+          "const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];",
+          "const dayOfWeek = daysOfWeek[today.getDay()];",
+          "",
+          "// Set environment variables",
+          "pm.environment.set('date', todayFormatted);",
+          "pm.environment.set('displayDate', displayDate);",
+          "pm.environment.set('dayOfWeek', dayOfWeek);"
+        ]
+      }
+    }
+  ]
+}
