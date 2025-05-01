@@ -259,12 +259,12 @@ ScreeningSchema.virtual('cinema', {
   justOne: true,
 });
 
-// Create virtual for room
-ScreeningSchema.virtual('room', {
-  ref: 'Room',
-  localField: 'room_id',
-  foreignField: '_id',
-  justOne: true,
+// Create virtual for room - using Cinema's embedded rooms
+ScreeningSchema.virtual('room').get(function() {
+  return this.populate('cinema_id').then(screening => {
+    if (!screening.cinema_id || !screening.cinema_id.rooms) return null;
+    return screening.cinema_id.rooms.find(room => room._id.toString() === this.room_id.toString());
+  });
 });
 
 // Create virtual for bookings
@@ -374,8 +374,8 @@ ScreeningSchema.statics.findByMovieAndDate = function(movieId, date) {
     isActive: true,
   })
   .sort({ startTime: 1 })
-  .populate('cinema', 'name location')
-  .populate('room', 'name type');
+  .populate('cinema_id', 'name location rooms')
+  .populate('movie_id', 'title poster duration');
 };
 
 // Static method to find screenings by movie, cinema, and date
@@ -393,7 +393,8 @@ ScreeningSchema.statics.findByMovieCinemaDate = function(movieId, cinemaId, date
     isActive: true,
   })
   .sort({ startTime: 1 })
-  .populate('room', 'name type');
+  .populate('cinema_id', 'name location rooms')
+  .populate('movie_id', 'title poster duration');
 };
 
 // Static method to find available seats for a screening
