@@ -36,7 +36,7 @@ mongodb+srv://lathanhsi100804:thanhsi1008@movie-booking.xovn2xs.mongodb.net/
 | Endpoint | Method | Status | Response | Notes |
 |----------|--------|--------|----------|-------|
 | `/api/cinemas` | GET | ✅ Working | Returns a list of cinemas | Successfully returns cinema data |
-| `/api/cinemas/:id` | GET | ❌ Error | Server error | Returns "FUNCTION_INVOCATION_FAILED" with ID: 68121d9d5e6e61cab67ae98f |
+| `/api/cinemas/:id` | GET | ✅ Working | Returns cinema details | Tested with ID: 68121d9d5e6e61cab67ae98f |
 | `/api/cinemas/movie/:movieId/date/:date` | GET | ✅ Working | Returns cinemas with screenings | Tested with movie ID: 680f66dbefdceecc9e34aab9 and date: 2026-05-01 |
 
 ### Screenings API
@@ -51,15 +51,13 @@ mongodb+srv://lathanhsi100804:thanhsi1008@movie-booking.xovn2xs.mongodb.net/
 
 ## Issues Identified
 
-1. **Server Errors**: One endpoint still returns a server error:
-   - The `/api/cinemas/:id` endpoint returns "FUNCTION_INVOCATION_FAILED"
-
-2. **Fixed Issues**:
+1. **Fixed Issues**:
    - The screenings collection was empty, but we've added sample data
    - The screenings API now works correctly
    - The seats API now works correctly
+   - The cinema detail endpoint now works correctly
 
-3. **Authentication Working**: The authentication flow is working correctly:
+2. **Authentication Working**: The authentication flow is working correctly:
    - Login endpoint returns a valid JWT token
    - Protected endpoints correctly validate the token
 
@@ -75,21 +73,19 @@ After connecting to the MongoDB database and adding sample data, we found:
    - Users collection has an admin user (admin@example.com)
    - Screenings collection now has sample screenings for the next 7 days
 
-3. **Remaining Issues**: The cinema detail endpoint still has an error that needs to be fixed
+3. **All Major Issues Fixed**: All major API endpoints are now working correctly
 
 ## Next Steps
 
-1. **Fix Remaining Server Error**: Investigate and fix the server error in the cinema detail endpoint.
-
-2. **Update Postman Collections**: Update the existing Postman collections with:
+1. **Update Postman Collections**: Update the existing Postman collections with:
    - Valid IDs extracted from the database
    - Authentication token handling
    - Tests for all endpoints
 
-3. **Create Missing Collections**: Create Postman collections for the models that don't have them yet (as listed in MISSING_COLLECTIONS.md).
+2. **Create Missing Collections**: Create Postman collections for the models that don't have them yet (as listed in MISSING_COLLECTIONS.md).
 
-4. **Complete Testing**: Test all endpoints in the existing and new Postman collections to ensure they work as expected.
+3. **Complete Testing**: Test all endpoints in the existing and new Postman collections to ensure they work as expected.
 
 ## Conclusion
 
-The API is now mostly working, with most endpoints functioning correctly. We've fixed the screenings API by adding sample data to the database. The only remaining issue is with the cinema detail endpoint, which still returns a server error. This issue needs to be addressed before proceeding with creating new Postman collections for the missing models.
+The API is now fully working, with all major endpoints functioning correctly. We've fixed the screenings API by adding sample data to the database and fixed the cinema detail endpoint. The next step is to update the Postman collections with valid IDs and authentication, and create collections for the missing models.
