@@ -10,19 +10,19 @@
     },
     {
       "key": "userToken",
-      "value": "",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTIxZjk0MGQ4OGU2NDJjODM5YWJkNCIsImlhdCI6MTc0NjI3NjM1NywiZXhwIjoxNzQ4ODY4MzU3fQ.2MRYwPAUSW5ZEFo_LuULD8jMpHkv48Oj6DNWHA6-S2c",
       "type": "secret",
       "enabled": true
     },
     {
       "key": "adminToken",
-      "value": "",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTIxZjk0MGQ4OGU2NDJjODM5YWJkNCIsImlhdCI6MTc0NjI3NjM1NywiZXhwIjoxNzQ4ODY4MzU3fQ.2MRYwPAUSW5ZEFo_LuULD8jMpHkv48Oj6DNWHA6-S2c",
       "type": "secret",
       "enabled": true
     },
     {
       "key": "movieId",
-      "value": "680f66dbefdceecc9e34aac5",
+      "value": "680f66dbefdceecc9e34aab9",
       "type": "default",
       "enabled": true
     },
@@ -46,7 +46,7 @@
     },
     {
       "key": "screeningId",
-      "value": "68130ea74c4a54833380aeab",
+      "value": "681361dd3b2c7d6ce0371ecb",
       "type": "default",
       "enabled": true
     },
@@ -58,19 +58,19 @@
     },
     {
       "key": "seatId1",
-      "value": "",
+      "value": "681361dd3b2c7d6ce0371e67",
       "type": "default",
       "enabled": true
     },
     {
       "key": "seatId2",
-      "value": "",
+      "value": "681361dd3b2c7d6ce0371e68",
       "type": "default",
       "enabled": true
     },
     {
       "key": "genreId",
-      "value": "",
+      "value": "680fa635205b620d90c2f656",
       "type": "default",
       "enabled": true
     },
@@ -94,13 +94,13 @@
     },
     {
       "key": "reviewId",
-      "value": "",
+      "value": "680fa9b8375cedf5a1a1c39a",
       "type": "default",
       "enabled": true
     },
     {
       "key": "bookingId",
-      "value": "",
+      "value": "680fa9e3375cedf5a1a1c39c",
       "type": "default",
       "enabled": true
     },
@@ -166,7 +166,7 @@
     },
     {
       "key": "eventId",
-      "value": "",
+      "value": "680f96e264e6bda9cbb83926",
       "type": "default",
       "enabled": true
     },
@@ -178,7 +178,7 @@
     },
     {
       "key": "newsId",
-      "value": "",
+      "value": "680fa583205b620d90c2f651",
       "type": "default",
       "enabled": true
     },
@@ -232,7 +232,7 @@
     },
     {
       "key": "userId",
-      "value": "",
+      "value": "68121f940d88e642c839abd4",
       "type": "default",
       "enabled": true
     }

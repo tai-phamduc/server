@@ -220,6 +220,53 @@ const getUserBookings = async (req, res) => {
   }
 };
 
+// @desc    Get user booking history
+// @route   GET /api/users/booking-history
+// @access  Private
+const getUserBookingHistory = async (req, res) => {
+  try {
+    // Get user with populated booking history
+    const user = await User.findById(req.user._id)
+      .populate({
+        path: 'bookingHistory',
+        populate: [
+          { path: 'movie', select: 'title poster slug' },
+          { path: 'theater', select: 'name location' },
+          { path: 'cinema', select: 'name location' }
+        ],
+        options: { sort: { bookingDate: -1 } }
+      });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // If user has booking history, return it
+    if (user.bookingHistory && user.bookingHistory.length > 0) {
+      return res.json(user.bookingHistory);
+    }
+
+    // If no booking history in user document, fetch from bookings collection
+    const bookings = await Booking.find({ user: req.user._id })
+      .populate('movie', 'title poster slug')
+      .populate('theater', 'name location')
+      .populate('cinema', 'name location')
+      .sort({ bookingDate: -1 });
+
+    // Update user's booking history
+    if (bookings.length > 0) {
+      user.bookingHistory = bookings.map(booking => booking._id);
+      await user.save();
+      console.log(`Updated user's booking history with ${bookings.length} bookings`);
+    }
+
+    res.json(bookings);
+  } catch (error) {
+    console.error('Error fetching user booking history:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // @desc    Update user password
 // @route   PUT /api/users/password
 // @access  Private
@@ -572,6 +619,7 @@ module.exports = {
   updateUser,
   deleteUser,
   getUserBookings,
+  getUserBookingHistory,
   updatePassword,
   uploadProfilePicture,
   forgotPassword,

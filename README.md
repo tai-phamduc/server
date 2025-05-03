@@ -76,7 +76,7 @@ server/
 - `POST /api/bookings` - Create a new booking
 - `GET /api/bookings/:id` - Get booking by ID
 - `PUT /api/bookings/:id/cancel` - Cancel booking
-- `GET /api/booking-history` - Get booking history
+- `GET /api/users/booking-history` - Get user booking history
 
 ### Showtimes
 - `GET /api/showtimes` - Get all showtimes

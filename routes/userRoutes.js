@@ -10,6 +10,7 @@ const {
   updateUser,
   deleteUser,
   getUserBookings,
+  getUserBookingHistory,
   updatePassword,
   uploadProfilePicture,
   forgotPassword,
@@ -34,6 +35,7 @@ router.post('/2fa/verify-token', verifyTwoFactorToken);
 router.get('/profile', protect, getUserProfile);
 router.put('/profile', protect, updateUserProfile);
 router.get('/bookings', protect, getUserBookings);
+router.get('/booking-history', protect, getUserBookingHistory);
 router.put('/password', protect, updatePassword);
 router.put('/profile-picture', protect, upload.single('image'), uploadProfilePicture);
 
