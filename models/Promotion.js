@@ -328,17 +328,7 @@ const PromotionSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
-    aiGenerated: {
-      type: Boolean,
-      default: false,
-    },
-    aiModel: {
-      type: String,
-      trim: true,
-    },
-    aiParameters: {
-      type: Object,
-    },
+
   },
   {
     timestamps: true,

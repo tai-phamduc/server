@@ -330,14 +330,7 @@ const ReviewSchema = new mongoose.Schema(
       min: [-1, 'Sentiment score cannot be less than -1'],
       max: [1, 'Sentiment score cannot be more than 1'],
     },
-    aiSummary: {
-      type: String,
-      trim: true,
-    },
-    aiTags: {
-      type: [String],
-      default: [],
-    },
+
     viewCount: {
       type: Number,
       default: 0,

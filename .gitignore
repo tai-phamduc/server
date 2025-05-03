@@ -37,3 +37,7 @@ yarn-error.log*
 /server/scripts/seedBookingData.js
 /seedData.js
 /add-bookings.js
+
+# Logs
+logs/
+*.log

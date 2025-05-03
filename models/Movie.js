@@ -475,29 +475,7 @@ const MovieSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
-    aiTags: {
-      type: [String],
-      default: [],
-    },
-    aiSummary: {
-      type: String,
-      trim: true,
-    },
-    aiSimilarMovies: [{
-      movie_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Movie',
-      },
-      similarity: {
-        type: Number,
-        min: [0, 'Similarity cannot be less than 0'],
-        max: [1, 'Similarity cannot be more than 1'],
-      },
-      reason: {
-        type: String,
-        trim: true,
-      },
-    }],
+
     viewCount: {
       type: Number,
       default: 0,
@@ -573,7 +551,6 @@ MovieSchema.index({ releaseDate: -1, status: 1 });
 MovieSchema.index({ genre: 1, status: 1 });
 MovieSchema.index({ rating: -1, reviewCount: -1 });
 MovieSchema.index({ 'cast.actor': 1 });
-MovieSchema.index({ 'aiSimilarMovies.movie_id': 1 });
 MovieSchema.index({ releaseYear: -1, title: 1 });
 MovieSchema.index({ status: 1, isFeatured: 1, releaseDate: -1 });
 

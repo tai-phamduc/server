@@ -542,24 +542,7 @@ const UserSchema = new mongoose.Schema(
     lockUntil: {
       type: Date,
     },
-    aiPreferences: {
-      enablePersonalization: {
-        type: Boolean,
-        default: true,
-      },
-      enableRecommendations: {
-        type: Boolean,
-        default: true,
-      },
-      dataUsageConsent: {
-        type: Boolean,
-        default: true,
-      },
-      preferredRecommendationTypes: {
-        type: [String],
-        default: ['similar_movies', 'trending', 'personalized'],
-      },
-    },
+
   },
   {
     timestamps: true,
