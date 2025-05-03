@@ -128,6 +128,7 @@ app.use('/api/screenings', require('./routes/screeningRoutes'));
 app.use('/api/bookings', require('./routes/bookingRoutes'));
 app.use('/api/reviews', require('./routes/reviewRoutes'));
 app.use('/api/payments', require('./routes/paymentRoutes'));
+app.use('/api/seats', require('./routes/seatRoutes'));
 app.use('/api/notifications', require('./routes/notificationRoutes'));
 app.use('/api/analytics', require('./routes/analyticsRoutes'));
 app.use('/api/content', require('./routes/contentRoutes'));
