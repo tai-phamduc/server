@@ -231,7 +231,6 @@ const getUserBookingHistory = async (req, res) => {
         path: 'bookingHistory',
         populate: [
           { path: 'movie', select: 'title poster slug' },
-          { path: 'theater', select: 'name location' },
           { path: 'cinema', select: 'name location' }
         ],
         options: { sort: { bookingDate: -1 } }
@@ -249,7 +248,6 @@ const getUserBookingHistory = async (req, res) => {
     // If no booking history in user document, fetch from bookings collection
     const bookings = await Booking.find({ user: req.user._id })
       .populate('movie', 'title poster slug')
-      .populate('theater', 'name location')
       .populate('cinema', 'name location')
       .sort({ bookingDate: -1 });
 
