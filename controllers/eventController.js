@@ -5,17 +5,27 @@ const Event = require('../models/Event');
 // @access  Public
 const getEvents = async (req, res) => {
   try {
-    const limit = req.query.limit ? parseInt(req.query.limit) : 0;
-    const query = Event.find().sort({ date: 1 });
+    // Use a simpler query to avoid potential issues
+    const events = await Event.find({}, {
+      title: 1,
+      slug: 1,
+      description: 1,
+      shortDescription: 1,
+      date: 1,
+      endDate: 1,
+      displayDate: 1,
+      startTime: 1,
+      endTime: 1,
+      location: 1,
+      image: 1,
+      featured: 1,
+      category: 1
+    }).sort({ date: 1 }).limit(req.query.limit ? parseInt(req.query.limit) : 100);
 
-    if (limit > 0) {
-      query.limit(limit);
-    }
-
-    const events = await query;
     res.json(events);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error getting events:', error);
+    res.status(500).json({ message: 'Error retrieving events. Please try again later.' });
   }
 };
 
@@ -24,13 +34,43 @@ const getEvents = async (req, res) => {
 // @access  Public
 const getEventById = async (req, res) => {
   try {
-    const event = await Event.findById(req.params.id);
+    // Use a simpler query to avoid potential issues
+    const event = await Event.findById(req.params.id, {
+      title: 1,
+      slug: 1,
+      description: 1,
+      shortDescription: 1,
+      date: 1,
+      endDate: 1,
+      displayDate: 1,
+      startTime: 1,
+      endTime: 1,
+      location: 1,
+      venue: 1,
+      address: 1,
+      city: 1,
+      state: 1,
+      zipCode: 1,
+      country: 1,
+      image: 1,
+      gallery: 1,
+      featured: 1,
+      category: 1,
+      categories: 1,
+      organizer: 1,
+      ticketPrice: 1,
+      ticketUrl: 1,
+      schedule: 1
+    });
+
     if (!event) {
       return res.status(404).json({ message: 'Event not found' });
     }
+
     res.json(event);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error getting event by ID:', error);
+    res.status(500).json({ message: 'Error retrieving event. Please try again later.' });
   }
 };
 
@@ -39,17 +79,27 @@ const getEventById = async (req, res) => {
 // @access  Public
 const getFeaturedEvents = async (req, res) => {
   try {
-    const limit = req.query.limit ? parseInt(req.query.limit) : 0;
-    const query = Event.find({ featured: true }).sort({ date: 1 });
+    // Use a simpler query to avoid potential issues
+    const events = await Event.find({ featured: true }, {
+      title: 1,
+      slug: 1,
+      description: 1,
+      shortDescription: 1,
+      date: 1,
+      endDate: 1,
+      displayDate: 1,
+      startTime: 1,
+      endTime: 1,
+      location: 1,
+      image: 1,
+      featured: 1,
+      category: 1
+    }).sort({ date: 1 }).limit(req.query.limit ? parseInt(req.query.limit) : 100);
 
-    if (limit > 0) {
-      query.limit(limit);
-    }
-
-    const events = await query;
     res.json(events);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error getting featured events:', error);
+    res.status(500).json({ message: 'Error retrieving featured events. Please try again later.' });
   }
 };
 
@@ -58,18 +108,28 @@ const getFeaturedEvents = async (req, res) => {
 // @access  Public
 const getUpcomingEvents = async (req, res) => {
   try {
-    const limit = req.query.limit ? parseInt(req.query.limit) : 0;
     const currentDate = new Date();
-    const query = Event.find({ date: { $gte: currentDate } }).sort({ date: 1 });
+    // Use a simpler query to avoid potential issues
+    const events = await Event.find({ date: { $gte: currentDate } }, {
+      title: 1,
+      slug: 1,
+      description: 1,
+      shortDescription: 1,
+      date: 1,
+      endDate: 1,
+      displayDate: 1,
+      startTime: 1,
+      endTime: 1,
+      location: 1,
+      image: 1,
+      featured: 1,
+      category: 1
+    }).sort({ date: 1 }).limit(req.query.limit ? parseInt(req.query.limit) : 100);
 
-    if (limit > 0) {
-      query.limit(limit);
-    }
-
-    const events = await query;
     res.json(events);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error getting upcoming events:', error);
+    res.status(500).json({ message: 'Error retrieving upcoming events. Please try again later.' });
   }
 };
 
@@ -78,18 +138,28 @@ const getUpcomingEvents = async (req, res) => {
 // @access  Public
 const getPastEvents = async (req, res) => {
   try {
-    const limit = req.query.limit ? parseInt(req.query.limit) : 0;
     const currentDate = new Date();
-    const query = Event.find({ date: { $lt: currentDate } }).sort({ date: -1 });
+    // Use a simpler query to avoid potential issues
+    const events = await Event.find({ date: { $lt: currentDate } }, {
+      title: 1,
+      slug: 1,
+      description: 1,
+      shortDescription: 1,
+      date: 1,
+      endDate: 1,
+      displayDate: 1,
+      startTime: 1,
+      endTime: 1,
+      location: 1,
+      image: 1,
+      featured: 1,
+      category: 1
+    }).sort({ date: -1 }).limit(req.query.limit ? parseInt(req.query.limit) : 100);
 
-    if (limit > 0) {
-      query.limit(limit);
-    }
-
-    const events = await query;
     res.json(events);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error getting past events:', error);
+    res.status(500).json({ message: 'Error retrieving past events. Please try again later.' });
   }
 };
 
