@@ -36,6 +36,44 @@ router.get('/profile', protect, getUserProfile);
 router.put('/profile', protect, updateUserProfile);
 router.get('/bookings', protect, getUserBookings);
 router.get('/booking-history', protect, getUserBookingHistory);
+router.post('/booking-history/:bookingId', protect, (req, res) => {
+  // Simple implementation to add a booking to user's history
+  const addBookingToHistory = async (req, res) => {
+    try {
+      const { bookingId } = req.params;
+      const userId = req.user._id;
+
+      console.log(`Adding booking ${bookingId} to user ${userId} history`);
+
+      // Find the user
+      const user = await require('../models/User').findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      // Initialize bookingHistory array if it doesn't exist
+      if (!user.bookingHistory) {
+        user.bookingHistory = [];
+      }
+
+      // Check if booking already exists in history
+      if (!user.bookingHistory.includes(bookingId)) {
+        user.bookingHistory.push(bookingId);
+        await user.save();
+        console.log(`Added booking ${bookingId} to user history`);
+      } else {
+        console.log(`Booking ${bookingId} already in user history`);
+      }
+
+      res.status(200).json({ message: 'Booking added to history' });
+    } catch (error) {
+      console.error('Error adding booking to history:', error);
+      res.status(500).json({ message: error.message });
+    }
+  };
+
+  addBookingToHistory(req, res);
+});
 router.put('/password', protect, updatePassword);
 router.put('/profile-picture', protect, upload.single('image'), uploadProfilePicture);
 
