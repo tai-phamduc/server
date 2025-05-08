@@ -477,6 +477,34 @@ const getReportedComments = asyncHandler(async (req, res) => {
   res.json(comments);
 });
 
+// @desc    Get the 3 most liked comments for a movie
+// @route   GET /api/comments/movie/:id/most-liked
+// @access  Public
+const getMostLikedMovieComments = asyncHandler(async (req, res) => {
+  const movieId = req.params.id;
+
+  // Check if movie exists
+  const movie = await Movie.findById(movieId);
+  if (!movie) {
+    res.status(404);
+    throw new Error('Movie not found');
+  }
+
+  // Get limit from query params or default to 3
+  const limit = parseInt(req.query.limit) || 3;
+
+  // Get the most liked comments
+  const comments = await Comment.findMostLikedByMovie(movieId, limit);
+
+  res.json({
+    movie: {
+      _id: movie._id,
+      title: movie.title
+    },
+    comments
+  });
+});
+
 module.exports = {
   getMovieComments,
   getNewsComments,
@@ -490,5 +518,6 @@ module.exports = {
   reportComment,
   approveComment,
   rejectComment,
-  getReportedComments
+  getReportedComments,
+  getMostLikedMovieComments
 };

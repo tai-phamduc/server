@@ -217,6 +217,14 @@ CommentSchema.statics.findReported = function() {
     .populate('event', 'title');
 };
 
+// Static method to find most liked comments for a movie
+CommentSchema.statics.findMostLikedByMovie = function(movieId, limit = 3) {
+  return this.find({ movie: movieId, parent: null, isApproved: true })
+    .sort({ likes: -1, dislikes: 1 }) // Sort by most likes, then least dislikes
+    .limit(limit)
+    .populate('userInfo');
+};
+
 // Method to like a comment
 CommentSchema.methods.like = async function(userId) {
   // Remove from dislikedBy if present

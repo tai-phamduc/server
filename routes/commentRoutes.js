@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { 
+const {
   getMovieComments,
   getNewsComments,
   getEventComments,
@@ -13,12 +13,14 @@ const {
   reportComment,
   approveComment,
   rejectComment,
-  getReportedComments
+  getReportedComments,
+  getMostLikedMovieComments
 } = require('../controllers/commentController');
 const { protect, admin } = require('../middleware/authMiddleware');
 
 // Public routes
 router.get('/movie/:id', getMovieComments);
+router.get('/movie/:id/most-liked', getMostLikedMovieComments);
 router.get('/news/:id', getNewsComments);
 router.get('/event/:id', getEventComments);
 router.get('/:id/replies', getCommentReplies);
