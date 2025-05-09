@@ -8,6 +8,6 @@ const { updateSeatStatus } = require('../controllers/screeningController');
 router.get('/types', getSeatTypes);
 
 // Seat status update route
-router.patch('/update', updateSeatStatus);
+router.put('/update', updateSeatStatus);
 
 module.exports = router;
