@@ -181,11 +181,11 @@ const RefundDetailsSchema = new mongoose.Schema({
   },
   paymentMethod: {
     type: String,
-    enum: {
-      values: ['original_payment', 'credit', 'bank_transfer', 'store_credit', 'gift_card', 'other'],
-      message: '{VALUE} is not a valid refund payment method',
-    },
-    default: 'original_payment',
+    // enum: {
+    //   values: ['original_payment', 'credit', 'bank_transfer', 'store_credit', 'gift_card', 'other'],
+    //   message: '{VALUE} is not a valid refund payment method',
+    // },
+    default: 'original_payment'
   },
   notes: {
     type: String,
