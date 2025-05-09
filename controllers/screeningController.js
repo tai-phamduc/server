@@ -306,6 +306,73 @@ const getScreeningsByMovieDate = async (req, res) => {
   }
 };
 
+// @desc    Get all seats of a screening
+// @route   GET /api/screenings/:id/all-seats
+// @access  Public
+const getAllSeats = async (req, res) => {
+  try {
+    const screening = await Screening.findById(req.params.id);
+
+    if (!screening) {
+      return res.status(404).json({ message: 'Screening not found' });
+    }
+
+    // Return all seats with their status
+    const seats = screening.seats.map(seat => ({
+      _id: seat._id,
+      seat_id: seat.seat_id,
+      row: seat.row,
+      column: seat.column,
+      seatNumber: seat.seatNumber,
+      status: seat.status,
+      price: seat.price,
+      type: seat.type
+    }));
+
+    // Group seats by row for easier frontend rendering
+    const seatsByRow = {};
+    seats.forEach(seat => {
+      if (!seatsByRow[seat.row]) {
+        seatsByRow[seat.row] = [];
+      }
+      seatsByRow[seat.row].push(seat);
+    });
+
+    // Sort each row by column
+    Object.keys(seatsByRow).forEach(row => {
+      seatsByRow[row].sort((a, b) => a.column - b.column);
+    });
+
+    // Get screening details
+    const screeningDetails = {
+      _id: screening._id,
+      movie_id: screening.movie_id,
+      cinema_id: screening.cinema_id,
+      room_id: screening.room_id,
+      date: screening.date,
+      startTime: screening.startTime,
+      endTime: screening.endTime,
+      format: screening.format,
+      language: screening.language,
+      price: screening.price,
+      pricingTiers: screening.pricingTiers,
+      status: screening.status,
+      displayDate: screening.displayDate,
+      displayTime: screening.displayTime
+    };
+
+    res.json({
+      screening: screeningDetails,
+      seats: seatsByRow,
+      totalSeats: screening.totalSeats,
+      seatsAvailable: screening.seatsAvailable
+    });
+  } catch (error) {
+    console.error('Error getting all seats:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createScreening,
   getScreenings,
@@ -313,6 +380,7 @@ module.exports = {
   updateScreening,
   deleteScreening,
   getAvailableSeats,
+  getAllSeats,
   reserveSeats,
   releaseSeats,
   getScreeningsByMovieCinemaDate,

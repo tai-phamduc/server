@@ -8,6 +8,7 @@ const {
   updateScreening,
   deleteScreening,
   getAvailableSeats,
+  getAllSeats,
   reserveSeats,
   releaseSeats,
   getScreeningsByMovieCinemaDate,
@@ -25,6 +26,9 @@ router.route('/:id')
 
 router.route('/:id/seats')
   .get(getAvailableSeats);
+
+router.route('/:id/all-seats')
+  .get(getAllSeats);
 
 router.route('/:id/reserve')
   .post(reserveSeats);
