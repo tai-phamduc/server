@@ -9,6 +9,6 @@ router.get('/types', getSeatTypes);
 
 // Seat status update routes
 router.put('/update', updateSeatStatus);
-router.patch('/book-by-id', bookSeatsByIds);
+router.put('/book-by-id', bookSeatsByIds);
 
 module.exports = router;

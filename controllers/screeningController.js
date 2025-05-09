@@ -580,7 +580,7 @@ const updateSeatStatus = async (req, res) => {
 };
 
 // @desc    Update seats by ID to booked status
-// @route   PATCH /api/seats/book-by-id
+// @route   PUT /api/seats/book-by-id
 // @access  Public
 const bookSeatsByIds = async (req, res) => {
   try {

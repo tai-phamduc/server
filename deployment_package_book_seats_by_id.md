@@ -2,7 +2,7 @@
 
 This package contains the code changes needed to add a new endpoint to the movie booking API:
 
-`PATCH /api/seats/book-by-id` - Updates the status of multiple seats to "booked" using their IDs
+`PUT /api/seats/book-by-id` - Updates the status of multiple seats to "booked" using their IDs
 
 ## Changes to Make
 
@@ -12,7 +12,7 @@ Add this new controller function:
 
 ```javascript
 // @desc    Update seats by ID to booked status
-// @route   PATCH /api/seats/book-by-id
+// @route   PUT /api/seats/book-by-id
 // @access  Public
 const bookSeatsByIds = async (req, res) => {
   try {
@@ -20,7 +20,7 @@ const bookSeatsByIds = async (req, res) => {
 
     // Validate required fields
     if (!screeningId || !seatIdList) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         message: 'Missing required fields',
         required: ['screeningId', 'seatIdList']
       });
@@ -28,7 +28,7 @@ const bookSeatsByIds = async (req, res) => {
 
     // Ensure seatIdList is an array
     const seatIds = Array.isArray(seatIdList) ? seatIdList : [seatIdList];
-    
+
     if (seatIds.length === 0) {
       return res.status(400).json({ message: 'At least one seat ID is required' });
     }
@@ -92,16 +92,16 @@ const bookSeatsByIds = async (req, res) => {
       if (seatInfo) {
         const seatIndex = seatInfo.index;
         const oldStatus = screening.seats[seatIndex].status;
-        
+
         // Update the seat status
         screening.seats[seatIndex].status = 'booked';
-        
+
         // Set reservation info
         screening.seats[seatIndex].reservedAt = new Date();
         if (req.user) {
           screening.seats[seatIndex].reservedBy = req.user._id;
         }
-        
+
         updatedSeats.push({
           seatId,
           seatNumber: seatInfo.seatNumber,
@@ -161,17 +161,17 @@ const { updateSeatStatus, bookSeatsByIds } = require('../controllers/screeningCo
 Add the new route:
 
 ```javascript
-router.patch('/book-by-id', bookSeatsByIds);
+router.put('/book-by-id', bookSeatsByIds);
 ```
 
 ## Testing
 
 After deploying these changes, you can test the new endpoint using the following:
 
-### PATCH /api/seats/book-by-id
+### PUT /api/seats/book-by-id
 
 ```
-PATCH https://movie-ticket-booking-api.vercel.app/api/seats/book-by-id
+PUT https://movie-ticket-booking-api.vercel.app/api/seats/book-by-id
 ```
 
 Request body:
@@ -217,7 +217,7 @@ Content-Type: application/json
 In your client-side code, you can use this endpoint as follows:
 
 ```javascript
-await cinemaApi.patch(
+await cinemaApi.put(
   "/seats/book-by-id",
   {
     screeningId: screening.screeningId,
