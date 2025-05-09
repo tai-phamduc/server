@@ -602,27 +602,93 @@ const createSimpleBooking = async (req, res) => {
     // Generate booking number
     const bookingNumber = generateBookingNumber();
 
-    // Create the booking
+    // Get screening details to populate required fields
+    const screening = await Screening.findById(screeningId)
+      .populate('movie_id', 'title _id')
+      .populate('cinema_id', 'name _id rooms');
+
+    if (!screening) {
+      return res.status(404).json({ message: 'Screening not found' });
+    }
+
+    // Get movie ID from screening
+    const movieId = screening.movie_id ? screening.movie_id._id : null;
+    if (!movieId) {
+      return res.status(400).json({ message: 'Movie information not available for this screening' });
+    }
+
+    // Get cinema ID from screening
+    const cinemaId = screening.cinema_id ? screening.cinema_id._id : null;
+    if (!cinemaId) {
+      return res.status(400).json({ message: 'Cinema information not available for this screening' });
+    }
+
+    // Get room information
+    let roomId = null;
+    let roomName = room || 'Standard Room';
+
+    if (screening.room_id && screening.cinema_id && screening.cinema_id.rooms) {
+      roomId = screening.room_id;
+      // Try to find room name from cinema's rooms array
+      const roomInfo = screening.cinema_id.rooms.find(r => r._id.toString() === screening.room_id.toString());
+      if (roomInfo && roomInfo.name) {
+        roomName = roomInfo.name;
+      }
+    } else {
+      // If room_id is not available, create a placeholder
+      roomId = new mongoose.Types.ObjectId();
+    }
+
+    // Ensure date is a valid Date object
+    let screeningDate;
+    try {
+      screeningDate = new Date(date);
+      if (isNaN(screeningDate.getTime())) {
+        // If date is invalid, use screening's start time
+        screeningDate = new Date(screening.startTime || Date.now());
+      }
+    } catch (error) {
+      screeningDate = new Date(screening.startTime || Date.now());
+    }
+
+    // Format the time string
+    const screeningTime = screeningDate.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+
+    // Validate payment method against allowed values
+    const validPaymentMethods = ['credit_card', 'paypal', 'cash', 'stripe', 'apple_pay', 'google_pay', 'venmo'];
+    let finalPaymentMethod = paymentMethod;
+
+    if (!validPaymentMethods.includes(paymentMethod)) {
+      // Default to credit_card if invalid payment method
+      finalPaymentMethod = 'credit_card';
+    }
+
+    // Create the booking with all required fields
     const booking = new Booking({
       user: req.user._id,
+      movie: movieId,
       movieTitle: product,
       screening: screeningId,
-      screeningDate: new Date(date),
-      screeningTime: new Date(date).toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true
-      }),
+      screeningDate: screeningDate,
+      screeningTime: screeningTime,
+      cinema: cinemaId,
+      cinemaName: screening.cinema_id ? screening.cinema_id.name : 'Cinema',
+      room: roomId,
+      roomName: roomName,
       seats,
       totalPrice: total,
       ticketPrice: subtotal / seats.length, // Calculate per-seat price
       serviceFee: ticketFees || 0,
-      paymentMethod,
+      paymentMethod: finalPaymentMethod,
       paymentStatus: 'pending',
       bookingStatus: 'pending',
       bookingNumber,
       bookingDate: new Date(),
-      format: room,
+      format: room || screening.format || '2D',
       address: address || 'Not specified',
       quantity: quantity || seats.length,
       service: service || '',
