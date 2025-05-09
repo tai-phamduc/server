@@ -586,6 +586,8 @@ const bookSeatsByIds = async (req, res) => {
   try {
     const { screeningId, seatIdList } = req.body;
 
+    console.log('Booking request received:', req.body);
+
     // Validate required fields
     if (!screeningId || !seatIdList) {
       return res.status(400).json({
