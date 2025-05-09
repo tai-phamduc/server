@@ -579,6 +579,135 @@ const updateSeatStatus = async (req, res) => {
   }
 };
 
+// @desc    Update seats by ID to booked status
+// @route   PATCH /api/seats/book-by-id
+// @access  Public
+const bookSeatsByIds = async (req, res) => {
+  try {
+    const { screeningId, seatIdList } = req.body;
+
+    // Validate required fields
+    if (!screeningId || !seatIdList) {
+      return res.status(400).json({
+        message: 'Missing required fields',
+        required: ['screeningId', 'seatIdList']
+      });
+    }
+
+    // Ensure seatIdList is an array
+    const seatIds = Array.isArray(seatIdList) ? seatIdList : [seatIdList];
+
+    if (seatIds.length === 0) {
+      return res.status(400).json({ message: 'At least one seat ID is required' });
+    }
+
+    // Find the screening
+    const screening = await Screening.findById(screeningId);
+    if (!screening) {
+      return res.status(404).json({ message: 'Screening not found' });
+    }
+
+    // Check if the screening has a seats array
+    if (!screening.seats || !Array.isArray(screening.seats)) {
+      return res.status(400).json({ message: 'Screening does not have a valid seats array' });
+    }
+
+    // Create a map of seat IDs for efficient lookup
+    const seatIdMap = {};
+    screening.seats.forEach(seat => {
+      if (seat && seat._id) {
+        seatIdMap[seat._id.toString()] = {
+          status: seat.status,
+          index: screening.seats.indexOf(seat),
+          seatNumber: seat.seatNumber
+        };
+      }
+    });
+
+    // Check if all seats exist
+    const nonExistentSeats = seatIds.filter(seatId => !seatIdMap[seatId]);
+    if (nonExistentSeats.length > 0) {
+      return res.status(400).json({
+        message: 'Some seat IDs do not exist in this screening',
+        nonExistentSeats
+      });
+    }
+
+    // Check if seats are available
+    const unavailableSeats = [];
+    for (const seatId of seatIds) {
+      const seatInfo = seatIdMap[seatId];
+      if (seatInfo && seatInfo.status !== 'available') {
+        unavailableSeats.push({
+          seatId,
+          seatNumber: seatInfo.seatNumber,
+          currentStatus: seatInfo.status
+        });
+      }
+    }
+
+    if (unavailableSeats.length > 0) {
+      return res.status(400).json({
+        message: 'Some seats are not available for booking',
+        unavailableSeats
+      });
+    }
+
+    // Update the status of each seat to 'booked'
+    const updatedSeats = [];
+    for (const seatId of seatIds) {
+      const seatInfo = seatIdMap[seatId];
+      if (seatInfo) {
+        const seatIndex = seatInfo.index;
+        const oldStatus = screening.seats[seatIndex].status;
+
+        // Update the seat status
+        screening.seats[seatIndex].status = 'booked';
+
+        // Set reservation info
+        screening.seats[seatIndex].reservedAt = new Date();
+        if (req.user) {
+          screening.seats[seatIndex].reservedBy = req.user._id;
+        }
+
+        updatedSeats.push({
+          seatId,
+          seatNumber: seatInfo.seatNumber,
+          oldStatus,
+          newStatus: 'booked'
+        });
+      }
+    }
+
+    // Update the count of available seats
+    const availableSeats = screening.seats.filter(seat => seat.status === 'available').length;
+    screening.seatsAvailable = availableSeats;
+
+    // Update screening status if needed
+    if (availableSeats === 0) {
+      screening.status = 'sold_out';
+    } else if (availableSeats <= screening.totalSeats * 0.1) { // Less than 10% seats available
+      screening.status = 'almost_full';
+    } else {
+      screening.status = 'open';
+    }
+
+    // Save the updated screening
+    await screening.save();
+
+    res.json({
+      message: `Successfully booked ${updatedSeats.length} seats`,
+      screeningId,
+      updatedSeats,
+      seatsAvailable: screening.seatsAvailable,
+      screeningStatus: screening.status
+    });
+  } catch (error) {
+    console.error('Error booking seats by ID:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createScreening,
   getScreenings,
@@ -593,4 +722,5 @@ module.exports = {
   getScreeningsByMovieDate,
   getScreeningDetails,
   updateSeatStatus,
+  bookSeatsByIds,
 };
