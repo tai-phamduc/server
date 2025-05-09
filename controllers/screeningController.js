@@ -382,7 +382,7 @@ const getScreeningDetails = async (req, res) => {
       .populate('movie_id', 'title')
       .populate({
         path: 'cinema_id',
-        select: 'name rooms',
+        select: 'name rooms location',
       });
 
     if (!screening) {
@@ -411,14 +411,30 @@ const getScreeningDetails = async (req, res) => {
     };
     const formattedStartTime = new Date(screening.startTime).toLocaleString('en-US', options);
 
-    // Get movie name
+    // Get movie name and ID
     const movieName = screening.movie_id ? screening.movie_id.title : 'Unknown Movie';
+    const movieId = screening.movie_id ? screening.movie_id._id : null;
+
+    // Get cinema address (city and state)
+    let address = 'Unknown Location';
+    if (screening.cinema_id && screening.cinema_id.location && screening.cinema_id.location.address) {
+      const { city, state } = screening.cinema_id.location.address;
+      if (city && state) {
+        address = `${city}, ${state}`;
+      } else if (city) {
+        address = city;
+      } else if (state) {
+        address = state;
+      }
+    }
 
     // Return the response
     res.json({
       screeningId: screening._id,
+      movieId,
       movieName,
       roomType,
+      address,
       startTime: formattedStartTime,
       format: screening.format,
       seats: screening.seats,

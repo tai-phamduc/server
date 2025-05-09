@@ -100,15 +100,16 @@ const createBooking = async (req, res) => {
     // Calculate prices - use provided values or calculate
     const calculatedTicketPrice = screening.price || 10.99;
     const calculatedTotalTicketPrice = calculatedTicketPrice * seats.length;
-    const calculatedTax = calculatedTotalTicketPrice * 0.1; // 10% tax
-    const calculatedServiceFee = seats.length * 1.5; // $1.5 per seat
-    const calculatedTotalPrice = calculatedTotalTicketPrice + calculatedTax + calculatedServiceFee;
+    // const calculatedTax = calculatedTotalTicketPrice * 0.1; // 10% tax
+    // const calculatedServiceFee = seats.length * 1.5; // $1.5 per seat
+    // const calculatedTotalPrice = calculatedTotalTicketPrice + calculatedTax + calculatedServiceFee;
+    const calculatedTotalPrice = calculatedTotalTicketPrice
 
     // Use provided values or calculated values
     const finalTicketPrice = ticketPrice || calculatedTicketPrice;
     const finalTotalPrice = totalPrice || calculatedTotalPrice;
-    const finalTax = calculatedTax;
-    const finalServiceFee = calculatedServiceFee;
+    // const finalTax = calculatedTax;
+    // const finalServiceFee = calculatedServiceFee;
 
     // Generate booking number or use provided one
     const finalBookingNumber = bookingNumber || generateBookingNumber();
@@ -134,7 +135,8 @@ const createBooking = async (req, res) => {
       totalPrice: finalTotalPrice,
       ticketPrice: finalTicketPrice,
       tax: finalTax,
-      serviceFee: finalServiceFee,
+      // serviceFee: finalServiceFee,
+      serviceFee: 0,
       paymentMethod,
       paymentStatus: 'pending',
       bookingStatus: 'pending',
