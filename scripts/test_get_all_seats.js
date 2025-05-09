@@ -5,10 +5,10 @@ async function testGetAllSeats() {
   try {
     // Get one of the screening IDs we created earlier
     const screeningId = '681d97a07c8c575a1a1e1d39'; // Replace with one of your screening IDs if needed
-    
+
     // Make a request to the endpoint
-    const response = await axios.get(`http://localhost:5010/api/screenings/${screeningId}/all-seats`);
-    
+    const response = await axios.get(`https://movie-ticket-booking-api.vercel.app/api/screenings/${screeningId}/all-seats`);
+
     // Log the response
     console.log('Response status:', response.status);
     console.log('Screening details:');
@@ -16,15 +16,15 @@ async function testGetAllSeats() {
     console.log('- Format:', response.data.screening.format);
     console.log('- Start time:', response.data.screening.startTime);
     console.log('- Display time:', response.data.screening.displayTime);
-    
+
     console.log('\nSeat information:');
     console.log('- Total seats:', response.data.totalSeats);
     console.log('- Available seats:', response.data.seatsAvailable);
-    
+
     // Log the number of rows and a sample of seats
     const rows = Object.keys(response.data.seats).sort();
     console.log('\nRows:', rows);
-    
+
     // Show a sample of seats from the first row
     if (rows.length > 0) {
       const firstRow = rows[0];
@@ -33,7 +33,7 @@ async function testGetAllSeats() {
         console.log(`- Seat ${seat.seatNumber}: ${seat.status}, Type: ${seat.type}, Price: $${seat.price}`);
       });
     }
-    
+
     console.log('\nTest completed successfully!');
   } catch (error) {
     console.error('Error testing getAllSeats endpoint:');

@@ -373,6 +373,64 @@ const getAllSeats = async (req, res) => {
   }
 };
 
+// @desc    Get screening details with movie name, room type, formatted time and seats
+// @route   GET /api/screenings/:id/details
+// @access  Public
+const getScreeningDetails = async (req, res) => {
+  try {
+    const screening = await Screening.findById(req.params.id)
+      .populate('movie_id', 'title')
+      .populate({
+        path: 'cinema_id',
+        select: 'name rooms',
+      });
+
+    if (!screening) {
+      return res.status(404).json({ message: 'Screening not found' });
+    }
+
+    // Find the room in the cinema's rooms array
+    let roomType = 'Standard';
+    if (screening.cinema_id && screening.cinema_id.rooms) {
+      const room = screening.cinema_id.rooms.find(
+        r => r._id.toString() === screening.room_id.toString()
+      );
+      if (room) {
+        roomType = room.type.charAt(0).toUpperCase() + room.type.slice(1); // Capitalize first letter
+      }
+    }
+
+    // Format the start time
+    const options = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    };
+    const formattedStartTime = new Date(screening.startTime).toLocaleString('en-US', options);
+
+    // Get movie name
+    const movieName = screening.movie_id ? screening.movie_id.title : 'Unknown Movie';
+
+    // Return the response
+    res.json({
+      screeningId: screening._id,
+      movieName,
+      roomType,
+      startTime: formattedStartTime,
+      format: screening.format,
+      seats: screening.seats,
+      totalSeats: screening.totalSeats,
+      seatsAvailable: screening.seatsAvailable
+    });
+  } catch (error) {
+    console.error('Error getting screening details:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createScreening,
   getScreenings,
@@ -385,4 +443,5 @@ module.exports = {
   releaseSeats,
   getScreeningsByMovieCinemaDate,
   getScreeningsByMovieDate,
+  getScreeningDetails,
 };

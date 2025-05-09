@@ -13,6 +13,7 @@ const {
   releaseSeats,
   getScreeningsByMovieCinemaDate,
   getScreeningsByMovieDate,
+  getScreeningDetails,
 } = require('../controllers/screeningController');
 
 router.route('/')
@@ -29,6 +30,9 @@ router.route('/:id/seats')
 
 router.route('/:id/all-seats')
   .get(getAllSeats);
+
+router.route('/:id/details')
+  .get(getScreeningDetails);
 
 router.route('/:id/reserve')
   .post(reserveSeats);
