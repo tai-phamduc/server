@@ -728,7 +728,49 @@ const createSimpleBooking = async (req, res) => {
 
       console.log(`Created seat status map with ${Object.keys(seatStatusMap).length} entries`);
 
+      // Check if the seats are available
+      for (const seatNumber of seats) {
+        const seatInfo = seatStatusMap[seatNumber];
+        if (!seatInfo || seatInfo.status !== 'available') {
+          unavailableSeats.push(seatNumber);
+          console.log(`Seat ${seatNumber} is not available. Current status: ${seatInfo ? seatInfo.status : 'not found'}`);
+        }
+      }
+
+      if (unavailableSeats.length > 0) {
+        console.log(`Found ${unavailableSeats.length} unavailable seats: ${unavailableSeats.join(', ')}`);
+        return res.status(400).json({
+          message: 'Some seats are no longer available',
+          unavailableSeats
+        });
+      }
+
+      // Update the status of each seat to 'booked'
+      let updatedCount = 0;
+      for (const seatNumber of seats) {
+        const seatInfo = seatStatusMap[seatNumber];
+        if (seatInfo) {
+          const seatIndex = seatInfo.index;
+          screening.seats[seatIndex].status = 'booked'; // Use 'booked' instead of 'taken'
+          screening.seats[seatIndex].reservedAt = new Date();
+          screening.seats[seatIndex].reservedBy = req.user._id;
+          updatedCount++;
+          console.log(`Updated seat ${seatNumber} to 'booked' status`);
+        }
+      }
+
+      // Update the count of available seats
+      const availableSeats = screening.seats.filter(seat => seat.status === 'available').length;
+      screening.seatsAvailable = availableSeats;
+
       console.log(`Updated seat count. Available seats: ${availableSeats}`);
+
+      // Update screening status if needed
+      if (availableSeats === 0) {
+        screening.status = 'sold_out';
+      } else if (availableSeats <= screening.totalSeats * 0.1) { // Less than 10% seats available
+        screening.status = 'almost_full';
+      }
 
       // Save the updated screening
       await screening.save();
