@@ -6,7 +6,8 @@ const {
   getBookingById,
   cancelBooking,
   getAllBookings,
-  updateBookingAfterPayment
+  updateBookingAfterPayment,
+  createSimpleBooking
 } = require('../controllers/bookingController');
 const { protect, admin } = require('../middleware/authMiddleware');
 
@@ -23,6 +24,9 @@ router.route('/:id/cancel')
 
 router.route('/:id/payment-complete')
   .put(protect, updateBookingAfterPayment);
+
+router.route('/create-simple')
+  .post(protect, createSimpleBooking);
 
 // Admin routes
 router.route('/admin')

@@ -568,11 +568,161 @@ const updateBookingAfterPayment = async (req, res) => {
 
 
 
+// @desc    Create a simplified booking
+// @route   POST /api/bookings/create-simple
+// @access  Private
+const createSimpleBooking = async (req, res) => {
+  try {
+    const {
+      product,
+      quantity,
+      date,
+      room,
+      seat,
+      service,
+      address,
+      subtotal,
+      ticketFees,
+      screeningId,
+      paymentMethod,
+      total
+    } = req.body;
+
+    // Validate required fields
+    if (!product || !date || !seat || !screeningId || !paymentMethod || !total) {
+      return res.status(400).json({
+        message: 'Missing required fields',
+        required: ['product', 'date', 'seat', 'screeningId', 'paymentMethod', 'total']
+      });
+    }
+
+    // Ensure seat is an array
+    const seats = Array.isArray(seat) ? seat : [seat];
+
+    // Generate booking number
+    const bookingNumber = generateBookingNumber();
+
+    // Create the booking
+    const booking = new Booking({
+      user: req.user._id,
+      movieTitle: product,
+      screening: screeningId,
+      screeningDate: new Date(date),
+      screeningTime: new Date(date).toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      }),
+      seats,
+      totalPrice: total,
+      ticketPrice: subtotal / seats.length, // Calculate per-seat price
+      serviceFee: ticketFees || 0,
+      paymentMethod,
+      paymentStatus: 'pending',
+      bookingStatus: 'pending',
+      bookingNumber,
+      bookingDate: new Date(),
+      format: room,
+      address: address || 'Not specified',
+      quantity: quantity || seats.length,
+      service: service || '',
+      subtotal: subtotal || total - (ticketFees || 0)
+    });
+
+    // Try to update screening with booked seats if it exists
+    try {
+      const screening = await Screening.findById(screeningId);
+      if (screening) {
+        // Check if seats are available in the seats array
+        const unavailableSeats = [];
+
+        // Check if the seats are available in the screening's seats array
+        for (const seatNumber of seats) {
+          const seatIndex = screening.seats.findIndex(s => s.seatNumber === seatNumber && s.status === 'available');
+          if (seatIndex === -1) {
+            unavailableSeats.push(seatNumber);
+          }
+        }
+
+        if (unavailableSeats.length > 0) {
+          return res.status(400).json({
+            message: 'Some seats are no longer available',
+            unavailableSeats
+          });
+        }
+
+        // Update the status of each seat to 'booked'
+        for (const seatNumber of seats) {
+          const seatIndex = screening.seats.findIndex(s => s.seatNumber === seatNumber);
+          if (seatIndex !== -1) {
+            screening.seats[seatIndex].status = 'booked';
+            screening.seats[seatIndex].reservedAt = new Date();
+            screening.seats[seatIndex].reservedBy = req.user._id;
+          }
+        }
+
+        // Update the count of available seats
+        const availableSeats = screening.seats.filter(seat => seat.status === 'available').length;
+        screening.seatsAvailable = availableSeats;
+
+        // Also maintain the legacy booked_seats array if it exists
+        if (Array.isArray(screening.booked_seats)) {
+          screening.booked_seats = [...(screening.booked_seats || []), ...seats];
+        }
+
+        // Save the updated screening
+        await screening.save();
+
+        console.log(`Updated ${seats.length} seats to 'booked' status in screening ${screeningId}`);
+      }
+    } catch (err) {
+      console.log('Could not update screening:', err.message);
+    }
+
+    // Save booking
+    await booking.save();
+
+    // Add booking to user's booking history
+    const user = await User.findById(req.user._id);
+    if (user) {
+      if (!user.bookingHistory) {
+        user.bookingHistory = [];
+      }
+      user.bookingHistory.push(booking._id);
+      await user.save();
+    }
+
+    // Generate QR code for the booking
+    try {
+      const qrCode = await generateQRCode(bookingNumber);
+      booking.qrCode = qrCode;
+      await booking.save();
+    } catch (qrError) {
+      console.error('Error generating QR code:', qrError);
+    }
+
+    // Send confirmation email
+    try {
+      if (user) {
+        await sendBookingConfirmationEmail(booking, user.email);
+      }
+    } catch (emailError) {
+      console.error('Error sending confirmation email:', emailError);
+    }
+
+    res.status(201).json(booking);
+  } catch (error) {
+    console.error('Error creating simple booking:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createBooking,
   getUserBookings,
   getBookingById,
   cancelBooking,
   getAllBookings,
-  updateBookingAfterPayment
+  updateBookingAfterPayment,
+  createSimpleBooking
 };
