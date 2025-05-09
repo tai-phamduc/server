@@ -774,6 +774,9 @@ const createSimpleBooking = async (req, res) => {
     console.error('Error creating simple booking:', error);
     res.status(500).json({ message: error.message });
   }
+
+  res.status(201).json(booking);
+
 };
 
 module.exports = {
