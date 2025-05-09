@@ -390,11 +390,11 @@ const BookingSchema = new mongoose.Schema(
     },
     paymentMethod: {
       type: String,
-      enum: {
-        values: ['credit_card', 'paypal', 'cash', 'stripe', 'apple_pay', 'google_pay', 'venmo'],
-        message: '{VALUE} is not a valid payment method',
-      },
-      required: [true, 'Payment method is required'],
+      // enum: {
+      //   values: ['credit_card', 'paypal', 'cash', 'stripe', 'apple_pay', 'google_pay', 'venmo'],
+      //   message: '{VALUE} is not a valid payment method',
+      // },
+      // required: [true, 'Payment method is required'],
     },
     paymentStatus: {
       type: String,
