@@ -710,6 +710,71 @@ const bookSeatsByIds = async (req, res) => {
   }
 };
 
+// @desc    Change seat status by screeningId and seatNumber
+// @route   PUT /api/seats/status
+// @access  Public
+const changeSeatStatus = async (req, res) => {
+  try {
+    const { screeningId, seatNumber, status } = req.body;
+    if (!screeningId || !seatNumber || !status)
+      return res.status(400).json({ message: 'Missing required fields' });
+
+    const screening = await Screening.findById(screeningId);
+    if (!screening) return res.status(404).json({ message: 'Screening not found' });
+
+    const seatIndex = screening.seats.findIndex(s => s.seatNumber === seatNumber);
+    if (seatIndex === -1) return res.status(404).json({ message: 'Seat not found' });
+
+    // Map "taken" to "booked" for compatibility
+    let normalizedStatus = status.toLowerCase();
+    if (normalizedStatus === 'taken') normalizedStatus = 'booked';
+
+    // Validate status
+    const validStatuses = ['available', 'booked', 'reserved', 'unavailable', 'maintenance'];
+    if (!validStatuses.includes(normalizedStatus))
+      return res.status(400).json({ message: `Invalid status. Must be one of: ${validStatuses.join(', ')} (or "taken")` });
+
+    // Update seat status
+    const oldStatus = screening.seats[seatIndex].status;
+    screening.seats[seatIndex].status = normalizedStatus;
+
+    // Update reservation info if needed
+    if (normalizedStatus === 'booked' || normalizedStatus === 'reserved') {
+      screening.seats[seatIndex].reservedAt = new Date();
+      if (req.user) screening.seats[seatIndex].reservedBy = req.user._id;
+    } else if (normalizedStatus === 'available') {
+      screening.seats[seatIndex].reservedAt = null;
+      screening.seats[seatIndex].reservedBy = null;
+    }
+
+    // Update available seats count
+    screening.seatsAvailable = screening.seats.filter(seat => seat.status === 'available').length;
+
+    // Update screening status
+    if (screening.seatsAvailable === 0) {
+      screening.status = 'sold_out';
+    } else if (screening.seatsAvailable <= screening.totalSeats * 0.1) {
+      screening.status = 'almost_full';
+    } else {
+      screening.status = 'open';
+    }
+
+    await screening.save();
+
+    res.json({
+      message: `Seat ${seatNumber} status changed from ${oldStatus} to ${normalizedStatus}`,
+      screeningId,
+      seatNumber,
+      oldStatus,
+      newStatus: normalizedStatus,
+      seatsAvailable: screening.seatsAvailable
+    });
+  } catch (error) {
+    console.error('Error changing seat status:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createScreening,
   getScreenings,
@@ -725,4 +790,5 @@ module.exports = {
   getScreeningDetails,
   updateSeatStatus,
   bookSeatsByIds,
+  changeSeatStatus,
 };
