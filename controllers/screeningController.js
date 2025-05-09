@@ -584,20 +584,20 @@ const updateSeatStatus = async (req, res) => {
 // @access  Public
 const bookSeatsByIds = async (req, res) => {
   try {
-    const { screeningId, seatIdList } = req.body;
+    const { screeningId, seatNumber } = req.body;
 
     console.log('Booking request received:', req.body);
 
     // Validate required fields
-    if (!screeningId || !seatIdList) {
+    if (!screeningId || !seatNumber) {
       return res.status(400).json({
         message: 'Missing required fields',
-        required: ['screeningId', 'seatIdList']
+        required: ['screeningId', 'seatNumber']
       });
     }
 
-    // Ensure seatIdList is an array
-    const seatIds = Array.isArray(seatIdList) ? seatIdList : [seatIdList];
+    // Ensure seatNumber is an array
+    const seatIds = Array.isArray(seatNumber) ? seatNumber : [seatNumber];
 
     if (seatIds.length === 0) {
       return res.status(400).json({ message: 'At least one seat ID is required' });
