@@ -471,12 +471,18 @@ const updateSeatStatus = async (req, res) => {
 
     // Validate status
     const validStatuses = ['available', 'booked', 'reserved', 'unavailable', 'maintenance'];
-    const normalizedStatus = status.toLowerCase();
+    let normalizedStatus = status.toLowerCase();
+
+    // Map "taken" to "booked" for compatibility with client code
+    if (normalizedStatus === 'taken') {
+      normalizedStatus = 'booked';
+    }
 
     if (!validStatuses.includes(normalizedStatus)) {
       return res.status(400).json({
-        message: `Invalid status. Must be one of: ${validStatuses.join(', ')}`,
-        providedStatus: status
+        message: `Invalid status. Must be one of: ${validStatuses.join(', ')} (or "taken" which maps to "booked")`,
+        providedStatus: status,
+        validOptions: [...validStatuses, 'taken']
       });
     }
 

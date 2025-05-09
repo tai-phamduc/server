@@ -20,7 +20,7 @@ const updateSeatStatus = async (req, res) => {
 
     // Validate required fields
     if (!screeningId || !seats || !status) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         message: 'Missing required fields',
         required: ['screeningId', 'seats', 'status']
       });
@@ -28,19 +28,25 @@ const updateSeatStatus = async (req, res) => {
 
     // Ensure seats is an array
     const seatNumbers = Array.isArray(seats) ? seats : [seats];
-    
+
     if (seatNumbers.length === 0) {
       return res.status(400).json({ message: 'At least one seat is required' });
     }
 
     // Validate status
     const validStatuses = ['available', 'booked', 'reserved', 'unavailable', 'maintenance'];
-    const normalizedStatus = status.toLowerCase();
-    
+    let normalizedStatus = status.toLowerCase();
+
+    // Map "taken" to "booked" for compatibility with client code
+    if (normalizedStatus === 'taken') {
+      normalizedStatus = 'booked';
+    }
+
     if (!validStatuses.includes(normalizedStatus)) {
-      return res.status(400).json({ 
-        message: `Invalid status. Must be one of: ${validStatuses.join(', ')}`,
-        providedStatus: status
+      return res.status(400).json({
+        message: `Invalid status. Must be one of: ${validStatuses.join(', ')} (or "taken" which maps to "booked")`,
+        providedStatus: status,
+        validOptions: [...validStatuses, 'taken']
       });
     }
 
@@ -82,10 +88,10 @@ const updateSeatStatus = async (req, res) => {
       if (seatInfo) {
         const seatIndex = seatInfo.index;
         const oldStatus = screening.seats[seatIndex].status;
-        
+
         // Update the seat status
         screening.seats[seatIndex].status = normalizedStatus;
-        
+
         // If seat is being booked, set reservation info
         if (normalizedStatus === 'booked' || normalizedStatus === 'reserved') {
           screening.seats[seatIndex].reservedAt = new Date();
@@ -93,13 +99,13 @@ const updateSeatStatus = async (req, res) => {
             screening.seats[seatIndex].reservedBy = req.user._id;
           }
         }
-        
+
         // If seat is being released, clear reservation info
         if (normalizedStatus === 'available') {
           screening.seats[seatIndex].reservedAt = null;
           screening.seats[seatIndex].reservedBy = null;
         }
-        
+
         updatedSeats.push({
           seatNumber,
           oldStatus,
@@ -227,9 +233,11 @@ await cinemaApi.patch(
   {
     screeningId: screening.screeningId,
     seats: seats.map(seat => seat.seatNumber),
-    status: "Booked",
+    status: "Booked", // or "taken" - both will work
   }
 );
 ```
 
 This will update the status of the specified seats to "booked" in the database.
+
+**Note**: The endpoint now supports using "taken" as a status value, which will be automatically mapped to "booked" to match the database schema. This ensures compatibility with client code that uses "taken" instead of "booked".
