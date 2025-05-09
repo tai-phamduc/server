@@ -248,52 +248,89 @@ const createSimpleBooking = async (req, res) => {
 
     // Try to update screening with booked seats if it exists
     try {
+      // Get a fresh copy of the screening to ensure we have the latest seat status
       const screening = await Screening.findById(screeningId);
-      if (screening) {
-        // Check if seats are available in the seats array
-        const unavailableSeats = [];
-
-        // Check if the seats are available in the screening's seats array
-        for (const seatNumber of seats) {
-          const seatIndex = screening.seats.findIndex(s => s.seatNumber === seatNumber && s.status === 'available');
-          if (seatIndex === -1) {
-            unavailableSeats.push(seatNumber);
-          }
-        }
-
-        if (unavailableSeats.length > 0) {
-          return res.status(400).json({
-            message: 'Some seats are no longer available',
-            unavailableSeats
-          });
-        }
-
-        // Update the status of each seat to 'booked'
-        for (const seatNumber of seats) {
-          const seatIndex = screening.seats.findIndex(s => s.seatNumber === seatNumber);
-          if (seatIndex !== -1) {
-            screening.seats[seatIndex].status = 'booked';
-            screening.seats[seatIndex].reservedAt = new Date();
-            screening.seats[seatIndex].reservedBy = req.user._id;
-          }
-        }
-
-        // Update the count of available seats
-        const availableSeats = screening.seats.filter(seat => seat.status === 'available').length;
-        screening.seatsAvailable = availableSeats;
-
-        // Also maintain the legacy booked_seats array if it exists
-        if (Array.isArray(screening.booked_seats)) {
-          screening.booked_seats = [...(screening.booked_seats || []), ...seats];
-        }
-
-        // Save the updated screening
-        await screening.save();
-
-        console.log(`Updated ${seats.length} seats to 'booked' status in screening ${screeningId}`);
+      if (!screening) {
+        console.log(`Screening with ID ${screeningId} not found`);
+        return;
       }
+
+      console.log(`Found screening with ${screening.seats ? screening.seats.length : 0} seats`);
+
+      // Check if the screening has a seats array
+      if (!screening.seats || !Array.isArray(screening.seats)) {
+        console.log('Screening does not have a valid seats array');
+        return;
+      }
+
+      // Check if seats are available in the seats array
+      const unavailableSeats = [];
+      const seatStatusMap = {};
+
+      // First, create a map of seat statuses for easier lookup
+      screening.seats.forEach(seat => {
+        if (seat && seat.seatNumber) {
+          seatStatusMap[seat.seatNumber] = {
+            status: seat.status,
+            index: screening.seats.indexOf(seat)
+          };
+        }
+      });
+
+      console.log(`Created seat status map with ${Object.keys(seatStatusMap).length} entries`);
+
+      // Check if the seats are available
+      for (const seatNumber of seats) {
+        const seatInfo = seatStatusMap[seatNumber];
+        if (!seatInfo || seatInfo.status !== 'available') {
+          unavailableSeats.push(seatNumber);
+          console.log(`Seat ${seatNumber} is not available. Current status: ${seatInfo ? seatInfo.status : 'not found'}`);
+        }
+      }
+
+      if (unavailableSeats.length > 0) {
+        console.log(`Found ${unavailableSeats.length} unavailable seats: ${unavailableSeats.join(', ')}`);
+        return res.status(400).json({
+          message: 'Some seats are no longer available',
+          unavailableSeats
+        });
+      }
+
+      // Update the status of each seat to 'booked'
+      let updatedCount = 0;
+      for (const seatNumber of seats) {
+        const seatInfo = seatStatusMap[seatNumber];
+        if (seatInfo) {
+          const seatIndex = seatInfo.index;
+          screening.seats[seatIndex].status = 'booked';
+          screening.seats[seatIndex].reservedAt = new Date();
+          screening.seats[seatIndex].reservedBy = req.user._id;
+          updatedCount++;
+          console.log(`Updated seat ${seatNumber} to 'booked' status`);
+        }
+      }
+
+      // Update the count of available seats
+      const availableSeats = screening.seats.filter(seat => seat.status === 'available').length;
+      screening.seatsAvailable = availableSeats;
+
+      console.log(`Updated seat count. Available seats: ${availableSeats}`);
+
+      // Update screening status if needed
+      if (availableSeats === 0) {
+        screening.status = 'sold_out';
+      } else if (availableSeats <= screening.totalSeats * 0.1) { // Less than 10% seats available
+        screening.status = 'almost_full';
+      }
+
+      // Save the updated screening
+      await screening.save();
+
+      console.log(`Successfully updated ${updatedCount} seats to 'booked' status in screening ${screeningId}`);
     } catch (err) {
-      console.log('Could not update screening:', err.message);
+      console.error('Could not update screening:', err);
+      // Don't fail the booking creation if seat status update fails
+      // Just log the error and continue
     }
 
     // Save booking
