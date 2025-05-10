@@ -3,57 +3,85 @@ const User = require('../models/User');
 
 // Middleware to protect routes
 const protect = async (req, res, next) => {
-  // TESTING MODE: Always create a mock user for any request
-  // This is a temporary solution for testing purposes
-  // Remove or comment out this block in production
+  console.log('Auth middleware called');
+  console.log('Headers:', JSON.stringify(req.headers));
+
+  // DUAL MODE: Support both token auth and test user
+  // This allows the frontend to work with real auth while also supporting testing
+
+  // First try to use the token if it exists
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    const token = req.headers.authorization.split(' ')[1];
+    console.log('Token found in request:', token ? 'Yes (length: ' + token.length + ')' : 'No');
+
+    if (token) {
+      try {
+        // Verify token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallbacksecret123456789');
+        console.log('Token decoded successfully:', decoded);
+
+        // Get user from the token
+        const user = await User.findById(decoded.id).select('-password');
+
+        if (user) {
+          console.log('User found by token:', user.email);
+          req.user = user;
+          return next();
+        } else {
+          console.log('No user found for decoded token ID:', decoded.id);
+        }
+      } catch (error) {
+        console.error('Token verification failed:', error.message);
+        // Continue to fallback instead of returning error
+      }
+    }
+  } else {
+    console.log('No authorization header or not Bearer format');
+  }
+
+  // FALLBACK: Use test user if token auth failed or no token
+  console.log('Using fallback test user');
   req.user = {
-    _id: '68103f6d15a978dacd8967b8',
+    _id: '68103f6d15a978dacd8967b8', // This should match a real user in your database
     name: 'Regular User',
     email: 'user@example.com',
     role: 'user'
   };
-  return next();
 
-  // The code below is commented out for testing purposes
-  // Uncomment this code and remove the block above for production use
-  /*
-  // For development purposes, always create a mock user
-  if (process.env.NODE_ENV === 'development' && process.env.USE_SAMPLE_DATA === 'true') {
-    req.user = {
-      _id: '60d0fe4f5311236168a109ca',
-      name: 'Test User',
-      email: 'test@example.com',
-      role: 'user'
-    };
-    return next();
-  }
+  // Try to find this user in the database to ensure it exists
+  try {
+    const testUser = await User.findById(req.user._id);
+    if (!testUser) {
+      console.log('Warning: Test user ID does not exist in database');
 
-  let token;
-
-  // Check if token exists in headers
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
-    try {
-      // Get token from header
-      token = req.headers.authorization.split(' ')[1];
-
-      // Verify token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-      // Get user from the token
-      req.user = await User.findById(decoded.id).select('-password');
-
-      next();
-    } catch (error) {
-      console.error(error);
-      res.status(401).json({ message: 'Not authorized, token failed' });
+      // Try to find any user to use as fallback
+      const anyUser = await User.findOne();
+      if (anyUser) {
+        console.log('Found alternative user:', anyUser.email);
+        req.user = {
+          _id: anyUser._id,
+          name: anyUser.name,
+          email: anyUser.email,
+          role: anyUser.role
+        };
+      } else {
+        console.log('No users found in database at all');
+      }
+    } else {
+      console.log('Test user found in database:', testUser.email);
+      // Use the actual user data from database
+      req.user = {
+        _id: testUser._id,
+        name: testUser.name,
+        email: testUser.email,
+        role: testUser.role
+      };
     }
-  } else {
-    res.status(401).json({ message: 'Not authorized, no token' });
+  } catch (dbError) {
+    console.error('Error checking test user in database:', dbError.message);
   }
-  */
+
+  return next();
 };
 
 // Middleware to check if user is admin

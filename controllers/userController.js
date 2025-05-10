@@ -209,14 +209,45 @@ const deleteUser = async (req, res) => {
 // @access  Private
 const getUserBookings = async (req, res) => {
   try {
-    const bookings = await Booking.find({ user: req.user._id })
-      .populate('movie', 'title poster')
-      .populate('screening', 'start_time cinema_id room_id')
-      .sort({ createdAt: -1 });
+    console.log('getUserBookings called with user:', req.user);
 
-    res.json(bookings);
+    if (!req.user || !req.user._id) {
+      console.error('No user found in request or user missing _id');
+      return res.status(401).json({ message: 'User not authenticated properly' });
+    }
+
+    console.log('Attempting to find bookings for user ID:', req.user._id);
+
+    try {
+      const bookings = await Booking.find({ user: req.user._id })
+        .populate('movie', 'title poster')
+        .populate('screening', 'start_time cinema_id room_id')
+        .sort({ createdAt: -1 });
+
+      console.log(`Found ${bookings.length} bookings for user`);
+
+      // If no bookings found, check if user exists
+      if (bookings.length === 0) {
+        const userExists = await User.findById(req.user._id);
+        console.log('User exists in database:', userExists ? 'Yes' : 'No');
+
+        // Check if there are any bookings at all in the system
+        const totalBookings = await Booking.countDocuments();
+        console.log('Total bookings in system:', totalBookings);
+      }
+
+      res.json(bookings);
+    } catch (dbError) {
+      console.error('Database error when finding bookings:', dbError);
+      throw new Error(`Database error: ${dbError.message}`);
+    }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error in getUserBookings:', error);
+    console.error('Error stack:', error.stack);
+    res.status(500).json({
+      message: error.message,
+      stack: process.env.NODE_ENV === 'production' ? null : error.stack
+    });
   }
 };
 

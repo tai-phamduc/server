@@ -31,6 +31,16 @@ router.post('/forgot-password', forgotPassword);
 router.put('/reset-password/:resetToken', resetPassword);
 router.post('/2fa/verify-token', verifyTwoFactorToken);
 
+// Test endpoint to check API connectivity
+router.get('/test', (req, res) => {
+  console.log('Test endpoint called');
+  res.json({
+    message: 'API is working',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
 // Protected routes
 router.get('/profile', protect, getUserProfile);
 router.put('/profile', protect, updateUserProfile);
