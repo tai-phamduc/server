@@ -42,9 +42,9 @@ const protect = async (req, res, next) => {
   // FALLBACK: Use test user if token auth failed or no token
   console.log('Using fallback test user');
   req.user = {
-    _id: '68103f6d15a978dacd8967b8', // This should match a real user in your database
-    name: 'Regular User',
-    email: 'user@example.com',
+    _id: '681c7dd698639062ebce1377', // This should match a real user in your database
+    name: 'Pham Duc Tai',
+    email: 'phamductai102703@gmail.com',
     role: 'user'
   };
 
