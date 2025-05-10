@@ -19,7 +19,8 @@ const {
   verifyAndEnableTwoFactorAuth,
   disableTwoFactorAuth,
   verifyTwoFactorToken,
-  generateNewBackupCodes
+  generateNewBackupCodes,
+  getSimpleUserBookings
 } = require('../controllers/userController');
 const { protect, admin } = require('../middleware/authMiddleware');
 const upload = require('../utils/fileUpload');
@@ -45,6 +46,7 @@ router.get('/test', (req, res) => {
 router.get('/profile', protect, getUserProfile);
 router.put('/profile', protect, updateUserProfile);
 router.get('/bookings', protect, getUserBookings);
+router.get('/my-bookings', protect, getSimpleUserBookings); // New simplified route
 router.get('/booking-history', protect, getUserBookingHistory);
 router.post('/booking-history/:bookingId', protect, (req, res) => {
   // Simple implementation to add a booking to user's history

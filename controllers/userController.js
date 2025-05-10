@@ -251,6 +251,99 @@ const getUserBookings = async (req, res) => {
   }
 };
 
+// @desc    Simple user bookings lookup (alternative route)
+// @route   GET /api/users/my-bookings
+// @access  Private
+const getSimpleUserBookings = async (req, res) => {
+  console.log('=== Simple User Bookings Route Called ===');
+  console.log('Request user:', req.user);
+  console.log('Request headers:', req.headers);
+
+  // Check if user exists in request
+  if (!req.user) {
+    console.error('ERROR: No user in request');
+    return res.status(401).json({ message: 'No user found in request' });
+  }
+
+  // Check if user ID exists
+  if (!req.user._id) {
+    console.error('ERROR: User has no _id property');
+    console.error('User object:', JSON.stringify(req.user));
+    return res.status(401).json({ message: 'User ID not found' });
+  }
+
+  console.log('Looking for bookings with user ID:', req.user._id);
+
+  try {
+    // Simple query with minimal population and no complex logic
+    const bookings = await Booking.find({ user: req.user._id })
+      .select('_id bookingNumber bookingDate totalPrice bookingStatus seats')
+      .sort({ bookingDate: -1 });
+
+    console.log(`SUCCESS: Found ${bookings.length} bookings`);
+
+    if (bookings.length === 0) {
+      console.log('No bookings found for this user');
+
+      // Check if the user ID actually exists in the database
+      try {
+        const userExists = await User.findById(req.user._id).select('_id email');
+        console.log('User exists check:', userExists ? 'Yes' : 'No');
+        if (userExists) {
+          console.log('User email:', userExists.email);
+        }
+      } catch (userCheckError) {
+        console.error('ERROR checking if user exists:', userCheckError.message);
+      }
+
+      // Check if there are any bookings at all in the system
+      try {
+        const bookingCount = await Booking.countDocuments();
+        console.log('Total bookings in system:', bookingCount);
+
+        if (bookingCount > 0) {
+          // Get a sample booking to check structure
+          const sampleBooking = await Booking.findOne().select('user');
+          console.log('Sample booking user ID type:', typeof sampleBooking.user);
+          console.log('Sample booking user ID:', sampleBooking.user);
+          console.log('Request user ID type:', typeof req.user._id);
+
+          // Check if IDs are in different formats (string vs ObjectId)
+          if (typeof sampleBooking.user !== typeof req.user._id) {
+            console.log('WARNING: ID type mismatch may be causing the issue');
+          }
+        }
+      } catch (countError) {
+        console.error('ERROR counting bookings:', countError.message);
+      }
+    }
+
+    // Return the bookings, even if empty array
+    return res.json(bookings);
+
+  } catch (error) {
+    // Log the full error details
+    console.error('ERROR finding bookings:', error.message);
+    console.error('Error name:', error.name);
+    console.error('Error stack:', error.stack);
+
+    // Check for specific error types
+    if (error.name === 'CastError') {
+      console.error('This is a CastError - likely an invalid ObjectId format');
+    } else if (error.name === 'ValidationError') {
+      console.error('This is a ValidationError - check schema requirements');
+    } else if (error.name === 'MongoError' || error.name === 'MongoServerError') {
+      console.error('This is a MongoDB error - check connection and query');
+    }
+
+    // Return a simple error response
+    return res.status(500).json({
+      message: 'Error finding bookings',
+      error: error.message
+    });
+  }
+};
+
 // @desc    Get user booking history
 // @route   GET /api/users/booking-history
 // @access  Private
@@ -658,4 +751,5 @@ module.exports = {
   disableTwoFactorAuth,
   verifyTwoFactorToken,
   generateNewBackupCodes,
+  getSimpleUserBookings,
 };
